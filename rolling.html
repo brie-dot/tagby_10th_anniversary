@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TAGby 10th Anniversary | Rolling Paper</title>
+  <style>
+    :root {
+      --tagby-blue: #005BFF;
+      --black: #050507;
+      --dark: #101014;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-line: rgba(255, 255, 255, 0.16);
+      --white: #ffffff;
+      --soft-white: rgba(255, 255, 255, 0.78);
+      --dim-white: rgba(255, 255, 255, 0.48);
+      --error: #ff6b6b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(0, 91, 255, 0.42), transparent 30%),
+        radial-gradient(circle at 88% 80%, rgba(0, 91, 255, 0.18), transparent 28%),
+        linear-gradient(135deg, #050507 0%, #111118 48%, #000000 100%);
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.82), transparent 84%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .screen {
+      min-height: 100vh;
+      width: 100%;
+      display: none;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .lock-screen {
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .lock-card {
+      width: min(720px, 92vw);
+      padding: clamp(34px, 5vw, 64px);
+      border: 1px solid var(--card-line);
+      border-radius: 36px;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.42);
+    }
+
+    .eyebrow {
+      font-size: clamp(13px, 1.3vw, 18px);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--soft-white);
+      font-weight: 800;
+      margin-bottom: 22px;
+    }
+
+    .lock-title {
+      font-size: clamp(42px, 7vw, 88px);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+      font-weight: 950;
+      word-break: keep-all;
+    }
+
+    .lock-subtitle {
+      margin-top: 26px;
+      color: var(--soft-white);
+      font-size: clamp(18px, 2vw, 26px);
+      line-height: 1.55;
+      font-weight: 500;
+      word-break: keep-all;
+    }
+
+    .code-form {
+      margin-top: 42px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .code-input {
+      width: min(360px, 100%);
+      padding: 18px 22px;
+      border: 1px solid rgba(255,255,255,0.26);
+      border-radius: 999px;
+      background: rgba(0,0,0,0.24);
+      color: var(--white);
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      outline: none;
+      letter-spacing: 0.08em;
+    }
+
+    .code-input::placeholder {
+      color: rgba(255,255,255,0.36);
+      letter-spacing: 0;
+      font-weight: 600;
+    }
+
+    .open-button,
+    .top-button {
+      border: 0;
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--tagby-blue);
+      font-size: 17px;
+      font-weight: 900;
+      padding: 18px 24px;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 20px 50px rgba(0, 91, 255, 0.2);
+    }
+
+    .error-message {
+      min-height: 28px;
+      margin-top: 18px;
+      color: var(--error);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .hint {
+      margin-top: 22px;
+      color: var(--dim-white);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .paper-screen {
+      flex-direction: column;
+      padding: 38px 44px 80px;
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 8px 0 28px;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .hero {
+      min-height: 74vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 64px 0 80px;
+    }
+
+    .hero-title {
+      font-size: clamp(52px, 8vw, 128px);
+      line-height: 0.98;
+      letter-spacing: -0.075em;
+      font-weight: 950;
+      word-break: keep-all;
+      animation: fadeUp 760ms ease both;
+    }
+
+    .hero-subtitle {
+      margin-top: 34px;
+      color: var(--soft-white);
+      font-size: clamp(20px, 2.2vw, 34px);
+      line-height: 1.45;
+      font-weight: 500;
+      word-break: keep-all;
+      animation: fadeUp 760ms ease 140ms both;
+    }
+
+    .hero-meta {
+      margin-top: 36px;
+      display: inline-flex;
+      padding: 12px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--card-line);
+      color: var(--soft-white);
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      font-size: clamp(13px, 1.2vw, 17px);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      animation: fadeUp 760ms ease 280ms both;
+    }
+
+    .section-title {
+      margin: 20px auto 34px;
+      width: min(1160px, 100%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      border-top: 1px solid rgba(255,255,255,0.14);
+      padding-top: 28px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(32px, 4vw, 64px);
+      font-weight: 950;
+      letter-spacing: -0.055em;
+    }
+
+    .section-title p {
+      color: var(--dim-white);
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .message-grid {
+      width: min(1160px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .message-card {
+      min-height: 240px;
+      padding: 26px;
+      border: 1px solid var(--card-line);
+      border-radius: 28px;
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 680ms ease forwards;
+    }
+
+    .message-card:nth-child(3n + 1) { transform: translateY(28px); }
+    .message-card:nth-child(3n + 2) { transform: translateY(10px); }
+
+    .message-text {
+      font-size: clamp(17px, 1.4vw, 22px);
+      line-height: 1.62;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      word-break: keep-all;
+      white-space: pre-line;
+    }
+
+    .message-from {
+      color: rgba(255,255,255,0.54);
+      font-size: 15px;
+      font-weight: 850;
+      letter-spacing: -0.01em;
+    }
+
+    .closing {
+      min-height: 82vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 90px 0 40px;
+    }
+
+    .closing-title {
+      font-size: clamp(50px, 7vw, 118px);
+      line-height: 1;
+      letter-spacing: -0.07em;
+      font-weight: 950;
+      word-break: keep-all;
+    }
+
+    .closing-subtitle {
+      margin-top: 32px;
+      color: var(--soft-white);
+      font-size: clamp(20px, 2vw, 32px);
+      line-height: 1.5;
+      word-break: keep-all;
+    }
+
+    .closing-sign {
+      margin-top: 42px;
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      color: var(--soft-white);
+      font-size: clamp(15px, 1.3vw, 20px);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+    }
+
+    .view-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .view-tab {
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: var(--soft-white);
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .view-tab.active {
+      background: var(--white);
+      color: var(--tagby-blue);
+      border-color: var(--white);
+    }
+
+    .rolling-app {
+      width: min(1160px, 100%);
+      margin: 0 auto;
+      min-height: 560px;
+    }
+
+    .bottle-view {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.95fr) minmax(320px, 1.05fr);
+      gap: clamp(28px, 5vw, 74px);
+      align-items: center;
+      padding: 36px 0 70px;
+    }
+
+    .bottle-wrap {
+      position: relative;
+      height: min(66vh, 660px);
+      min-height: 480px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      filter: drop-shadow(0 42px 80px rgba(0,0,0,0.36));
+    }
+
+    .bottle-wrap.shake {
+      animation: bottleShake 520ms ease;
+    }
+
+    .bottle-cap {
+      position: absolute;
+      top: 2%;
+      width: 118px;
+      height: 34px;
+      border-radius: 14px 14px 8px 8px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(200,215,245,0.42));
+      border: 1px solid rgba(255,255,255,0.42);
+      z-index: 4;
+    }
+
+    .bottle-neck {
+      position: absolute;
+      top: 7%;
+      width: 104px;
+      height: 148px;
+      border: 2px solid rgba(255,255,255,0.38);
+      border-bottom: 0;
+      border-radius: 30px 30px 10px 10px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.17), rgba(255,255,255,0.03) 50%, rgba(0,91,255,0.08));
+      box-shadow: inset 22px 0 34px rgba(255,255,255,0.08);
+      z-index: 2;
+      backdrop-filter: blur(12px);
+    }
+
+    .bottle-neck::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 16px;
+      width: 16px;
+      height: 104px;
+      border-radius: 999px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.38), rgba(255,255,255,0));
+      opacity: 0.75;
+    }
+
+    .bottle-body {
+      position: relative;
+      width: min(390px, 74vw);
+      height: 80%;
+      border: 2px solid rgba(255,255,255,0.38);
+      border-radius: 47% 47% 38px 38px / 17% 17% 38px 38px;
+      background:
+        radial-gradient(circle at 28% 18%, rgba(255,255,255,0.28), transparent 20%),
+        linear-gradient(112deg, rgba(255,255,255,0.19), rgba(255,255,255,0.04) 42%, rgba(0,91,255,0.12) 100%);
+      box-shadow:
+        inset 34px 0 86px rgba(255,255,255,0.1),
+        inset -38px 0 88px rgba(0,91,255,0.13),
+        inset 0 -42px 70px rgba(0,0,0,0.14);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .bottle-body::before {
+      content: "";
+      position: absolute;
+      left: 48px;
+      top: 72px;
+      width: 42px;
+      height: 68%;
+      border-radius: 999px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
+      opacity: 0.76;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .bottle-body::after {
+      content: "";
+      position: absolute;
+      inset: auto 28px 28px;
+      height: 42px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.18), rgba(255,255,255,0));
+      opacity: 0.7;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .bottle-label {
+      position: absolute;
+      left: 50%;
+      top: 45%;
+      transform: translate(-50%, -50%) rotate(-2deg);
+      z-index: 5;
+      width: 74%;
+      padding: 24px 22px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.88);
+      color: #101014;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.72);
+    }
+
+    .bottle-label .label-small {
+      display: block;
+      margin-bottom: 8px;
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      font-weight: 900;
+      color: rgba(16,16,20,0.52);
+    }
+
+    .bottle-label .label-main {
+      display: block;
+      font-size: clamp(24px, 2.4vw, 34px);
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.06em;
+      word-break: keep-all;
+    }
+
+    .paper-piece {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: 76px;
+      height: 40px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(218,228,250,0.92));
+      transform: rotate(var(--r));
+      box-shadow: 0 9px 18px rgba(0,0,0,0.18);
+      overflow: hidden;
+    }
+
+    .paper-piece::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background: rgba(60,76,110,0.18);
+      box-shadow: -20px 0 0 rgba(60,76,110,0.08), 20px 0 0 rgba(60,76,110,0.08);
+    }
+
+    .paper-piece::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 22px;
+      height: 22px;
+      background: linear-gradient(135deg, rgba(180,196,232,0.3) 0 50%, rgba(255,255,255,0.82) 51%);
+      clip-path: polygon(100% 0, 0 0, 100% 100%);
+    }
+
+    .paper-piece:nth-child(3n) { background: linear-gradient(135deg, rgba(221,233,255,0.98), rgba(255,255,255,0.86)); }
+    .paper-piece:nth-child(4n) { background: linear-gradient(135deg, rgba(238,242,248,0.98), rgba(205,219,250,0.9)); }
+
+    .bottle-side h3 {
+      font-size: clamp(48px, 6vw, 92px);
+      line-height: 0.96;
+      letter-spacing: -0.07em;
+      font-weight: 950;
+    }
+
+    .bottle-side p {
+      margin-top: 24px;
+      color: var(--soft-white);
+      font-size: clamp(18px, 1.7vw, 25px);
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .bottle-count {
+      display: inline-flex;
+      margin-bottom: 22px;
+      padding: 10px 16px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      color: var(--soft-white);
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .draw-button,
+    .reset-button {
+      margin-top: 30px;
+      margin-right: 10px;
+      border: 0;
+      border-radius: 999px;
+      padding: 17px 24px;
+      font-size: 17px;
+      font-weight: 950;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .draw-button {
+      background: var(--white);
+      color: var(--tagby-blue);
+    }
+
+    .reset-button {
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .postit-board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      padding-bottom: 80px;
+    }
+
+    .postit {
+      min-height: 178px;
+      border: 0;
+      border-radius: 4px 18px 18px 18px;
+      padding: 22px;
+      text-align: left;
+      cursor: pointer;
+      background: linear-gradient(145deg, rgba(255,255,255,0.94), rgba(225,235,255,0.9));
+      color: #101014;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      transform: rotate(var(--r));
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      animation: fadeUp 520ms ease forwards;
+      animation-delay: var(--delay);
+      font-family: inherit;
+    }
+
+    .postit:nth-child(3n) { background: linear-gradient(145deg, #f7f9ff, #dfeaff); }
+    .postit:nth-child(4n) { background: linear-gradient(145deg, #ffffff, #eef1f7); }
+    .postit:nth-child(5n) { background: linear-gradient(145deg, #eaf1ff, #ffffff); }
+
+    .postit:hover {
+      transform: rotate(0deg) translateY(-6px) scale(1.02);
+      transition: transform 180ms ease;
+    }
+
+    .postit-keyword {
+      font-size: clamp(25px, 2.7vw, 44px);
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+      font-weight: 950;
+      word-break: keep-all;
+    }
+
+    .postit-from {
+      margin-top: 18px;
+      font-size: 15px;
+      color: rgba(16,16,20,0.62);
+      font-weight: 900;
+      letter-spacing: -0.01em;
+    }
+
+    .table-tools {
+      margin-bottom: 18px;
+    }
+
+    .search-input {
+      width: min(520px, 100%);
+      padding: 16px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      font-size: 17px;
+      outline: none;
+    }
+
+    .search-input::placeholder { color: rgba(255,255,255,0.38); }
+
+    .message-table {
+      display: grid;
+      gap: 8px;
+      padding-bottom: 80px;
+    }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 160px 180px 1fr;
+      gap: 18px;
+      align-items: start;
+      width: 100%;
+      padding: 18px 20px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.06);
+      color: var(--soft-white);
+      font-size: 15px;
+      line-height: 1.5;
+      text-align: left;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .table-head {
+      cursor: default;
+      background: rgba(255,255,255,0.12);
+      color: var(--white);
+      font-weight: 950;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+    }
+
+    .table-row:not(.table-head):hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .table-row div:nth-child(2) {
+      color: var(--white);
+      font-weight: 950;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0,0,0,0.68);
+      backdrop-filter: blur(12px);
+      animation: fadeIn 180ms ease both;
+    }
+
+    .modal-postit {
+      position: relative;
+      width: min(720px, 92vw);
+      min-height: 440px;
+      padding: clamp(34px, 5vw, 60px);
+      border-radius: 6px 34px 34px 34px;
+      background: linear-gradient(145deg, #ffffff, #e7efff);
+      color: #101014;
+      box-shadow: 0 40px 140px rgba(0,0,0,0.42);
+      animation: modalPop 240ms ease both;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.08);
+      color: #101014;
+      font-size: 28px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .modal-keyword {
+      font-size: clamp(46px, 7vw, 98px);
+      line-height: 0.94;
+      letter-spacing: -0.08em;
+      font-weight: 950;
+      word-break: keep-all;
+      padding-right: 40px;
+    }
+
+    .modal-from {
+      margin-top: 22px;
+      color: rgba(16,16,20,0.56);
+      font-size: clamp(16px, 1.6vw, 22px);
+      font-weight: 950;
+    }
+
+    .modal-description {
+      margin-top: 34px;
+      color: rgba(16,16,20,0.84);
+      font-size: clamp(19px, 2vw, 28px);
+      line-height: 1.7;
+      font-weight: 600;
+      white-space: pre-line;
+      word-break: keep-all;
+    }
+
+    @keyframes bottleShake {
+      0%, 100% { transform: rotate(0deg); }
+      18% { transform: rotate(-4deg) translateX(-8px); }
+      38% { transform: rotate(4deg) translateX(8px); }
+      58% { transform: rotate(-3deg) translateX(-6px); }
+      78% { transform: rotate(2deg) translateX(4px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: translateY(20px) scale(0.92) rotate(-2deg); }
+      to { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .message-grid,
+      .postit-board {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .bottle-view {
+        grid-template-columns: 1fr;
+      }
+
+      .table-row {
+        grid-template-columns: 120px 140px 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .paper-screen {
+        padding: 26px 20px 70px;
+      }
+
+      .top-bar,
+      .section-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .message-grid,
+      .postit-board {
+        grid-template-columns: 1fr;
+      }
+
+      .table-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .bottle-wrap {
+        min-height: 380px;
+      }
+
+      .code-form {
+        flex-direction: column;
+      }
+
+      .open-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="screen lock-screen active" id="lockScreen">
+    <div class="lock-card">
+      <div class="eyebrow">TAGby 10th Anniversary</div>
+      <h1 class="lock-title">This page is<br />for one special person.</h1>
+      <p class="lock-subtitle">10년의 시간을 함께한 마음을 담았습니다.<br />Secret Code를 입력해주세요.</p>
+
+      <form class="code-form" id="codeForm">
+        <input class="code-input" id="codeInput" type="password" placeholder="Secret Code" autocomplete="off" />
+        <button class="open-button" type="submit">Open</button>
+      </form>
+
+      <div class="error-message" id="errorMessage"></div>
+      <p class="hint">Hint. 전달받은 코드가 있다면 영문 대소문자와 숫자를 확인해주세요.</p>
+    </div>
+  </section>
+
+  <section class="screen paper-screen" id="paperScreen">
+    <header class="top-bar">
+      <div class="brand"><span class="brand-dot"></span><span>TAGby</span></div>
+      <button class="top-button" type="button" onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })">마지막으로 이동</button>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">Digital Rolling Paper</div>
+      <h1 class="hero-title">10년의 시간을<br />이끌어주셔서 감사합니다</h1>
+      <p class="hero-subtitle">함께 일해온 사람들이 전하는<br />고마움과 응원의 기록</p>
+      <div class="hero-meta">FROM. TAGby · 2016 — 2026</div>
+    </section>
+
+    <section class="section-title">
+      <h2>Messages</h2>
+      <p>ROLLING.PAPER.ARCHIVE</p>
+    </section>
+
+    <section class="message-grid" id="messageGrid"></section>
+
+    <section class="closing">
+      <h2 class="closing-title">From. TAGby</h2>
+      <p class="closing-subtitle">앞으로의 시간도<br />우리답게 함께 만들어가겠습니다.</p>
+      <div class="closing-sign">TAGby 10th Anniversary · 2016 — 2026</div>
+    </section>
+  </section>
+
+  <script>
+    const SECRET_CODES = ["TAGby10", "20160601", "0601"];
+    const MESSAGE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTDEEKzSCsP3YJMTrhgq76UHKkWpAycfAxtRWz9ZbJ5gXXQBU5jJX1hCZfmT6J9OICBy0_vysfm4Tvh/pub?gid=0&single=true&output=csv";
+
+    const PROXIES = [
+      url => url,
+      url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+      url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+      url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+    ];
+
+    const fallbackMessages = [
+      { author: "TAGby People", keyword: "감사", description: "대표님, TAGby의 10년을 만들어주셔서 감사합니다." },
+      { author: "TF Team", keyword: "10 YEARS", description: "이번 10주년이 오래 기억에 남는 하루가 되었으면 좋겠습니다." }
+    ];
+
+    let messages = [];
+    let pickedIndexes = new Set();
+    let currentView = "bottle";
+
+    const lockScreen = document.getElementById("lockScreen");
+    const paperScreen = document.getElementById("paperScreen");
+    const codeForm = document.getElementById("codeForm");
+    const codeInput = document.getElementById("codeInput");
+    const errorMessage = document.getElementById("errorMessage");
+    const messageGrid = document.getElementById("messageGrid");
+
+    function normalizeCode(value) {
+      return String(value || "").trim();
+    }
+
+    function escapeHTML(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function tryFetch(url) {
+      const res = await fetch(url, { cache: "no-cache" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
+      if (!text.trim()) throw new Error("empty csv");
+      return text;
+    }
+
+    async function loadWithFallback(url) {
+      for (const makeUrl of PROXIES) {
+        try { return await tryFetch(makeUrl(url)); } catch {}
+      }
+      throw new Error("csv load failed");
+    }
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [], cell = "", inQuote = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const next = text[i + 1];
+
+        if (ch === '"' && inQuote && next === '"') {
+          cell += '"';
+          i++;
+        } else if (ch === '"') {
+          inQuote = !inQuote;
+        } else if (ch === ',' && !inQuote) {
+          row.push(cell.trim());
+          cell = "";
+        } else if ((ch === "\n" || ch === "\r") && !inQuote) {
+          if (cell || row.length) {
+            row.push(cell.trim());
+            rows.push(row);
+            row = [];
+            cell = "";
+          }
+          if (ch === "\r" && next === "\n") i++;
+        } else {
+          cell += ch;
+        }
+      }
+
+      if (cell || row.length) {
+        row.push(cell.trim());
+        rows.push(row);
+      }
+
+      return rows.filter(r => r.some(c => String(c).trim()));
+    }
+
+    function rowsToMessages(rows) {
+      if (!rows.length) return [];
+      const header = rows[0].map(v => String(v).trim().toLowerCase());
+      const body = rows.slice(1);
+
+      const findIndex = names => names.map(n => header.indexOf(n)).find(i => i !== -1);
+      const authorIndex = findIndex(["작성자", "author", "from", "name", "이름"]);
+      const keywordIndex = findIndex(["키워드", "keyword", "word", "title"]);
+      const descriptionIndex = findIndex(["설명", "description", "message", "메시지", "내용", "text"]);
+
+      const ai = authorIndex ?? 0;
+      const ki = keywordIndex ?? 1;
+      const di = descriptionIndex ?? 2;
+
+      return body
+        .map(row => ({
+          author: row[ai] || "TAGby People",
+          keyword: row[ki] || "MESSAGE",
+          description: row[di] || ""
+        }))
+        .filter(item => item.keyword || item.description);
+    }
+
+    async function loadMessages() {
+      try {
+        const csv = await loadWithFallback(MESSAGE_CSV_URL);
+        const parsed = rowsToMessages(parseCSV(csv));
+        messages = parsed.length ? parsed : fallbackMessages;
+      } catch {
+        messages = fallbackMessages;
+      }
+    }
+
+    function openPaper() {
+      lockScreen.classList.remove("active");
+      paperScreen.classList.add("active");
+      document.body.style.overflowY = "auto";
+      buildRollingPaperApp();
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    function buildRollingPaperApp() {
+      const hero = document.querySelector(".hero");
+      const sectionTitle = document.querySelector(".section-title");
+      const closing = document.querySelector(".closing");
+
+      hero.innerHTML = `
+        <div class="eyebrow">Digital Rolling Paper</div>
+        <h1 class="hero-title">마음을 담은<br />51개의 메시지</h1>
+        <p class="hero-subtitle">병에서 쪽지를 꺼내듯 하나씩 열어보고,<br />보드와 전체보기로 다시 읽어볼 수 있습니다.</p>
+        <div class="hero-meta">FROM. TAGby · 2016 — 2026</div>
+      `;
+
+      sectionTitle.innerHTML = `
+        <div>
+          <h2>Rolling Paper</h2>
+          <p style="margin-top:10px;">MESSAGE.VIEW.MODE</p>
+        </div>
+        <div class="view-tabs">
+          <button class="view-tab active" data-view="bottle">Message Bottle</button>
+          <button class="view-tab" data-view="board">Post-it Board</button>
+          <button class="view-tab" data-view="table">All Messages</button>
+        </div>
+      `;
+
+      messageGrid.outerHTML = `<section class="rolling-app" id="rollingApp"></section>`;
+      closing.innerHTML = `
+        <h2 class="closing-title">From. TAGby</h2>
+        <p class="closing-subtitle">앞으로의 시간도<br />우리답게 함께 만들어가겠습니다.</p>
+        <div class="closing-sign">TAGby 10th Anniversary · 2016 — 2026</div>
+      `;
+
+      document.querySelectorAll(".view-tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+          currentView = btn.dataset.view;
+          document.querySelectorAll(".view-tab").forEach(b => b.classList.toggle("active", b === btn));
+          renderCurrentView();
+        });
+      });
+
+      renderCurrentView();
+    }
+
+    function renderCurrentView() {
+      const app = document.getElementById("rollingApp");
+      if (!app) return;
+
+      if (currentView === "bottle") renderBottle(app);
+      if (currentView === "board") renderBoard(app);
+      if (currentView === "table") renderTable(app);
+    }
+
+    function renderBottle(app) {
+      const paperPieces = Array.from({ length: 34 }, () => {
+        const x = Math.random() * 72 + 9;
+        const y = Math.random() * 70 + 20;
+        const r = Math.random() * 70 - 35;
+        return `<span class="paper-piece" style="--x:${x}%; --y:${y}%; --r:${r}deg;"></span>`;
+      }).join("");
+
+      app.innerHTML = `
+        <div class="bottle-view">
+          <div class="bottle-wrap" id="bottleWrap">
+            <div class="bottle-cap"></div>
+            <div class="bottle-neck"></div>
+            <div class="bottle-body">
+              ${paperPieces}
+              <div class="bottle-label">
+                <span class="label-small">MESSAGE BOTTLE</span>
+                <span class="label-main">나에게<br />태그바이란?</span>
+              </div>
+            </div>
+          </div>
+          <div class="bottle-side">
+            <div class="bottle-count">${pickedIndexes.size} / ${messages.length}</div>
+            <h3>Message Bottle</h3>
+            <p>버튼을 누를 때마다 병 속에서 랜덤 쪽지가 하나씩 나옵니다.</p>
+            <button class="draw-button" onclick="drawRandomMessage()">쪽지 하나 꺼내기</button>
+            <button class="reset-button" onclick="resetPickedMessages()">다시 섞기</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderBoard(app) {
+      app.innerHTML = `
+        <div class="postit-board">
+          ${messages.map((msg, index) => `
+            <button class="postit" onclick="openMessageModal(${index})" style="--r:${(index % 7) - 3}deg; --delay:${index * 18}ms;">
+              <span class="postit-keyword">${escapeHTML(msg.keyword)}</span>
+              <span class="postit-from">From. ${escapeHTML(msg.author)}</span>
+            </button>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderTable(app) {
+      app.innerHTML = `
+        <div class="table-tools">
+          <input class="search-input" id="messageSearch" placeholder="작성자 / 키워드 / 내용 검색" oninput="filterTableMessages()" />
+        </div>
+        <div class="message-table" id="messageTable">
+          ${tableRows(messages)}
+        </div>
+      `;
+    }
+
+    function tableRows(items) {
+      return `
+        <div class="table-row table-head">
+          <div>작성자</div><div>키워드</div><div>설명</div>
+        </div>
+        ${items.map((msg, index) => `
+          <button class="table-row" onclick="openMessageModal(${index})">
+            <div>${escapeHTML(msg.author)}</div>
+            <div>${escapeHTML(msg.keyword)}</div>
+            <div>${escapeHTML(msg.description)}</div>
+          </button>
+        `).join("")}
+      `;
+    }
+
+    function filterTableMessages() {
+      const keyword = document.getElementById("messageSearch").value.trim().toLowerCase();
+      const filtered = messages.filter(msg => [msg.author, msg.keyword, msg.description].join(" ").toLowerCase().includes(keyword));
+      document.getElementById("messageTable").innerHTML = tableRows(filtered);
+    }
+
+    function drawRandomMessage() {
+      if (pickedIndexes.size >= messages.length) {
+        pickedIndexes.clear();
+      }
+
+      const available = messages.map((_, i) => i).filter(i => !pickedIndexes.has(i));
+      const index = available[Math.floor(Math.random() * available.length)];
+      pickedIndexes.add(index);
+
+      const bottle = document.getElementById("bottleWrap");
+      bottle?.classList.remove("shake");
+      void bottle?.offsetWidth;
+      bottle?.classList.add("shake");
+
+      setTimeout(() => {
+        openMessageModal(index);
+        renderBottle(document.getElementById("rollingApp"));
+      }, 520);
+    }
+
+    function resetPickedMessages() {
+      pickedIndexes.clear();
+      renderCurrentView();
+    }
+
+    function openMessageModal(index) {
+      const msg = messages[index];
+      if (!msg) return;
+
+      const old = document.getElementById("messageModal");
+      old?.remove();
+
+      const modal = document.createElement("div");
+      modal.id = "messageModal";
+      modal.className = "modal-backdrop";
+      modal.innerHTML = `
+        <article class="modal-postit">
+          <button class="modal-close" onclick="closeMessageModal()">×</button>
+          <div class="modal-keyword">${escapeHTML(msg.keyword)}</div>
+          <div class="modal-from">From. ${escapeHTML(msg.author)}</div>
+          <p class="modal-description">${escapeHTML(msg.description)}</p>
+        </article>
+      `;
+      modal.addEventListener("click", event => {
+        if (event.target === modal) closeMessageModal();
+      });
+      document.body.appendChild(modal);
+    }
+
+    function closeMessageModal() {
+      document.getElementById("messageModal")?.remove();
+    }
+
+    codeForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const input = normalizeCode(codeInput.value);
+      const isCorrect = SECRET_CODES.includes(input);
+
+      if (isCorrect) {
+        sessionStorage.setItem("tagbyRollingPaperUnlocked", "true");
+        await loadMessages();
+        openPaper();
+        return;
+      }
+
+      errorMessage.textContent = "코드를 다시 확인해주세요 :)";
+      codeInput.value = "";
+      codeInput.focus();
+    });
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      document.body.style.overflowY = "hidden";
+      codeInput.focus();
+
+      if (sessionStorage.getItem("tagbyRollingPaperUnlocked") === "true") {
+        await loadMessages();
+        openPaper();
+      }
+    });
+  </script>
+</body>
+</html>
