@@ -3,618 +3,926 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TAGby 10주년 기념 퀴즈쇼</title>
+  <title>TAGby 10th Anniversary | Rolling Paper</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      transition: background-color 0.15s ease;
+    :root {
+      --tagby-blue: #005BFF;
+      --black: #050507;
+      --dark: #101014;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-line: rgba(255, 255, 255, 0.16);
+      --white: #ffffff;
+      --soft-white: rgba(255, 255, 255, 0.78);
+      --dim-white: rgba(255, 255, 255, 0.48);
+      --error: #ff6b6b;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f4f7ff;
-      color: #111827;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    body {
       overflow-x: hidden;
     }
 
-    /* ── 공통 스크린 ── */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(255, 255, 255, 0.16), transparent 28%),
+        linear-gradient(180deg, #005BFF 0%, #0038A8 26%, #111118 62%, #000000 100%);
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.82), transparent 84%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
     .screen {
-      width: 100vw;
       min-height: 100vh;
+      width: 100%;
       display: none;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .lock-screen {
       align-items: center;
       justify-content: center;
-      padding: 48px 64px;
-    }
-    .screen.active { display: flex; }
-    /* 퀴즈 화면만 고정 높이 유지 */
-    .quiz-screen { height: 100vh; overflow: hidden; }
-
-    /* ── 인트로 / 룰 스크린 ── */
-    .intro-screen {
-      background: radial-gradient(circle at top left, #dbeafe 0, transparent 36%),
-                  linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
+      padding: 48px 24px;
       text-align: center;
     }
-    .intro-content { width: min(100%, 1100px); }
-    .intro-label {
-      display: inline-block;
-      margin-bottom: 28px;
-      padding: 12px 22px;
-      border-radius: 999px;
-      background: #2563eb;
-      color: #fff;
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: 0.02em;
-    }
-    .intro-title {
-      margin: 0;
-      font-size: clamp(64px, 9vw, 128px);
-      line-height: 1.1;
-      font-weight: 950;
-      letter-spacing: -0.06em;
-      word-break: keep-all;
-    }
-    .intro-button {
-      margin-top: 56px;
-      padding: 18px 34px;
-      border: 0;
-      border-radius: 999px;
-      background: #111827;
-      color: #fff;
-      font-size: 22px;
-      font-weight: 900;
-      cursor: pointer;
+
+    .lock-card {
+      width: min(720px, 92vw);
+      padding: clamp(34px, 5vw, 64px);
+      border: 1px solid var(--card-line);
+      border-radius: 36px;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.42);
     }
 
-    /* ── 룰 슬라이더 ── */
-    .rule-screen-content {
-      max-width: 1100px;
-      text-align: left;
+    .eyebrow {
+      font-size: clamp(13px, 1.3vw, 18px);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--soft-white);
+      font-weight: 800;
+      margin-bottom: 22px;
     }
-    .rule-title {
-      margin: 0 0 52px;
-      font-size: clamp(54px, 7vw, 100px);
-      line-height: 1.1;
+
+    .lock-title {
+      font-size: clamp(42px, 7vw, 88px);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
       font-weight: 950;
-      letter-spacing: -0.05em;
-    }
-    .rule-slider-wrap {
-      position: relative;
-      min-height: 420px;
-      overflow: hidden;
-    }
-    .rule-next-button {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 42px;
-      height: 42px;
-      border-radius: 999px;
-      border: 1px solid rgba(17,24,39,0.08);
-      background: rgba(255,255,255,0.18);
-      backdrop-filter: blur(8px);
-      color: rgba(17,24,39,0.92);
-      font-size: 18px;
-      font-weight: 900;
-      cursor: pointer;
-      z-index: 10;
-    }
-    .rule-slider {
-      display: flex;
-      transition: transform 0.4s ease;
-    }
-    .rule-slide {
-      width: 100%;
-      flex-shrink: 0;
-      padding: 12px;
-    }
-    .rule-card {
-      padding: 40px;
-      border-radius: 36px;
-      background: rgba(255,255,255,0.72);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(37,99,235,0.08);
-      min-height: 360px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .rule-emoji { font-size: 96px; }
-    .rule-label {
-      font-size: 24px;
-      font-weight: 950;
-      color: #2563eb;
-      margin-bottom: 12px;
-    }
-    .rule-main {
-      font-size: clamp(34px, 4vw, 64px);
-      line-height: 1.25;
-      font-weight: 900;
       word-break: keep-all;
     }
-    .rule-sub {
-      margin-top: 16px;
-      color: #6b7280;
-      font-size: 24px;
+
+    .lock-subtitle {
+      margin-top: 26px;
+      color: var(--soft-white);
+      font-size: clamp(18px, 2vw, 26px);
+      line-height: 1.55;
+      font-weight: 500;
+      word-break: keep-all;
+    }
+
+    .code-form {
+      margin-top: 42px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .code-input {
+      width: min(360px, 100%);
+      padding: 18px 22px;
+      border: 1px solid rgba(255,255,255,0.26);
+      border-radius: 999px;
+      background: rgba(0,0,0,0.24);
+      color: var(--white);
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      outline: none;
+      letter-spacing: 0.08em;
+    }
+
+    .code-input::placeholder {
+      color: rgba(255,255,255,0.36);
+      letter-spacing: 0;
+      font-weight: 600;
+    }
+
+    .open-button,
+    .top-button {
+      border: 0;
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--tagby-blue);
+      font-size: 17px;
+      font-weight: 900;
+      padding: 18px 24px;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 20px 50px rgba(0, 91, 255, 0.2);
+    }
+
+    .error-message {
+      min-height: 28px;
+      margin-top: 18px;
+      color: var(--error);
+      font-size: 15px;
       font-weight: 700;
     }
 
-    /* ── 퀴즈 스크린 ── */
-    .quiz-screen {
-      position: relative;
-      background: #fff;
-      overflow: hidden;
+    .hint {
+      margin-top: 22px;
+      color: var(--dim-white);
+      font-size: 13px;
+      line-height: 1.55;
     }
-    .quiz-screen::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(220,38,38,0);
-      pointer-events: none;
-      z-index: 1;
-    }
-    .quiz-screen.danger-mode::after { animation: screenFlash 0.45s infinite; }
 
-    .quiz-layout {
-      position: relative;
-      width: 100%;
-      height: 100%;
+    .paper-screen {
+      flex-direction: column;
+      padding: 38px 44px 80px;
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 8px 0 28px;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .hero {
+      min-height: 74vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 40px;
+      align-items: center;
+      text-align: center;
+      padding: 64px 0 80px;
     }
-    .question-area {
-      width: 100%;
-      max-width: 1280px;
-      margin: 0 auto;
-      text-align: left;
-    }
-    .question-number {
-      margin-bottom: 24px;
-      color: #2563eb;
-      font-size: clamp(32px, 4vw, 56px);
+
+    .hero-title {
+      font-size: clamp(52px, 8vw, 128px);
+      line-height: 0.98;
+      letter-spacing: -0.075em;
       font-weight: 950;
-      letter-spacing: -0.04em;
-    }
-    .question-text {
-      transition: all 0.35s ease;
-      margin: 0;
-      font-size: clamp(58px, 7.5vw, 118px);
-      line-height: 1.18;
-      font-weight: 950;
-      letter-spacing: -0.06em;
       word-break: keep-all;
+      animation: fadeUp 760ms ease both;
     }
 
-    /* ── 타이머 ── */
-    .timer {
-      display: none;
-      margin-top: 28px;
-      min-width: 80px;
-      color: #2563eb;
-      font-size: clamp(72px, 9vw, 140px);
-      font-weight: 950;
-      letter-spacing: -0.04em;
-      text-align: left;
-    }
-    .timer.visible { display: block; }
-    .timer.danger {
-      color: #dc2626;
-      animation: shake 0.28s infinite;
-    }
-
-    /* ── 정답 박스 ── */
-    .answer-box {
-      transition: all 0.35s ease;
-      display: none;
-      width: min(100%, 1280px);
-      margin: 36px auto 0;
-      padding: 28px 34px;
-      border-radius: 28px;
-      background: #ecfdf5;
-      color: #166534;
-      font-size: clamp(34px, 4.5vw, 64px);
-      font-weight: 950;
-      line-height: 1.25;
+    .hero-subtitle {
+      margin-top: 34px;
+      color: var(--soft-white);
+      font-size: clamp(20px, 2.2vw, 34px);
+      line-height: 1.45;
+      font-weight: 500;
       word-break: keep-all;
+      animation: fadeUp 760ms ease 140ms both;
     }
-    .answer-box.visible { display: block; }
 
-    /* ── 정답 모드 ── */
-    .question-area.answer-mode .question-number {
-      opacity: 0.4;
-      transform: scale(0.9);
+    .hero-meta {
+      margin-top: 36px;
+      display: inline-flex;
+      padding: 12px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--card-line);
+      color: var(--soft-white);
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      font-size: clamp(13px, 1.2vw, 17px);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      animation: fadeUp 760ms ease 280ms both;
     }
-    .question-area.answer-mode .question-text {
-      font-size: clamp(30px, 3vw, 52px);
-      opacity: 0.45;
-      margin-bottom: 12px;
-    }
-    .question-area.answer-mode .timer { display: none !important; }
-    .question-area.answer-mode .answer-box {
-      margin-top: 24px;
-      font-size: clamp(72px, 8vw, 150px);
-      line-height: 1.1;
-      background: transparent;
-      color: #111827;
-      padding: 0;
-    }
-    .answer-highlight { color: #2563eb; }
 
-    /* ── 하단 바 ── */
-    .bottom-bar {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
+    .section-title {
+      margin: 20px auto 34px;
+      width: min(1160px, 100%);
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
       gap: 24px;
+      border-top: 1px solid rgba(255,255,255,0.14);
+      padding-top: 28px;
     }
-    .timer-box {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 18px;
-      border-radius: 999px;
-      background: #f3f4f6;
-    }
-    .timer-start-button {
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: #2563eb;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 900;
-    }
-    .answer-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 54px;
-      height: 54px;
-      border-radius: 999px;
-      background: #111827;
-      color: #fff;
-      font-size: 26px;
+
+    .section-title h2 {
+      font-size: clamp(32px, 4vw, 64px);
       font-weight: 950;
-      line-height: 1;
+      letter-spacing: -0.055em;
     }
-    .score-btn {
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 10px 18px;
-      border-radius: 999px;
-      background: #2563eb;
-      color: #fff;
+
+    .section-title p {
+      color: var(--dim-white);
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
       font-size: 14px;
-      font-weight: 900;
-      z-index: 10;
-    }
-    .hint {
-      position: absolute;
-      left: 0;
-      bottom: 74px;
-      color: #9ca3af;
-      font-size: 14px;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: 0.08em;
     }
 
-    /* ── 공통 버튼 ── */
-    button {
-      border: 0;
-      cursor: pointer;
-      transition: transform 0.15s ease, opacity 0.15s ease;
-      font-family: inherit;
-    }
-    button:hover:not(:disabled) { transform: translateY(-2px); }
-    button:disabled { opacity: 0.45; cursor: not-allowed; }
-
-    /* ── 애니메이션 ── */
-    @keyframes shake {
-      0%   { transform: translateX(0); }
-      25%  { transform: translateX(-4px); }
-      50%  { transform: translateX(4px); }
-      75%  { transform: translateX(-3px); }
-      100% { transform: translateX(0); }
-    }
-    @keyframes screenFlash {
-      0%,100% { background: rgba(220,38,38,0);    box-shadow: inset 0 0 0 rgba(255,0,0,0); }
-      50%      { background: rgba(220,38,38,0.22); box-shadow: inset 0 0 260px rgba(255,0,0,0.34); }
+    .message-grid {
+      width: min(1160px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
     }
 
-    .error { color: #dc2626; }
-
-    /* ── 최종 결과 스크린 ── */
-    .final-screen {
-      background: radial-gradient(circle at bottom right, #dbeafe 0, transparent 40%),
-                  linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
-      flex-direction: column;
-      gap: 48px;
-    }
-    .final-content { width: min(100%, 860px); text-align: center; }
-    .final-title {
-      margin: 16px 0 8px;
-      font-size: clamp(48px, 7vw, 96px);
-      font-weight: 950;
-      letter-spacing: -0.05em;
-      line-height: 1.1;
-      color: #111827;
-    }
-    .final-sub {
-      font-size: 22px;
-      font-weight: 700;
-      color: #6b7280;
-      margin-bottom: 40px;
-    }
-    .final-ranking {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      text-align: left;
-    }
-    .ranking-item {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 28px;
-      border-radius: 20px;
-      background: #fff;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-      animation: slideUp 0.4s ease both;
-    }
-    .ranking-item:nth-child(1) { animation-delay: 0.05s; }
-    .ranking-item:nth-child(2) { animation-delay: 0.1s; }
-    .ranking-item:nth-child(3) { animation-delay: 0.15s; }
-    .ranking-item:nth-child(4) { animation-delay: 0.2s; }
-    .ranking-item:nth-child(5) { animation-delay: 0.25s; }
-    .ranking-item:nth-child(6) { animation-delay: 0.3s; }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .ranking-item.rank-1 { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #fbbf24; }
-    .ranking-item.rank-2 { background: linear-gradient(135deg, #f9fafb, #f3f4f6); border: 2px solid #9ca3af; }
-    .ranking-item.rank-3 { background: linear-gradient(135deg, #fffaf0, #fef3e2); border: 2px solid #d97706; }
-    .rank-badge {
-      font-size: 36px;
-      min-width: 48px;
-      text-align: center;
-    }
-    .rank-team {
-      flex: 1;
-      font-size: clamp(22px, 3vw, 36px);
-      font-weight: 900;
-      color: #111827;
-    }
-    .rank-score {
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: 950;
-      color: #2563eb;
-      letter-spacing: -0.03em;
-    }
-    .rank-score-label {
-      font-size: 16px;
-      font-weight: 700;
-      color: #9ca3af;
-      margin-left: 4px;
-    }
-    .final-next-btn {
-      margin-top: 40px;
-      padding: 18px 40px;
-      border: 0;
-      border-radius: 999px;
-      background: #111827;
-      color: #fff;
-      font-size: 20px;
-      font-weight: 900;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    /* ── 순위결정전 스크린 ── */
-    .tiebreak-screen {
-      background: radial-gradient(circle at top right, #fee2e2 0, transparent 40%),
-                  linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
-      flex-direction: column;
-      gap: 40px;
-      text-align: center;
-    }
-    .tiebreak-content { width: min(100%, 860px); }
-    .tiebreak-title {
-      margin: 16px 0 16px;
-      font-size: clamp(48px, 7vw, 96px);
-      font-weight: 950;
-      letter-spacing: -0.05em;
-      line-height: 1.1;
-      color: #111827;
-    }
-    .tiebreak-sub {
-      font-size: 22px;
-      font-weight: 700;
-      color: #6b7280;
-      margin-bottom: 48px;
-      word-break: keep-all;
-      line-height: 1.6;
-    }
-    .tiebreak-btn-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-    .tiebreak-pass-btn {
-      padding: 18px 40px;
-      border: 2px solid #e5e7eb;
-      border-radius: 999px;
-      background: #fff;
-      color: #6b7280;
-      font-size: 18px;
-      font-weight: 900;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    /* ── 레크리에이션 뽑기 스크린 ── */
-    .recreation-screen {
-      background: radial-gradient(circle at bottom left, #d1fae5 0, transparent 40%),
-                  linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
-      flex-direction: column;
-      gap: 40px;
-    }
-    .recreation-content { width: min(100%, 1200px); text-align: left; }
-    .recreation-title {
-      margin: 16px 0 40px;
-      font-size: clamp(48px, 6vw, 88px);
-      font-weight: 950;
-      letter-spacing: -0.05em;
-      line-height: 1.1;
-      color: #111827;
-      word-break: keep-all;
-    }
-    .rec-slider-wrap { position: relative; min-height: 380px; overflow: hidden; }
-    .rec-next-button {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 48px;
-      height: 48px;
-      border-radius: 999px;
-      border: 1px solid rgba(17,24,39,0.08);
-      background: rgba(255,255,255,0.3);
-      backdrop-filter: blur(8px);
-      color: rgba(17,24,39,0.9);
-      font-size: 20px;
-      font-weight: 900;
-      cursor: pointer;
-      z-index: 10;
-      font-family: inherit;
-    }
-    .rec-slider { display: flex; transition: transform 0.4s ease; }
-    .rec-slide { width: 100%; flex-shrink: 0; padding: 12px; }
-    .rec-card {
-      padding: 48px 52px;
-      border-radius: 36px;
-      background: rgba(255,255,255,0.8);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 40px rgba(16,185,129,0.1);
-      min-height: 380px;
+    .message-card {
+      min-height: 240px;
+      padding: 26px;
+      border: 1px solid var(--card-line);
+      border-radius: 28px;
+      background: var(--card);
+      backdrop-filter: blur(16px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 24px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 680ms ease forwards;
     }
-    .rec-emoji { font-size: 80px; line-height: 1; }
-    .rec-label {
-      font-size: 20px;
+
+    .message-card:nth-child(3n + 1) { transform: translateY(28px); }
+    .message-card:nth-child(3n + 2) { transform: translateY(10px); }
+
+    .message-text {
+      font-size: clamp(17px, 1.4vw, 22px);
+      line-height: 1.62;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      word-break: keep-all;
+      white-space: pre-line;
+    }
+
+    .message-from {
+      color: rgba(255,255,255,0.54);
+      font-size: 15px;
+      font-weight: 850;
+      letter-spacing: -0.01em;
+    }
+
+    .closing {
+      min-height: 82vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 90px 0 40px;
+    }
+
+    .closing-title {
+      font-size: clamp(50px, 7vw, 118px);
+      line-height: 1;
+      letter-spacing: -0.07em;
       font-weight: 950;
-      color: #059669;
-      margin-bottom: 10px;
-      letter-spacing: 0.02em;
-    }
-    .rec-main {
-      font-size: clamp(28px, 3.5vw, 52px);
-      line-height: 1.35;
-      font-weight: 900;
       word-break: keep-all;
-      color: #111827;
     }
-    .rec-sub {
-      margin-top: 12px;
-      font-size: 20px;
-      font-weight: 700;
-      color: #6b7280;
-      word-break: keep-all;
+
+    .closing-subtitle {
+      margin-top: 32px;
+      color: var(--soft-white);
+      font-size: clamp(20px, 2vw, 32px);
       line-height: 1.5;
+      word-break: keep-all;
+    }
+
+    .closing-sign {
+      margin-top: 42px;
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      color: var(--soft-white);
+      font-size: clamp(15px, 1.3vw, 20px);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+    }
+
+    .view-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .view-tab {
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: var(--soft-white);
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .view-tab.active {
+      background: var(--white);
+      color: var(--tagby-blue);
+      border-color: var(--white);
+    }
+
+    .rolling-app {
+      width: min(1160px, 100%);
+      margin: 0 auto;
+      min-height: 560px;
+    }
+
+    .bottle-view {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.95fr) minmax(320px, 1.05fr);
+      gap: clamp(28px, 5vw, 74px);
+      align-items: center;
+      padding: 36px 0 70px;
+    }
+
+    .bottle-wrap {
+      position: relative;
+      height: min(66vh, 660px);
+      min-height: 480px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      filter: drop-shadow(0 42px 80px rgba(0,0,0,0.36));
+    }
+
+    .bottle-wrap.shake {
+      animation: bottleShake 520ms ease;
+    }
+
+    .bottle-cap {
+      position: absolute;
+      top: 2%;
+      width: 118px;
+      height: 34px;
+      border-radius: 14px 14px 8px 8px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(200,215,245,0.42));
+      border: 1px solid rgba(255,255,255,0.42);
+      z-index: 4;
+    }
+
+    .bottle-neck {
+      position: absolute;
+      top: 7%;
+      width: 104px;
+      height: 148px;
+      border: 2px solid rgba(255,255,255,0.38);
+      border-bottom: 0;
+      border-radius: 30px 30px 10px 10px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.17), rgba(255,255,255,0.03) 50%, rgba(0,91,255,0.08));
+      box-shadow: inset 22px 0 34px rgba(255,255,255,0.08);
+      z-index: 2;
+      backdrop-filter: blur(12px);
+    }
+
+    .bottle-neck::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 16px;
+      width: 16px;
+      height: 104px;
+      border-radius: 999px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.38), rgba(255,255,255,0));
+      opacity: 0.75;
+    }
+
+    .bottle-body {
+      position: relative;
+      width: min(390px, 74vw);
+      height: 80%;
+      border: 2px solid rgba(255,255,255,0.38);
+      border-radius: 47% 47% 38px 38px / 17% 17% 38px 38px;
+      background:
+        radial-gradient(circle at 28% 18%, rgba(255,255,255,0.28), transparent 20%),
+        linear-gradient(112deg, rgba(255,255,255,0.19), rgba(255,255,255,0.04) 42%, rgba(0,91,255,0.12) 100%);
+      box-shadow:
+        inset 34px 0 86px rgba(255,255,255,0.1),
+        inset -38px 0 88px rgba(0,91,255,0.13),
+        inset 0 -42px 70px rgba(0,0,0,0.14);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .bottle-body::before {
+      content: "";
+      position: absolute;
+      left: 48px;
+      top: 72px;
+      width: 42px;
+      height: 68%;
+      border-radius: 999px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
+      opacity: 0.76;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .bottle-body::after {
+      content: "";
+      position: absolute;
+      inset: auto 28px 28px;
+      height: 42px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.18), rgba(255,255,255,0));
+      opacity: 0.7;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .bottle-label {
+      position: absolute;
+      left: 50%;
+      top: 45%;
+      transform: translate(-50%, -50%) rotate(-2deg);
+      z-index: 5;
+      width: 74%;
+      padding: 24px 22px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.88);
+      color: #101014;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.72);
+    }
+
+    .bottle-label .label-small {
+      display: block;
+      margin-bottom: 8px;
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      font-weight: 900;
+      color: rgba(16,16,20,0.52);
+    }
+
+    .bottle-label .label-main {
+      display: block;
+      font-size: clamp(24px, 2.4vw, 34px);
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.06em;
+      word-break: keep-all;
+    }
+
+    .paper-piece {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: 76px;
+      height: 40px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(218,228,250,0.92));
+      transform: rotate(var(--r));
+      box-shadow: 0 9px 18px rgba(0,0,0,0.18);
+      overflow: hidden;
+    }
+
+    .paper-piece::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 1px;
+      height: 100%;
+      background: rgba(60,76,110,0.18);
+      box-shadow: -20px 0 0 rgba(60,76,110,0.08), 20px 0 0 rgba(60,76,110,0.08);
+    }
+
+    .paper-piece::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 22px;
+      height: 22px;
+      background: linear-gradient(135deg, rgba(180,196,232,0.3) 0 50%, rgba(255,255,255,0.82) 51%);
+      clip-path: polygon(100% 0, 0 0, 100% 100%);
+    }
+
+    .paper-piece:nth-child(3n) { background: linear-gradient(135deg, rgba(221,233,255,0.98), rgba(255,255,255,0.86)); }
+    .paper-piece:nth-child(4n) { background: linear-gradient(135deg, rgba(238,242,248,0.98), rgba(205,219,250,0.9)); }
+
+    .bottle-side h3 {
+      font-size: clamp(48px, 6vw, 92px);
+      line-height: 0.96;
+      letter-spacing: -0.07em;
+      font-weight: 950;
+    }
+
+    .bottle-side p {
+      margin-top: 24px;
+      color: var(--soft-white);
+      font-size: clamp(18px, 1.7vw, 25px);
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .bottle-count {
+      display: inline-flex;
+      margin-bottom: 22px;
+      padding: 10px 16px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      color: var(--soft-white);
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .draw-button,
+    .reset-button {
+      margin-top: 30px;
+      margin-right: 10px;
+      border: 0;
+      border-radius: 999px;
+      padding: 17px 24px;
+      font-size: 17px;
+      font-weight: 950;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .draw-button {
+      background: var(--white);
+      color: var(--tagby-blue);
+    }
+
+    .reset-button {
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .postit-board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      padding-bottom: 80px;
+    }
+
+    .postit {
+      min-height: 178px;
+      border: 0;
+      border-radius: 4px 18px 18px 18px;
+      padding: 22px;
+      text-align: left;
+      cursor: pointer;
+      background: linear-gradient(145deg, rgba(255,255,255,0.94), rgba(225,235,255,0.9));
+      color: #101014;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      transform: rotate(var(--r));
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      animation: fadeUp 520ms ease forwards;
+      animation-delay: var(--delay);
+      font-family: inherit;
+    }
+
+    .postit:nth-child(3n) { background: linear-gradient(145deg, #f7f9ff, #dfeaff); }
+    .postit:nth-child(4n) { background: linear-gradient(145deg, #ffffff, #eef1f7); }
+    .postit:nth-child(5n) { background: linear-gradient(145deg, #eaf1ff, #ffffff); }
+
+    .postit:hover {
+      transform: rotate(0deg) translateY(-6px) scale(1.02);
+      transition: transform 180ms ease;
+    }
+
+    .postit-keyword {
+      font-size: clamp(25px, 2.7vw, 44px);
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+      font-weight: 950;
+      word-break: keep-all;
+    }
+
+    .postit-from {
+      margin-top: 18px;
+      font-size: 15px;
+      color: rgba(16,16,20,0.62);
+      font-weight: 900;
+      letter-spacing: -0.01em;
+    }
+
+    .table-tools {
+      margin-bottom: 18px;
+    }
+
+    .search-input {
+      width: min(520px, 100%);
+      padding: 16px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      font-size: 17px;
+      outline: none;
+    }
+
+    .search-input::placeholder { color: rgba(255,255,255,0.38); }
+
+    .message-table {
+      display: grid;
+      gap: 8px;
+      padding-bottom: 80px;
+    }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 160px 180px 1fr;
+      gap: 18px;
+      align-items: start;
+      width: 100%;
+      padding: 18px 20px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.06);
+      color: var(--soft-white);
+      font-size: 15px;
+      line-height: 1.5;
+      text-align: left;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .table-head {
+      cursor: default;
+      background: rgba(255,255,255,0.12);
+      color: var(--white);
+      font-weight: 950;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+    }
+
+    .table-row:not(.table-head):hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .table-row div:nth-child(2) {
+      color: var(--white);
+      font-weight: 950;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0,0,0,0.68);
+      backdrop-filter: blur(12px);
+      animation: fadeIn 180ms ease both;
+    }
+
+    .modal-postit {
+      position: relative;
+      width: min(720px, 92vw);
+      height: min(620px, 82vh);
+      padding: clamp(34px, 5vw, 60px);
+      border-radius: 6px 34px 34px 34px;
+      background: linear-gradient(145deg, #ffffff, #e7efff);
+      color: #101014;
+      box-shadow: 0 40px 140px rgba(0,0,0,0.42);
+      animation: modalPop 240ms ease both;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.08);
+      color: #101014;
+      font-size: 28px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .modal-keyword {
+      font-size: clamp(46px, 7vw, 98px);
+      line-height: 0.94;
+      letter-spacing: -0.08em;
+      font-weight: 950;
+      word-break: keep-all;
+      padding-right: 40px;
+    }
+
+    .modal-from {
+      margin-top: 22px;
+      color: rgba(16,16,20,0.56);
+      font-size: clamp(16px, 1.6vw, 22px);
+      font-weight: 950;
+    }
+
+    .modal-description {
+      margin-top: 34px;
+      color: rgba(16,16,20,0.84);
+      font-size: clamp(19px, 2vw, 28px);
+      line-height: 1.7;
+      font-weight: 600;
+      white-space: pre-line;
+      word-break: keep-all;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .modal-description::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-description::-webkit-scrollbar-thumb {
+      background: rgba(16,16,20,0.22);
+      border-radius: 999px;
+    }
+
+    @keyframes bottleShake {
+      0%, 100% { transform: rotate(0deg); }
+      18% { transform: rotate(-4deg) translateX(-8px); }
+      38% { transform: rotate(4deg) translateX(8px); }
+      58% { transform: rotate(-3deg) translateX(-6px); }
+      78% { transform: rotate(2deg) translateX(4px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: translateY(20px) scale(0.92) rotate(-2deg); }
+      to { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .message-grid,
+      .postit-board {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .bottle-view {
+        grid-template-columns: 1fr;
+      }
+
+      .table-row {
+        grid-template-columns: 120px 140px 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .paper-screen {
+        padding: 26px 20px 70px;
+      }
+
+      .top-bar,
+      .section-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .message-grid,
+      .postit-board {
+        grid-template-columns: 1fr;
+      }
+
+      .table-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .bottle-wrap {
+        min-height: 380px;
+      }
+
+      .code-form {
+        flex-direction: column;
+      }
+
+      .open-button {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
+  <section class="screen lock-screen" id="lockScreen">
+    <div class="lock-card">
+      <div class="eyebrow">TAGby 10th Anniversary</div>
+      <h1 class="lock-title">This page is<br />for one special person.</h1>
+      <p class="lock-subtitle">10년의 시간을 함께한 마음을 담았습니다.<br />Secret Code를 입력해주세요.</p>
 
-  <!-- 인트로 -->
-  <section class="screen intro-screen active" id="introScreen">
-    <div class="intro-content">
-      <div class="intro-label">TAGby 10th Anniversary</div>
-      <h1 class="intro-title">TAGby 10주년<br />기념 퀴즈쇼</h1>
-      <button class="intro-button" id="showRuleButton">퀴즈 룰 보기</button>
+      <form class="code-form" id="codeForm">
+        <input class="code-input" id="codeInput" type="password" placeholder="Secret Code" autocomplete="off" />
+        <button class="open-button" type="submit">Open</button>
+      </form>
+
+      <div class="error-message" id="errorMessage"></div>
+      <p class="hint">Hint. 전달받은 코드가 있다면 영문 대소문자와 숫자를 확인해주세요.</p>
     </div>
   </section>
 
-  <!-- 룰 -->
-  <section class="screen intro-screen" id="ruleScreen">
-    <div class="intro-content rule-screen-content">
-      <div class="intro-label">QUIZ RULE</div>
-      <h2 class="rule-title">퀴즈 진행 방식</h2>
-      <div class="rule-slider-wrap">
-        <button class="rule-next-button" id="ruleNextButton">→</button>
-        <div class="rule-slider" id="ruleSlider"></div>
-      </div>
-      <button class="intro-button" id="enterQuizButton">퀴즈 시작하기</button>
-    </div>
-  </section>
+  <section class="screen paper-screen active" id="paperScreen">
+    <header class="top-bar">
+      <div class="brand"><span class="brand-dot"></span><span>TAGby</span></div>
+      
+    </header>
 
-  <!-- 퀴즈 -->
-  <section class="screen quiz-screen" id="quizScreen">
-    <div class="quiz-layout">
-      <button class="score-btn" onclick="window.open('scoreboard.html','점수판','width=900,height=700')">🏆 점수판</button>
-      <div class="question-area" id="questionArea">
-        <div class="question-number" id="questionNumber">Q1</div>
-        <h2 class="question-text" id="questionText">문제를 불러오는 중...</h2>
-        <div class="timer" id="timer">01:00</div>
-        <div class="answer-box" id="answerBox"></div>
-      </div>
-      <div class="hint" id="hintText">타이머 시작 버튼을 누르면 1분 카운트다운이 시작됩니다.</div>
-      <div class="bottom-bar">
-        <div class="timer-box">
-          <button class="timer-start-button" id="startButton">시작</button>
-        </div>
-        <button class="answer-button" id="answerButton" aria-label="정답 확인 또는 다음 문제">→</button>
-      </div>
-    </div>
-  </section>
+    <section class="hero">
+      <div class="eyebrow">Digital Rolling Paper</div>
+      <h1 class="hero-title">10년의 시간을<br />이끌어주셔서 감사합니다</h1>
+      <p class="hero-subtitle">함께 일해온 사람들이 전하는<br />고마움과 응원의 기록</p>
+      <div class="hero-meta">FROM. TAGby · 2016 — 2026</div>
+    </section>
 
-  <!-- 최종 결과 스크린 -->
-  <section class="screen final-screen" id="finalScreen">
-    <div class="final-content">
-      <div class="intro-label">QUIZ COMPLETE 🎉</div>
-      <h2 class="final-title">퀴즈가 모두<br>종료되었습니다!</h2>
-      <p class="final-sub">최종 점수를 확인하세요</p>
-      <div class="final-ranking" id="finalRanking">
-        <div style="text-align:center; color:#9ca3af; font-weight:700;">점수 불러오는 중...</div>
-      </div>
-      <button class="final-next-btn" id="finalNextBtn" style="display:none;" onclick="goAfterFinal()"></button>
-    </div>
-  </section>
+    <section class="section-title">
+      <h2>Messages</h2>
+      <p>ROLLING.PAPER.ARCHIVE</p>
+    </section>
 
-  <!-- 순위결정전 스크린 -->
-  <section class="screen tiebreak-screen" id="tiebreakScreen">
-    <div class="tiebreak-content">
-      <div class="intro-label" style="background:#dc2626;">⚡ TIEBREAKER</div>
-      <h2 class="tiebreak-title">동점자가<br>발생했습니다!</h2>
-      <p class="tiebreak-sub">순위결정전을 통해 최종 순위를 가립니다.<br>진행 방식은 진행자의 안내를 따라주세요.</p>
-      <p style="margin-top:32px; color:#9ca3af; font-size:16px; font-weight:700;">→ 방향키를 누르면 레크리에이션 뽑기로 넘어갑니다</p>
-    </div>
-  </section>
+    <section class="message-grid" id="messageGrid"></section>
 
-  <!-- 레크리에이션 뽑기 스크린 -->
-  <section class="screen recreation-screen" id="recreationScreen">
-    <div class="recreation-content">
-      <div class="intro-label" style="background:#059669;">🎁 RECREATION</div>
-      <h2 class="recreation-title">레크리에이션<br>상품 뽑기</h2>
-      <div class="rec-slider-wrap">
-        <button class="rec-next-button" id="recNextBtn">→</button>
-        <div class="rec-slider" id="recSlider"></div>
-      </div>
-    </div>
+    <section class="closing">
+      <h2 class="closing-title">From. TAGby</h2>
+      <p class="closing-subtitle">앞으로의 시간도<br />우리답게 함께 만들어가겠습니다.</p>
+      <div class="closing-sign">TAGby 10th Anniversary · 2016 — 2026</div>
+    </section>
   </section>
 
   <script>
-    /* ── 상수 ── */
-    const SHEET_URL      = "https://docs.google.com/spreadsheets/d/1B6AtoVN8a4kBMX7xcGotZEhRS_NWBISjy5l8OCFn4O8/export?format=csv&gid=0";
-    const SCORE_URL      = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpMTMpqFtQVyu9efUUp10kRvpQMza3Ur9JxVkqWfb_7JFLYmQGogHznVf9s3NpeJa9QMPjfGX3HTPH/pub?gid=355034406&single=true&output=csv";
-    const TIMER_DURATION = 60;   // 초
-    const DANGER_AT      = 10;   // 위험 임계 초
+    const SECRET_CODES = ["TAGby10", "20160601", "0601"];
+    const MESSAGE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTDEEKzSCsP3YJMTrhgq76UHKkWpAycfAxtRWz9ZbJ5gXXQBU5jJX1hCZfmT6J9OICBy0_vysfm4Tvh/pub?gid=0&single=true&output=csv";
 
     const PROXIES = [
       url => url,
@@ -623,510 +931,353 @@
       url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
     ];
 
-    const RULES = [
-      { emoji: "👥", label: "RULE 1", main: "퀴즈는 팀전으로 진행됩니다.",                                             sub: "팀당 5~6인 구성" },
-      { emoji: "✍️", label: "RULE 2", main: "질문을 보고 전달받은 스케치북에 답을 작성해주세요." },
-      { emoji: "🏆", label: "RULE 3", main: "정답을 맞춘 팀에게 1점이 부여됩니다." },
-      { emoji: "📊", label: "RULE 4", main: "모든 퀴즈 종료 후 점수가 높은 팀 순으로 최종 순위를 발표합니다." },
+    const fallbackMessages = [
+      { author: "TAGby People", keyword: "감사", description: "대표님, TAGby의 10년을 만들어주셔서 감사합니다." },
+      { author: "TF Team", keyword: "10 YEARS", description: "이번 10주년이 오래 기억에 남는 하루가 되었으면 좋겠습니다." }
     ];
 
-    const REC_RULES = [
-      {
-        emoji: "🎁",
-        label: "RULE 1",
-        main: "1~61번이 부여된 랜덤 상품을 준비했습니다!",
-        sub: "최고가: 신세계상품권 5만원권\n최저가: 바나프레소 아메리카노+디저트 세트",
-      },
-      {
-        emoji: "🏅",
-        label: "RULE 2",
-        main: "1등 팀부터 순서대로 랜덤으로 상품 번호표를 뽑습니다.",
-      },
-      {
-        emoji: "⭐",
-        label: "RULE 3",
-        main: "단, 1등 팀은 만 원 이상의 상품으로만 구성된 번호 풀에서 뽑습니다.",
-        sub: "1등 팀은 만원 이상 상품 확정!",
-      },
-      {
-        emoji: "🎉",
-        label: "RULE 4",
-        main: "모든 참여자들이 하나 이상의 상품을 가져갑니다!",
-        sub: "아무도 빈손으로 돌아가지 않습니다 :)",
-      },
-    ];
+    let messages = [];
+    let shuffledMessages = [];
+    let pickedIndexes = new Set();
+    let fullAccessUnlocked = false;
+    let currentView = "bottle";
 
-    const FALLBACK_DATA = [
-      { num: 1, question: "태그바이 창립일은?",                         answer: "[[2016년 6월 1일]]입니다." },
-      { num: 2, question: "그렇다면, 2016년 6월 1일은 무슨 요일이었을까요?", answer: "[[수요일]]이었습니다." },
-    ];
+    const lockScreen = document.getElementById("lockScreen");
+    const paperScreen = document.getElementById("paperScreen");
+    const codeForm = document.getElementById("codeForm");
+    const codeInput = document.getElementById("codeInput");
+    const errorMessage = document.getElementById("errorMessage");
+    const messageGrid = document.getElementById("messageGrid");
 
-    const HINTS = {
-      idle:    "타이머 시작 버튼을 누르면 1분 카운트다운이 시작됩니다.",
-      running: "답을 생각해보세요. 화살표를 누르면 언제든 정답을 확인할 수 있습니다.",
-      end:     "시간 종료! 화살표를 눌러 정답을 확인하세요.",
-      answer:  "화살표를 한 번 더 누르면 다음 문제로 넘어갑니다.",
-      next:    "시작 버튼을 누르면 1분 타이머가 크게 표시됩니다.",
-    };
-
-    /* ── DOM ── */
-    const $  = id => document.getElementById(id);
-    const introScreen   = $("introScreen");
-    const ruleScreen    = $("ruleScreen");
-    const quizScreen    = $("quizScreen");
-    const ruleSlider    = $("ruleSlider");
-    const ruleNextBtn   = $("ruleNextButton");
-    const questionArea  = $("questionArea");
-    const questionNum   = $("questionNumber");
-    const questionText  = $("questionText");
-    const timer         = $("timer");
-    const startBtn      = $("startButton");
-    const answerBtn     = $("answerButton");
-    const answerBox     = $("answerBox");
-    const hintText      = $("hintText");
-
-    /* ── 상태 ── */
-    let quizData        = [];
-    let currentIndex    = 0;
-    let remainingSecs   = TIMER_DURATION;
-    let timerId         = null;
-    let isRunning       = false;
-    let isAnswerShown   = false;
-    let ruleIndex       = 0;
-
-    /* ── 룰 슬라이드 생성 ── */
-    ruleSlider.innerHTML = RULES.map(r => `
-      <div class="rule-slide">
-        <div class="rule-card">
-          <div class="rule-emoji">${r.emoji}</div>
-          <div>
-            <div class="rule-label">${r.label}</div>
-            <div class="rule-main">${r.main}</div>
-            ${r.sub ? `<div class="rule-sub">${r.sub}</div>` : ""}
-          </div>
-        </div>
-      </div>
-    `).join("");
-
-    /* ── 레크리에이션 슬라이드 생성 ── */
-    document.getElementById("recSlider").innerHTML = REC_RULES.map(r => `
-      <div class="rec-slide">
-        <div class="rec-card">
-          <div class="rec-emoji">${r.emoji}</div>
-          <div>
-            <div class="rec-label">${r.label}</div>
-            <div class="rec-main">${r.main}</div>
-            ${r.sub ? `<div class="rec-sub">${r.sub.replace(/\n/g, "<br>")}</div>` : ""}
-          </div>
-        </div>
-      </div>
-    `).join("");
-
-    /* ── 유틸 ── */
-    function formatTime(s) {
-      return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+    function normalizeCode(value) {
+      return String(value || "").trim();
     }
 
     function escapeHTML(text) {
-      return String(text)
-        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    function formatAnswer(answer) {
-      return escapeHTML(answer).replace(/\[\[(.*?)\]\]/g, '<span class="answer-highlight">$1</span>');
-    }
-
-    function setHint(key) { hintText.textContent = HINTS[key]; }
-
-    function clearDanger() {
-      timer.classList.remove("danger");
-      quizScreen.classList.remove("danger-mode");
-    }
-
-    /* ── CSV 파싱 ── */
-    function parseCSV(text) {
-      const rows = [];
-      let row = [], cell = "", inQuote = false;
-      for (let i = 0; i < text.length; i++) {
-        const ch = text[i], next = text[i + 1];
-        if (ch === '"' && inQuote && next === '"') { cell += '"'; i++; }
-        else if (ch === '"')                        { inQuote = !inQuote; }
-        else if (ch === ',' && !inQuote)            { row.push(cell.trim()); cell = ""; }
-        else if ((ch === '\n' || ch === '\r') && !inQuote) {
-          if (cell || row.length) { row.push(cell.trim()); rows.push(row); row = []; cell = ""; }
-          if (ch === '\r' && next === '\n') i++;
-        } else { cell += ch; }
-      }
-      if (cell || row.length) { row.push(cell.trim()); rows.push(row); }
-      return rows;
-    }
-
-    function rowsToQuizData(rows) {
-      if (!rows.length) return [];
-      const header = rows[0].map(c => String(c).trim().toLowerCase());
-      const hasHeader = header.some(c => ["question","answer","문제","정답","num","번호","no"].includes(c));
-      const body = hasHeader ? rows.slice(1) : rows;
-      const qi = [header.indexOf("question"), header.indexOf("문제"),  1].find(i => i !== -1);
-      const ai = [header.indexOf("answer"),   header.indexOf("정답"),  2].find(i => i !== -1);
-      const ni = [header.indexOf("num"), header.indexOf("번호"), header.indexOf("no"), 0].find(i => i !== -1);
-      return body
-        .filter(r => r[qi]?.trim())
-        .map((r, i) => ({ num: r[ni] || i + 1, question: r[qi].trim(), answer: (r[ai] || "정답 없음").trim() }));
-    }
-
-    /* ── 데이터 로드 ── */
     async function tryFetch(url) {
-      const r = await fetch(url, { cache: "no-cache" });
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const text = await r.text();
-      if (!text?.trim()) throw new Error("empty");
+      const res = await fetch(url, { cache: "no-cache" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
+      if (!text.trim()) throw new Error("empty csv");
       return text;
     }
 
-    // loadWithFallback은 아래에 url 파라미터 버전으로 통합
-
-    async function loadQuizData() {
-      try {
-        const csv  = await loadWithFallback();
-        const data = rowsToQuizData(parseCSV(csv));
-        if (!data.length) throw new Error("no data");
-        quizData = data;
-        setHint("idle");
-      } catch {
-        quizData = FALLBACK_DATA;
-        hintText.innerHTML = `<span class="error">구글 시트 연결 실패 — 기본 문제로 진행합니다.</span>`;
-      }
-      renderQuestion();
-    }
-
-    /* ── 렌더링 ── */
-    function renderQuestion() {
-      if (!quizData.length) return;
-      const q = quizData[currentIndex];
-      questionNum.textContent  = `Q${currentIndex + 1}`;
-      questionText.textContent = q.question;
-      resetTimer();
-    }
-
-    /* ── 타이머 ── */
-    function resetTimer() {
-      clearInterval(timerId);
-      timerId = null; isRunning = false; isAnswerShown = false;
-      remainingSecs = TIMER_DURATION;
-      timer.textContent = formatTime(remainingSecs);
-      timer.classList.remove("visible", "danger");
-      clearDanger();
-      startBtn.disabled  = false;
-      answerBtn.disabled = false;
-      answerBox.classList.remove("visible");
-      answerBox.textContent = "";
-      questionArea.classList.remove("answer-mode");
-    }
-
-    /* ── 사운드 ── */
-    let audioCtx = null;
-    function getAudioCtx() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      return audioCtx;
-    }
-
-    // freq 배열을 순서대로 재생 (offset: 초 단위 시작 시간)
-    async function playTone(freq, duration, volume = 0.7, offset = 0) {
-      try {
-        const ctx = getAudioCtx();
-        await ctx.resume(); // 브라우저 자동재생 정책 해제
-        const osc  = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.type = "sine";
-        osc.frequency.value = freq;
-        const t = ctx.currentTime + offset;
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(volume, t + 0.01); // 클리핑 방지
-        gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
-        osc.start(t);
-        osc.stop(t + duration + 0.02);
-      } catch {}
-    }
-
-    // 카운트다운: 매 초마다 같은 음을 4번 빠르게 반복
-    function playTickBeep(remainingSecs) {
-      const step = DANGER_AT - remainingSecs; // 0(10초) ~ 9(1초)
-      const freq = 600 + step * 55;           // 600 → 1095Hz
-      for (let i = 0; i < 4; i++) {
-        playTone(freq, 0.10, 0.75, i * 0.13); // 0.13초 간격으로 4연타
-      }
-    }
-
-    // 종료: 사이렌 (저음↔고음 빠르게 반복, 2.5초)
-    async function playEndBeep() {
-      try {
-        const ctx = getAudioCtx();
-        await ctx.resume();
-        const osc  = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.type = "sawtooth"; // 날카롭고 요란한 파형
-        const duration  = 2.5;
-        const cycleTime = 0.25; // 사이렌 한 주기 (빠를수록 요란함)
-        const cycles    = Math.ceil(duration / cycleTime);
-        for (let i = 0; i < cycles; i++) {
-          const t = ctx.currentTime + i * cycleTime;
-          osc.frequency.setValueAtTime(400, t);
-          osc.frequency.linearRampToValueAtTime(1300, t + cycleTime / 2);
-          osc.frequency.linearRampToValueAtTime(400,  t + cycleTime);
-        }
-        gain.gain.setValueAtTime(0.85, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + duration);
-      } catch {}
-    }
-
-    function startTimer() {
-      if (isRunning || !quizData.length) return;
-      isRunning = true;
-      startBtn.disabled = true;
-      timer.classList.add("visible");
-      setHint("running");
-      timerId = setInterval(() => {
-        remainingSecs--;
-        timer.textContent = formatTime(remainingSecs);
-        if (remainingSecs <= DANGER_AT) {
-          timer.classList.add("danger");
-          quizScreen.classList.add("danger-mode");
-          if (remainingSecs > 0) playTickBeep(remainingSecs);
-        }
-        if (remainingSecs <= 0) {
-          clearInterval(timerId); timerId = null; isRunning = false;
-          playEndBeep();
-          setHint("end");
-        }
-      }, 1000);
-    }
-
-    /* ── 정답 / 다음 ── */
-    function showAnswer() {
-      clearInterval(timerId); timerId = null; isRunning = false;
-      clearDanger();
-      answerBox.innerHTML = `A. ${formatAnswer(quizData[currentIndex].answer)}`;
-      answerBox.classList.add("visible");
-      questionArea.classList.add("answer-mode");
-      startBtn.disabled = true;
-      isAnswerShown = true;
-      setHint("answer");
-    }
-
-    function goNext() {
-      if (currentIndex === quizData.length - 1) {
-        showFinalScreen();
-        return;
-      }
-      currentIndex++;
-      renderQuestion();
-      setHint("next");
-    }
-
-    const RANK_EMOJI = { 1: "🥇", 2: "🥈", 3: "🥉" };
-
-    async function showFinalScreen() {
-      clearInterval(timerId);
-      clearDanger();
-      quizScreen.classList.remove("active");
-      document.getElementById("finalScreen").classList.add("active");
-
-      try {
-        const csv  = await loadWithFallback(SCORE_URL);
-        const rows = parseCSV(csv);
-        const hasHeader = isNaN(Number(rows[0]?.[1]));
-        const body = hasHeader ? rows.slice(1) : rows;
-        const teams = body
-          .filter(r => r[0]?.trim())
-          .map(r => {
-            const raw = r[0].trim();
-            const name = raw.endsWith("팀") ? raw : raw + "팀";
-            return { name, score: Number(r[1]) || 0 };
-          })
-          .sort((a, b) => b.score - a.score);
-
-        // 동점 처리: 같은 점수면 같은 순위, 다음 순위는 건너뜀
-        let rank = 1;
-        teams.forEach((t, i) => {
-          if (i > 0 && t.score < teams[i - 1].score) rank = i + 1;
-          t.rank = rank;
-        });
-
-        document.getElementById("finalRanking").innerHTML = teams.map(t => `
-          <div class="ranking-item ${t.rank <= 3 ? "rank-" + t.rank : ""}">
-            <div class="rank-badge">${RANK_EMOJI[t.rank] || t.rank + "위"}</div>
-            <div class="rank-team">${t.name}</div>
-            <div>
-              <span class="rank-score">${t.score}</span>
-              <span class="rank-score-label">점</span>
-            </div>
-          </div>`).join("");
-
-        // 동점 여부 감지 → 버튼 텍스트/분기 결정
-        const scores = teams.map(t => t.score);
-        const hasTie = scores.length !== new Set(scores).size;
-        const btn = document.getElementById("finalNextBtn");
-        btn.textContent = hasTie ? "⚡ 순위결정전 진행하기" : "🎁 레크리에이션 뽑기로 이동";
-        btn.dataset.hasTie = hasTie;
-        btn.style.display = "inline-block";
-      } catch {
-        document.getElementById("finalRanking").innerHTML =
-          `<div style="color:#dc2626;font-weight:700;text-align:center;">점수를 불러오지 못했어요. 구글 시트 연결을 확인해주세요.</div>`;
-      }
-    }
-
-    function goAfterFinal() {
-      const hasTie = document.getElementById("finalNextBtn").dataset.hasTie === "true";
-      document.getElementById("finalScreen").classList.remove("active");
-      if (hasTie) {
-        document.getElementById("tiebreakScreen").classList.add("active");
-      } else {
-        goRecreation("finalScreen");
-      }
-    }
-
-    function goRecreation(from = "tiebreakScreen") {
-      recPrevScreen = from;
-      document.getElementById("tiebreakScreen").classList.remove("active");
-      document.getElementById("finalScreen").classList.remove("active");
-      document.getElementById("recreationScreen").classList.add("active");
-      recIndex = 0;
-      updateRecSlider();
-    }
-
-    async function loadWithFallback(url = SHEET_URL) {
+    async function loadWithFallback(url) {
       for (const makeUrl of PROXIES) {
         try { return await tryFetch(makeUrl(url)); } catch {}
       }
-      throw new Error("failed");
+      throw new Error("csv load failed");
     }
 
-    function handleArrow() {
-      isAnswerShown ? goNext() : showAnswer();
-    }
+    function parseCSV(text) {
+      const rows = [];
+      let row = [], cell = "", inQuote = false;
 
-    function goPrev() {
-      if (currentIndex === 0) return;
-      currentIndex--;
-      renderQuestion();
-      setHint("next");
-    }
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const next = text[i + 1];
 
-    /* ── 룰 슬라이더 ── */
-    function updateRuleSlider() {
-      ruleSlider.style.transform = `translateX(-${ruleIndex * 100}%)`;
-      ruleNextBtn.style.display  = ruleIndex === RULES.length - 1 ? "none" : "block";
-    }
-
-    /* ── 레크리에이션 슬라이더 ── */
-    let recIndex = 0;
-    let recPrevScreen = "finalScreen"; // 이전 화면 추적
-    function updateRecSlider() {
-      document.getElementById("recSlider").style.transform = `translateX(-${recIndex * 100}%)`;
-      document.getElementById("recNextBtn").style.display = recIndex === REC_RULES.length - 1 ? "none" : "block";
-    }
-    document.getElementById("recNextBtn").addEventListener("click", () => {
-      recIndex = (recIndex + 1) % REC_RULES.length;
-      updateRecSlider();
-    });
-
-    /* ── 이벤트 ── */
-    $("showRuleButton").addEventListener("click", () => {
-      introScreen.classList.remove("active");
-      ruleScreen.classList.add("active");
-      ruleIndex = 0;
-      updateRuleSlider();
-    });
-    ruleNextBtn.addEventListener("click", () => {
-      ruleIndex = (ruleIndex + 1) % RULES.length;
-      updateRuleSlider();
-    });
-    $("enterQuizButton").addEventListener("click", () => {
-      ruleScreen.classList.remove("active");
-      quizScreen.classList.add("active");
-    });
-    startBtn.addEventListener("click",  startTimer);
-    answerBtn.addEventListener("click", handleArrow);
-
-    /* ── 키보드 방향키 네비게이션 ── */
-    function showScreen(id) {
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-    }
-
-    document.addEventListener("keydown", e => {
-      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-      const dir = e.key === "ArrowRight" ? 1 : -1;
-
-      // 인트로: → 룰 첫 카드
-      if (introScreen.classList.contains("active")) {
-        if (dir === 1) { ruleIndex = 0; updateRuleSlider(); showScreen("ruleScreen"); }
-        return;
-      }
-
-      // 룰 슬라이더: 경계에서 섹션 넘기
-      if (ruleScreen.classList.contains("active")) {
-        if (dir === -1 && ruleIndex === 0) {
-          showScreen("introScreen");
-        } else if (dir === 1 && ruleIndex === RULES.length - 1) {
-          showScreen("quizScreen");                        // 룰 마지막 → 퀴즈
+        if (ch === '"' && inQuote && next === '"') {
+          cell += '"';
+          i++;
+        } else if (ch === '"') {
+          inQuote = !inQuote;
+        } else if (ch === ',' && !inQuote) {
+          row.push(cell.trim());
+          cell = "";
+        } else if ((ch === "\n" || ch === "\r") && !inQuote) {
+          if (cell || row.length) {
+            row.push(cell.trim());
+            rows.push(row);
+            row = [];
+            cell = "";
+          }
+          if (ch === "\r" && next === "\n") i++;
         } else {
-          ruleIndex += dir;
-          updateRuleSlider();
+          cell += ch;
         }
+      }
+
+      if (cell || row.length) {
+        row.push(cell.trim());
+        rows.push(row);
+      }
+
+      return rows.filter(r => r.some(c => String(c).trim()));
+    }
+
+    function rowsToMessages(rows) {
+      if (!rows.length) return [];
+      const header = rows[0].map(v => String(v).trim().toLowerCase());
+      const body = rows.slice(1);
+
+      const findIndex = names => names.map(n => header.indexOf(n)).find(i => i !== -1);
+      const authorIndex = findIndex(["작성자", "author", "from", "name", "이름"]);
+      const keywordIndex = findIndex(["키워드", "keyword", "word", "title"]);
+      const descriptionIndex = findIndex(["설명", "description", "message", "메시지", "내용", "text"]);
+
+      const ai = authorIndex ?? 0;
+      const ki = keywordIndex ?? 1;
+      const di = descriptionIndex ?? 2;
+
+      return body
+        .map(row => ({
+          author: row[ai] || "TAGby People",
+          keyword: row[ki] || "MESSAGE",
+          description: row[di] || ""
+        }))
+        .filter(item => item.keyword || item.description);
+    }
+
+    async function loadMessages() {
+      try {
+        const csv = await loadWithFallback(MESSAGE_CSV_URL);
+        const parsed = rowsToMessages(parseCSV(csv));
+        messages = parsed.length ? parsed : fallbackMessages;
+        shuffledMessages = shuffleMessages(messages);
+      } catch {
+        messages = fallbackMessages;
+        shuffledMessages = shuffleMessages(messages);
+      }
+    }
+
+    function shuffleMessages(items) {
+      const copied = [...items];
+      for (let i = copied.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copied[i], copied[j]] = [copied[j], copied[i]];
+      }
+      return copied;
+    }
+
+    function getMessageIndex(target) {
+      return messages.indexOf(target);
+    }
+
+    function openPaper() {
+      lockScreen.classList.remove("active");
+      paperScreen.classList.add("active");
+      document.body.style.overflowY = "auto";
+      buildRollingPaperApp();
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    function buildRollingPaperApp() {
+      const hero = document.querySelector(".hero");
+      const sectionTitle = document.querySelector(".section-title");
+      const closing = document.querySelector(".closing");
+
+      hero.innerHTML = `
+        <div class="eyebrow">Digital Rolling Paper</div>
+        <h1 class="hero-title">마음을 담은<br />51개의 메시지</h1>
+        <p class="hero-subtitle">병에서 쪽지를 꺼내듯 하나씩 열어보고,<br />보드와 전체보기로 다시 읽어볼 수 있습니다.</p>
+        <div class="hero-meta">FROM. TAGby · 2016 — 2026</div>
+      `;
+
+      sectionTitle.innerHTML = `
+        <div>
+          <h2>Rolling Paper</h2>
+          <p style="margin-top:10px;">MESSAGE.VIEW.MODE</p>
+        </div>
+        <div class="view-tabs">
+          <button class="view-tab active" data-view="bottle">Message Bottle</button>
+          <button class="view-tab" data-view="board">Post-it Board</button>
+          <button class="view-tab" data-view="table">All Messages</button>
+        </div>
+      `;
+
+      messageGrid.outerHTML = `<section class="rolling-app" id="rollingApp"></section>`;
+      closing.innerHTML = `
+        <h2 class="closing-title">From. TAGby</h2>
+        <p class="closing-subtitle">앞으로의 시간도<br />우리답게 함께 만들어가겠습니다.</p>
+        <div class="closing-sign">TAGby 10th Anniversary · 2016 — 2026</div>
+      `;
+
+      document.querySelectorAll(".view-tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const nextView = btn.dataset.view;
+
+          if ((nextView === "board" || nextView === "table") && !fullAccessUnlocked) {
+            const input = window.prompt("전체 메시지를 보려면 Secret Code를 입력해주세요.");
+            if (!SECRET_CODES.includes(normalizeCode(input))) {
+              alert("코드를 다시 확인해주세요 :)");
+              return;
+            }
+            fullAccessUnlocked = true;
+            sessionStorage.setItem("tagbyRollingPaperFullUnlocked", "true");
+          }
+
+          currentView = nextView;
+          document.querySelectorAll(".view-tab").forEach(b => b.classList.toggle("active", b === btn));
+          renderCurrentView();
+        });
+      });
+
+      renderCurrentView();
+    }
+
+    function renderCurrentView() {
+      const app = document.getElementById("rollingApp");
+      if (!app) return;
+
+      if (currentView === "bottle") renderBottle(app);
+      if (currentView === "board") renderBoard(app);
+      if (currentView === "table") renderTable(app);
+    }
+
+    function renderBottle(app) {
+      const paperPieces = Array.from({ length: 34 }, () => {
+        const x = Math.random() * 72 + 9;
+        const y = Math.random() * 70 + 20;
+        const r = Math.random() * 70 - 35;
+        return `<span class="paper-piece" style="--x:${x}%; --y:${y}%; --r:${r}deg;"></span>`;
+      }).join("");
+
+      app.innerHTML = `
+        <div class="bottle-view">
+          <div class="bottle-wrap" id="bottleWrap">
+            <div class="bottle-cap"></div>
+            <div class="bottle-neck"></div>
+            <div class="bottle-body">
+              ${paperPieces}
+              <div class="bottle-label">
+                <span class="label-small">MESSAGE BOTTLE</span>
+                <span class="label-main">나에게<br />태그바이란?</span>
+              </div>
+            </div>
+          </div>
+          <div class="bottle-side">
+            <div class="bottle-count">RANDOM / ${messages.length}</div>
+            <h3>Message Bottle</h3>
+            <p>버튼을 누를 때마다 51개의 메시지 중 하나가 랜덤으로 나옵니다.</p>
+            <button class="draw-button" onclick="drawRandomMessage()">쪽지 하나 꺼내기</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderBoard(app) {
+      app.innerHTML = `
+        <div class="postit-board">
+          ${shuffledMessages.map((msg, index) => `
+            <button class="postit" onclick="openMessageModal(${getMessageIndex(msg)})" style="--r:${(index % 7) - 3}deg; --delay:${index * 18}ms;">
+              <span class="postit-keyword">${escapeHTML(msg.keyword)}</span>
+              <span class="postit-from">From. ${escapeHTML(msg.author)}</span>
+            </button>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderTable(app) {
+      app.innerHTML = `
+        <div class="table-tools">
+          <input class="search-input" id="messageSearch" placeholder="작성자 / 키워드 / 내용 검색" oninput="filterTableMessages()" />
+        </div>
+        <div class="message-table" id="messageTable">
+          ${tableRows(shuffledMessages)}
+        </div>
+      `;
+    }
+
+    function tableRows(items) {
+      return `
+        <div class="table-row table-head">
+          <div>작성자</div><div>키워드</div><div>설명</div>
+        </div>
+        ${items.map((msg, index) => `
+          <button class="table-row" onclick="openMessageModal(${getMessageIndex(msg)})">
+            <div>${escapeHTML(msg.author)}</div>
+            <div>${escapeHTML(msg.keyword)}</div>
+            <div>${escapeHTML(msg.description)}</div>
+          </button>
+        `).join("")}
+      `;
+    }
+
+    function filterTableMessages() {
+      const keyword = document.getElementById("messageSearch").value.trim().toLowerCase();
+      const filtered = shuffledMessages.filter(msg => [msg.author, msg.keyword, msg.description].join(" ").toLowerCase().includes(keyword));
+      document.getElementById("messageTable").innerHTML = tableRows(filtered);
+    }
+
+    function drawRandomMessage() {
+      if (!messages.length) return;
+
+      const index = Math.floor(Math.random() * messages.length);
+
+      const bottle = document.getElementById("bottleWrap");
+      bottle?.classList.remove("shake");
+      void bottle?.offsetWidth;
+      bottle?.classList.add("shake");
+
+      setTimeout(() => {
+        openMessageModal(index);
+      }, 520);
+    }
+
+    function openMessageModal(index) {
+      const msg = messages[index];
+      if (!msg) return;
+
+      const old = document.getElementById("messageModal");
+      old?.remove();
+
+      const modal = document.createElement("div");
+      modal.id = "messageModal";
+      modal.className = "modal-backdrop";
+      modal.innerHTML = `
+        <article class="modal-postit">
+          <button class="modal-close" onclick="closeMessageModal()">×</button>
+          <div class="modal-keyword">${escapeHTML(msg.keyword)}</div>
+          <div class="modal-from">From. ${escapeHTML(msg.author)}</div>
+          <p class="modal-description">${escapeHTML(msg.description)}</p>
+        </article>
+      `;
+      modal.addEventListener("click", event => {
+        if (event.target === modal) closeMessageModal();
+      });
+      document.body.appendChild(modal);
+    }
+
+    function closeMessageModal() {
+      document.getElementById("messageModal")?.remove();
+    }
+
+    codeForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const input = normalizeCode(codeInput.value);
+      const isCorrect = SECRET_CODES.includes(input);
+
+      if (isCorrect) {
+        fullAccessUnlocked = true;
+        sessionStorage.setItem("tagbyRollingPaperFullUnlocked", "true");
+        lockScreen.classList.remove("active");
+        paperScreen.classList.add("active");
+        currentView = "board";
+        buildRollingPaperApp();
         return;
       }
 
-      // 퀴즈: 첫 문제 ← 룰 마지막 카드 / 마지막 문제 → 최종결과(goNext가 처리)
-      if (quizScreen.classList.contains("active")) {
-        if (dir === -1 && currentIndex === 0 && !isAnswerShown) {
-          ruleIndex = RULES.length - 1; updateRuleSlider(); showScreen("ruleScreen");
-        } else if (dir === 1) {
-          handleArrow();
-        } else if (dir === -1) {
-          goPrev();
-        }
-        return;
-      }
-
-      // 최종 결과: ← 퀴즈 / → 다음(동점or뽑기)
-      if (document.getElementById("finalScreen").classList.contains("active")) {
-        if (dir === -1) showScreen("quizScreen");
-        if (dir === 1) document.getElementById("finalNextBtn").click();
-        return;
-      }
-
-      // 순위결정전: ← 최종결과 / → 레크리에이션
-      if (document.getElementById("tiebreakScreen").classList.contains("active")) {
-        if (dir === -1) showScreen("finalScreen");
-        if (dir === 1) goRecreation("tiebreakScreen");
-        return;
-      }
-
-      // 레크리에이션 슬라이더
-      if (document.getElementById("recreationScreen").classList.contains("active")) {
-        if (dir === -1 && recIndex === 0) {
-          // 첫 카드에서 ← → 이전 화면으로
-          document.getElementById("recreationScreen").classList.remove("active");
-          document.getElementById(recPrevScreen).classList.add("active");
-        } else {
-          recIndex = Math.max(0, Math.min(REC_RULES.length - 1, recIndex + dir));
-          updateRecSlider();
-        }
-        return;
-      }
+      errorMessage.textContent = "코드를 다시 확인해주세요 :)";
+      codeInput.value = "";
+      codeInput.focus();
     });
 
-    /* ── 시작 ── */
-    loadQuizData();
+    window.addEventListener("DOMContentLoaded", async () => {
+      document.body.style.overflowY = "auto";
+      fullAccessUnlocked = sessionStorage.getItem("tagbyRollingPaperFullUnlocked") === "true";
+      await loadMessages();
+      buildRollingPaperApp();
+    });
   </script>
 </body>
 </html>
