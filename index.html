@@ -491,6 +491,59 @@
       background: rgba(255, 255, 255, 0.06);
     }
 
+
+    .rotating-guide-slide {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rotating-message {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(36px, 5vw, 64px);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: rotateGuide 10s ease-in-out infinite;
+    }
+
+    .rotating-message.message-two {
+      animation-delay: 5s;
+    }
+
+    .rotating-title {
+      font-size: clamp(42px, 5.4vw, 86px) !important;
+      line-height: 1.08 !important;
+      letter-spacing: -0.06em;
+      max-width: 1100px;
+    }
+
+    .rotating-subtitle {
+      margin-top: 26px;
+      font-size: clamp(20px, 1.9vw, 30px) !important;
+      line-height: 1.45 !important;
+      max-width: 980px;
+    }
+
+    @keyframes rotateGuide {
+      0%, 8% {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      14%, 44% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      50%, 100% {
+        opacity: 0;
+        transform: translateY(-14px);
+      }
+    }
+
     @keyframes dnaFade {
       to {
         opacity: 1;
@@ -553,9 +606,7 @@
       <p class="subtitle">Cake & Digital Rolling Paper</p>
       <div class="button-row">
         <a class="button" href="./rolling.html" target="_blank" rel="noopener noreferrer">디지털 롤링페이퍼 열기</a>
-        <button class="button secondary" type="button" onclick="nextSlide()">다음 순서로 이동</button>
       </div>
-      <p class="small-note">※ 롤링페이퍼 페이지는 추후 별도 HTML로 연결 예정</p>
     </section>
 
     <section class="slide">
@@ -675,24 +726,23 @@
       <h2 class="title medium">레크리에이션</h2>
       <p class="subtitle">다음 프로그램을 시작합니다</p>
       <div class="button-row">
-        <a class="button" href="./recreation.html" target="_blank" rel="noopener noreferrer">레크리에이션 HTML 열기</a>
+        <a class="button" href="./recreation/" target="_blank" rel="noopener noreferrer">레크리에이션 HTML 열기</a>
       </div>
     </section>
 
-    <section class="slide dark-slide">
-      <div class="eyebrow">Made by TAGby People</div>
-      <h2 class="title medium">THANK YOU<br />TF TEAM</h2>
-      <p class="subtitle">10주년 이벤트를 준비해준 TF에게<br />큰 박수 부탁드립니다</p>
-      <div class="meta">👏 👏 👏</div>
-    </section>
+    <section class="slide dark-slide rotating-guide-slide">
+      <div class="rotating-message message-one">
+        <div class="eyebrow">Made by TAGby People</div>
+        <h2 class="title medium rotating-title">준비한 콘텐츠가<br />모두 마무리되었습니다</h2>
+        <p class="subtitle rotating-subtitle">10주년 이벤트를 함께 준비해준<br />TF에게 큰 박수 부탁드립니다</p>
+        <div class="meta">👏 👏 👏</div>
+      </div>
 
-    <section class="slide">
-      <div class="eyebrow">Closing Guide</div>
-      <h2 class="title medium">기념촬영 · 퇴장 · 저녁식사</h2>
-      <div class="info-stack">
-        <div class="info-card">기념촬영 후 순서에 따라 퇴장해주세요</div>
-        <div class="info-card">저녁식사 장소: 신라스테이 역삼 카페</div>
-        <div class="info-card">18:00 Dinner Session</div>
+      <div class="rotating-message message-two">
+        <div class="eyebrow">Next Guide</div>
+        <h2 class="title medium rotating-title">기념촬영 후<br />저녁 식사 장소로 이동합니다</h2>
+        <p class="subtitle rotating-subtitle">순서에 따라 촬영을 마친 뒤<br />신라스테이 역삼 카페로 이동해주세요</p>
+        <div class="meta">18:00 Dinner Session</div>
       </div>
     </section>
 
