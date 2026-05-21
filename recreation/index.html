@@ -593,10 +593,7 @@
       <div class="intro-label" style="background:#dc2626;">⚡ TIEBREAKER</div>
       <h2 class="tiebreak-title">동점자가<br>발생했습니다!</h2>
       <p class="tiebreak-sub">순위결정전을 통해 최종 순위를 가립니다.<br>진행 방식은 진행자의 안내를 따라주세요.</p>
-      <div class="tiebreak-btn-row">
-        <button class="intro-button" onclick="goRecreation()">순위결정전 완료 →</button>
-        <button class="tiebreak-pass-btn" onclick="goRecreation()">건너뛰기</button>
-      </div>
+      <p style="margin-top:32px; color:#9ca3af; font-size:16px; font-weight:700;">→ 방향키를 누르면 레크리에이션 뽑기로 넘어갑니다</p>
     </div>
   </section>
 
@@ -992,12 +989,14 @@
       if (hasTie) {
         document.getElementById("tiebreakScreen").classList.add("active");
       } else {
-        goRecreation();
+        goRecreation("finalScreen");
       }
     }
 
-    function goRecreation() {
+    function goRecreation(from = "tiebreakScreen") {
+      recPrevScreen = from;
       document.getElementById("tiebreakScreen").classList.remove("active");
+      document.getElementById("finalScreen").classList.remove("active");
       document.getElementById("recreationScreen").classList.add("active");
       recIndex = 0;
       updateRecSlider();
@@ -1014,6 +1013,13 @@
       isAnswerShown ? goNext() : showAnswer();
     }
 
+    function goPrev() {
+      if (currentIndex === 0) return;
+      currentIndex--;
+      renderQuestion();
+      setHint("next");
+    }
+
     /* ── 룰 슬라이더 ── */
     function updateRuleSlider() {
       ruleSlider.style.transform = `translateX(-${ruleIndex * 100}%)`;
@@ -1022,6 +1028,7 @@
 
     /* ── 레크리에이션 슬라이더 ── */
     let recIndex = 0;
+    let recPrevScreen = "finalScreen"; // 이전 화면 추적
     function updateRecSlider() {
       document.getElementById("recSlider").style.transform = `translateX(-${recIndex * 100}%)`;
       document.getElementById("recNextBtn").style.display = recIndex === REC_RULES.length - 1 ? "none" : "block";
@@ -1048,6 +1055,75 @@
     });
     startBtn.addEventListener("click",  startTimer);
     answerBtn.addEventListener("click", handleArrow);
+
+    /* ── 키보드 방향키 네비게이션 ── */
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    document.addEventListener("keydown", e => {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      const dir = e.key === "ArrowRight" ? 1 : -1;
+
+      // 인트로: → 룰 첫 카드
+      if (introScreen.classList.contains("active")) {
+        if (dir === 1) { ruleIndex = 0; updateRuleSlider(); showScreen("ruleScreen"); }
+        return;
+      }
+
+      // 룰 슬라이더: 경계에서 섹션 넘기
+      if (ruleScreen.classList.contains("active")) {
+        if (dir === -1 && ruleIndex === 0) {
+          showScreen("introScreen");
+        } else if (dir === 1 && ruleIndex === RULES.length - 1) {
+          showScreen("quizScreen");                        // 룰 마지막 → 퀴즈
+        } else {
+          ruleIndex += dir;
+          updateRuleSlider();
+        }
+        return;
+      }
+
+      // 퀴즈: 첫 문제 ← 룰 마지막 카드 / 마지막 문제 → 최종결과(goNext가 처리)
+      if (quizScreen.classList.contains("active")) {
+        if (dir === -1 && currentIndex === 0 && !isAnswerShown) {
+          ruleIndex = RULES.length - 1; updateRuleSlider(); showScreen("ruleScreen");
+        } else if (dir === 1) {
+          handleArrow();
+        } else if (dir === -1) {
+          goPrev();
+        }
+        return;
+      }
+
+      // 최종 결과: ← 퀴즈 / → 다음(동점or뽑기)
+      if (document.getElementById("finalScreen").classList.contains("active")) {
+        if (dir === -1) showScreen("quizScreen");
+        if (dir === 1) document.getElementById("finalNextBtn").click();
+        return;
+      }
+
+      // 순위결정전: ← 최종결과 / → 레크리에이션
+      if (document.getElementById("tiebreakScreen").classList.contains("active")) {
+        if (dir === -1) showScreen("finalScreen");
+        if (dir === 1) goRecreation("tiebreakScreen");
+        return;
+      }
+
+      // 레크리에이션 슬라이더
+      if (document.getElementById("recreationScreen").classList.contains("active")) {
+        if (dir === -1 && recIndex === 0) {
+          // 첫 카드에서 ← → 이전 화면으로
+          document.getElementById("recreationScreen").classList.remove("active");
+          document.getElementById(recPrevScreen).classList.add("active");
+        } else {
+          recIndex = Math.max(0, Math.min(REC_RULES.length - 1, recIndex + dir));
+          updateRecSlider();
+        }
+        return;
+      }
+    });
 
     /* ── 시작 ── */
     loadQuizData();
