@@ -549,6 +549,72 @@
       }
     }
 
+
+
+    .exit-guide-slide {
+      background: var(--tagby-blue);
+      padding: 72px clamp(48px, 6vw, 100px);
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: clamp(36px, 5vw, 72px);
+      align-items: center;
+      text-align: left;
+    }
+
+    .exit-guide-copy {
+      width: 100%;
+    }
+
+    .exit-guide-copy .eyebrow {
+      margin-bottom: 24px;
+    }
+
+    .exit-guide-copy .title {
+      font-size: clamp(56px, 7vw, 118px);
+      line-height: 0.98;
+    }
+
+    .exit-guide-copy .subtitle {
+      margin-top: 32px;
+      font-size: clamp(24px, 2.3vw, 38px);
+      line-height: 1.45;
+    }
+
+    .exit-guide-copy .meta {
+      margin-top: 38px;
+    }
+
+    .exit-map-panel {
+      width: 100%;
+      height: min(68vh, 640px);
+      border-radius: 36px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 32px 90px rgba(0, 30, 120, 0.28);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .exit-map-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .exit-map-fallback {
+      padding: 40px;
+      text-align: center;
+      color: var(--soft-white);
+      font-size: clamp(20px, 2vw, 30px);
+      line-height: 1.55;
+      font-weight: 800;
+      word-break: keep-all;
+    }
+
     @keyframes dnaFade {
       to {
         opacity: 1;
@@ -756,12 +822,18 @@
       <p class="subtitle">10th Anniversary</p>
     </section>
 
-    <section class="slide">
-      <div class="eyebrow">Exit Guide</div>
-      <h2 class="title medium">퇴장 안내</h2>
-      <p class="subtitle">퇴장 시 레크리에이션 상품을<br />꼭 수령해주세요</p>
-      <div class="map-stage">저녁식사 장소 약도 이미지 자리</div>
-      <div class="meta">신라스테이 역삼 카페</div>
+    <section class="slide exit-guide-slide">
+      <div class="exit-guide-copy">
+        <div class="eyebrow">Exit Guide</div>
+        <h2 class="title">퇴장 안내</h2>
+        <p class="subtitle">퇴장 시 레크리에이션 상품을<br />꼭 수령해주세요.</p>
+        <div class="meta">저녁식사 장소 · 신라스테이 역삼 카페</div>
+      </div>
+
+      <div class="exit-map-panel">
+        <img src="./dinner-map.png" alt="신라스테이 역삼 카페 약도" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <div class="exit-map-fallback" style="display:none;">저녁식사 장소 약도 이미지 자리<br />파일명: dinner-map.png</div>
+      </div>
     </section>
   </main>
 
