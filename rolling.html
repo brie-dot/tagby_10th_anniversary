@@ -41,9 +41,8 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(circle at 15% 10%, rgba(0, 91, 255, 0.42), transparent 30%),
-        radial-gradient(circle at 88% 80%, rgba(0, 91, 255, 0.18), transparent 28%),
-        linear-gradient(135deg, #050507 0%, #111118 48%, #000000 100%);
+        radial-gradient(circle at 18% 8%, rgba(255, 255, 255, 0.16), transparent 28%),
+        linear-gradient(180deg, #005BFF 0%, #0038A8 26%, #111118 62%, #000000 100%);
       z-index: -2;
     }
 
@@ -733,13 +732,16 @@
     .modal-postit {
       position: relative;
       width: min(720px, 92vw);
-      min-height: 440px;
+      height: min(620px, 82vh);
       padding: clamp(34px, 5vw, 60px);
       border-radius: 6px 34px 34px 34px;
       background: linear-gradient(145deg, #ffffff, #e7efff);
       color: #101014;
       box-shadow: 0 40px 140px rgba(0,0,0,0.42);
       animation: modalPop 240ms ease both;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
     .modal-close {
@@ -781,6 +783,18 @@
       font-weight: 600;
       white-space: pre-line;
       word-break: keep-all;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .modal-description::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-description::-webkit-scrollbar-thumb {
+      background: rgba(16,16,20,0.22);
+      border-radius: 999px;
     }
 
     @keyframes bottleShake {
@@ -923,6 +937,7 @@
     ];
 
     let messages = [];
+    let shuffledMessages = [];
     let pickedIndexes = new Set();
     let fullAccessUnlocked = false;
     let currentView = "bottle";
@@ -1027,9 +1042,24 @@
         const csv = await loadWithFallback(MESSAGE_CSV_URL);
         const parsed = rowsToMessages(parseCSV(csv));
         messages = parsed.length ? parsed : fallbackMessages;
+        shuffledMessages = shuffleMessages(messages);
       } catch {
         messages = fallbackMessages;
+        shuffledMessages = shuffleMessages(messages);
       }
+    }
+
+    function shuffleMessages(items) {
+      const copied = [...items];
+      for (let i = copied.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copied[i], copied[j]] = [copied[j], copied[i]];
+      }
+      return copied;
+    }
+
+    function getMessageIndex(target) {
+      return messages.indexOf(target);
     }
 
     function openPaper() {
@@ -1137,8 +1167,8 @@
     function renderBoard(app) {
       app.innerHTML = `
         <div class="postit-board">
-          ${messages.map((msg, index) => `
-            <button class="postit" onclick="openMessageModal(${index})" style="--r:${(index % 7) - 3}deg; --delay:${index * 18}ms;">
+          ${shuffledMessages.map((msg, index) => `
+            <button class="postit" onclick="openMessageModal(${getMessageIndex(msg)})" style="--r:${(index % 7) - 3}deg; --delay:${index * 18}ms;">
               <span class="postit-keyword">${escapeHTML(msg.keyword)}</span>
               <span class="postit-from">From. ${escapeHTML(msg.author)}</span>
             </button>
@@ -1153,7 +1183,7 @@
           <input class="search-input" id="messageSearch" placeholder="작성자 / 키워드 / 내용 검색" oninput="filterTableMessages()" />
         </div>
         <div class="message-table" id="messageTable">
-          ${tableRows(messages)}
+          ${tableRows(shuffledMessages)}
         </div>
       `;
     }
@@ -1164,7 +1194,7 @@
           <div>작성자</div><div>키워드</div><div>설명</div>
         </div>
         ${items.map((msg, index) => `
-          <button class="table-row" onclick="openMessageModal(${index})">
+          <button class="table-row" onclick="openMessageModal(${getMessageIndex(msg)})">
             <div>${escapeHTML(msg.author)}</div>
             <div>${escapeHTML(msg.keyword)}</div>
             <div>${escapeHTML(msg.description)}</div>
@@ -1175,7 +1205,7 @@
 
     function filterTableMessages() {
       const keyword = document.getElementById("messageSearch").value.trim().toLowerCase();
-      const filtered = messages.filter(msg => [msg.author, msg.keyword, msg.description].join(" ").toLowerCase().includes(keyword));
+      const filtered = shuffledMessages.filter(msg => [msg.author, msg.keyword, msg.description].join(" ").toLowerCase().includes(keyword));
       document.getElementById("messageTable").innerHTML = tableRows(filtered);
     }
 
