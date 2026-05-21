@@ -863,7 +863,7 @@
   </style>
 </head>
 <body>
-  <section class="screen lock-screen active" id="lockScreen">
+  <section class="screen lock-screen" id="lockScreen">
     <div class="lock-card">
       <div class="eyebrow">TAGby 10th Anniversary</div>
       <h1 class="lock-title">This page is<br />for one special person.</h1>
@@ -879,10 +879,10 @@
     </div>
   </section>
 
-  <section class="screen paper-screen" id="paperScreen">
+  <section class="screen paper-screen active" id="paperScreen">
     <header class="top-bar">
       <div class="brand"><span class="brand-dot"></span><span>TAGby</span></div>
-      <button class="top-button" type="button" onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })">마지막으로 이동</button>
+      
     </header>
 
     <section class="hero">
@@ -924,6 +924,7 @@
 
     let messages = [];
     let pickedIndexes = new Set();
+    let fullAccessUnlocked = false;
     let currentView = "bottle";
 
     const lockScreen = document.getElementById("lockScreen");
@@ -1072,7 +1073,19 @@
 
       document.querySelectorAll(".view-tab").forEach(btn => {
         btn.addEventListener("click", () => {
-          currentView = btn.dataset.view;
+          const nextView = btn.dataset.view;
+
+          if ((nextView === "board" || nextView === "table") && !fullAccessUnlocked) {
+            const input = window.prompt("전체 메시지를 보려면 Secret Code를 입력해주세요.");
+            if (!SECRET_CODES.includes(normalizeCode(input))) {
+              alert("코드를 다시 확인해주세요 :)");
+              return;
+            }
+            fullAccessUnlocked = true;
+            sessionStorage.setItem("tagbyRollingPaperFullUnlocked", "true");
+          }
+
+          currentView = nextView;
           document.querySelectorAll(".view-tab").forEach(b => b.classList.toggle("active", b === btn));
           renderCurrentView();
         });
@@ -1112,11 +1125,10 @@
             </div>
           </div>
           <div class="bottle-side">
-            <div class="bottle-count">${pickedIndexes.size} / ${messages.length}</div>
+            <div class="bottle-count">RANDOM / ${messages.length}</div>
             <h3>Message Bottle</h3>
-            <p>버튼을 누를 때마다 병 속에서 랜덤 쪽지가 하나씩 나옵니다.</p>
+            <p>버튼을 누를 때마다 51개의 메시지 중 하나가 랜덤으로 나옵니다.</p>
             <button class="draw-button" onclick="drawRandomMessage()">쪽지 하나 꺼내기</button>
-            <button class="reset-button" onclick="resetPickedMessages()">다시 섞기</button>
           </div>
         </div>
       `;
@@ -1168,13 +1180,9 @@
     }
 
     function drawRandomMessage() {
-      if (pickedIndexes.size >= messages.length) {
-        pickedIndexes.clear();
-      }
+      if (!messages.length) return;
 
-      const available = messages.map((_, i) => i).filter(i => !pickedIndexes.has(i));
-      const index = available[Math.floor(Math.random() * available.length)];
-      pickedIndexes.add(index);
+      const index = Math.floor(Math.random() * messages.length);
 
       const bottle = document.getElementById("bottleWrap");
       bottle?.classList.remove("shake");
@@ -1183,13 +1191,7 @@
 
       setTimeout(() => {
         openMessageModal(index);
-        renderBottle(document.getElementById("rollingApp"));
       }, 520);
-    }
-
-    function resetPickedMessages() {
-      pickedIndexes.clear();
-      renderCurrentView();
     }
 
     function openMessageModal(index) {
@@ -1226,9 +1228,12 @@
       const isCorrect = SECRET_CODES.includes(input);
 
       if (isCorrect) {
-        sessionStorage.setItem("tagbyRollingPaperUnlocked", "true");
-        await loadMessages();
-        openPaper();
+        fullAccessUnlocked = true;
+        sessionStorage.setItem("tagbyRollingPaperFullUnlocked", "true");
+        lockScreen.classList.remove("active");
+        paperScreen.classList.add("active");
+        currentView = "board";
+        buildRollingPaperApp();
         return;
       }
 
@@ -1238,13 +1243,10 @@
     });
 
     window.addEventListener("DOMContentLoaded", async () => {
-      document.body.style.overflowY = "hidden";
-      codeInput.focus();
-
-      if (sessionStorage.getItem("tagbyRollingPaperUnlocked") === "true") {
-        await loadMessages();
-        openPaper();
-      }
+      document.body.style.overflowY = "auto";
+      fullAccessUnlocked = sessionStorage.getItem("tagbyRollingPaperFullUnlocked") === "true";
+      await loadMessages();
+      buildRollingPaperApp();
     });
   </script>
 </body>
