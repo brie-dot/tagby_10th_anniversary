@@ -26,7 +26,6 @@
       padding: 48px 64px;
     }
     .screen.active { display: flex; }
-    /* 퀴즈 화면만 고정 높이 유지 */
     .quiz-screen { height: 100vh; overflow: hidden; }
 
     /* ── 인트로 / 룰 스크린 ── */
@@ -68,10 +67,7 @@
     }
 
     /* ── 룰 슬라이더 ── */
-    .rule-screen-content {
-      max-width: 1100px;
-      text-align: left;
-    }
+    .rule-screen-content { max-width: 1100px; text-align: left; }
     .rule-title {
       margin: 0 0 52px;
       font-size: clamp(54px, 7vw, 100px);
@@ -79,11 +75,7 @@
       font-weight: 950;
       letter-spacing: -0.05em;
     }
-    .rule-slider-wrap {
-      position: relative;
-      min-height: 420px;
-      overflow: hidden;
-    }
+    .rule-slider-wrap { position: relative; min-height: 420px; overflow: hidden; }
     .rule-next-button {
       position: absolute;
       right: 12px;
@@ -101,15 +93,8 @@
       cursor: pointer;
       z-index: 10;
     }
-    .rule-slider {
-      display: flex;
-      transition: transform 0.4s ease;
-    }
-    .rule-slide {
-      width: 100%;
-      flex-shrink: 0;
-      padding: 12px;
-    }
+    .rule-slider { display: flex; transition: transform 0.4s ease; }
+    .rule-slide { width: 100%; flex-shrink: 0; padding: 12px; }
     .rule-card {
       padding: 40px;
       border-radius: 36px;
@@ -122,24 +107,9 @@
       justify-content: space-between;
     }
     .rule-emoji { font-size: 96px; }
-    .rule-label {
-      font-size: 24px;
-      font-weight: 950;
-      color: #2563eb;
-      margin-bottom: 12px;
-    }
-    .rule-main {
-      font-size: clamp(34px, 4vw, 64px);
-      line-height: 1.25;
-      font-weight: 900;
-      word-break: keep-all;
-    }
-    .rule-sub {
-      margin-top: 16px;
-      color: #6b7280;
-      font-size: 24px;
-      font-weight: 700;
-    }
+    .rule-label { font-size: 24px; font-weight: 950; color: #2563eb; margin-bottom: 12px; }
+    .rule-main { font-size: clamp(34px, 4vw, 64px); line-height: 1.25; font-weight: 900; word-break: keep-all; }
+    .rule-sub { margin-top: 16px; color: #6b7280; font-size: 24px; font-weight: 700; }
 
     /* ── 퀴즈 스크린 ── */
     .quiz-screen {
@@ -164,8 +134,10 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 40px;
+      gap: 24px;
     }
+
+    /* ── 문제 영역 ── */
     .question-area {
       width: 100%;
       max-width: 1280px;
@@ -173,50 +145,137 @@
       text-align: left;
     }
     .question-number {
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       color: #2563eb;
-      font-size: clamp(32px, 4vw, 56px);
+      font-size: clamp(28px, 3.5vw, 48px);
       font-weight: 950;
       letter-spacing: -0.04em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
+    /* 문제 유형 배지 */
+    .question-type-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.01em;
+      vertical-align: middle;
+    }
+    .badge-subjective   { background: #eff6ff; color: #2563eb; }
+    .badge-mcq          { background: #f0fdf4; color: #16a34a; }
+    .badge-image-mcq    { background: #fdf4ff; color: #9333ea; }
+    .badge-image-subj   { background: #fff7ed; color: #ea580c; }
+
     .question-text {
       transition: all 0.35s ease;
       margin: 0;
-      font-size: clamp(58px, 7.5vw, 118px);
+      font-size: clamp(48px, 6.5vw, 100px);
       line-height: 1.18;
       font-weight: 950;
       letter-spacing: -0.06em;
       word-break: keep-all;
     }
 
+    /* ── 이미지 영역 ── */
+    .question-image-wrap {
+      display: none;
+      margin-top: 20px;
+      border-radius: 20px;
+      overflow: hidden;
+      max-height: 300px;
+      width: fit-content;
+      max-width: 100%;
+      background: #f3f4f6;
+    }
+    .question-image-wrap.visible { display: block; }
+    .question-image-wrap img {
+      display: block;
+      max-height: 300px;
+      max-width: 100%;
+      width: auto;
+      object-fit: contain;
+    }
+    .image-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 120px;
+      width: 240px;
+      color: #9ca3af;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .image-error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 80px;
+      width: 240px;
+      color: #dc2626;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ── 객관식 선택지 ── */
+    .options-area {
+      display: none;
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      gap: 10px;
+    }
+    .options-area.visible {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .options-area.single-col { grid-template-columns: 1fr; }
+
+    .option-item {
+      padding: 16px 22px;
+      border-radius: 16px;
+      background: #f3f4f6;
+      font-size: clamp(20px, 2.2vw, 32px);
+      font-weight: 800;
+      line-height: 1.4;
+      word-break: keep-all;
+      transition: background 0.2s, opacity 0.2s, border 0.2s;
+      border: 2px solid transparent;
+    }
+    .option-item.correct {
+      background: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #15803d !important;
+    }
+    .option-item.incorrect { opacity: 0.35; }
+
     /* ── 타이머 ── */
     .timer {
       display: none;
-      margin-top: 28px;
+      margin-top: 12px;
       min-width: 80px;
       color: #2563eb;
-      font-size: clamp(72px, 9vw, 140px);
+      font-size: clamp(64px, 8vw, 120px);
       font-weight: 950;
       letter-spacing: -0.04em;
       text-align: left;
     }
     .timer.visible { display: block; }
-    .timer.danger {
-      color: #dc2626;
-      animation: shake 0.28s infinite;
-    }
+    .timer.danger { color: #dc2626; animation: shake 0.28s infinite; }
 
     /* ── 정답 박스 ── */
     .answer-box {
       transition: all 0.35s ease;
       display: none;
       width: min(100%, 1280px);
-      margin: 36px auto 0;
-      padding: 28px 34px;
+      margin: 20px auto 0;
+      padding: 24px 32px;
       border-radius: 28px;
       background: #ecfdf5;
       color: #166534;
-      font-size: clamp(34px, 4.5vw, 64px);
+      font-size: clamp(30px, 4vw, 56px);
       font-weight: 950;
       line-height: 1.25;
       word-break: keep-all;
@@ -224,25 +283,31 @@
     .answer-box.visible { display: block; }
 
     /* ── 정답 모드 ── */
-    .question-area.answer-mode .question-number {
-      opacity: 0.4;
-      transform: scale(0.9);
-    }
+    .question-area.answer-mode .question-number { opacity: 0.4; transform: scale(0.9); }
     .question-area.answer-mode .question-text {
-      font-size: clamp(30px, 3vw, 52px);
+      font-size: clamp(26px, 2.5vw, 44px);
       opacity: 0.45;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     .question-area.answer-mode .timer { display: none !important; }
     .question-area.answer-mode .answer-box {
-      margin-top: 24px;
-      font-size: clamp(72px, 8vw, 150px);
+      margin-top: 16px;
+      font-size: clamp(60px, 7vw, 130px);
       line-height: 1.1;
       background: transparent;
       color: #111827;
       padding: 0;
     }
     .answer-highlight { color: #2563eb; }
+
+    /* 정답 모드에서 선택지는 유지 (하이라이트 보여야 함) */
+    .question-area.answer-mode .options-area.visible {
+      font-size: clamp(16px, 1.8vw, 26px);
+    }
+    .question-area.answer-mode .options-area .option-item {
+      font-size: clamp(16px, 1.8vw, 26px);
+      padding: 12px 18px;
+    }
 
     /* ── 하단 바 ── */
     .bottom-bar {
@@ -346,18 +411,8 @@
       line-height: 1.1;
       color: #111827;
     }
-    .final-sub {
-      font-size: 22px;
-      font-weight: 700;
-      color: #6b7280;
-      margin-bottom: 40px;
-    }
-    .final-ranking {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      text-align: left;
-    }
+    .final-sub { font-size: 22px; font-weight: 700; color: #6b7280; margin-bottom: 40px; }
+    .final-ranking { display: flex; flex-direction: column; gap: 14px; text-align: left; }
     .ranking-item {
       display: flex;
       align-items: center;
@@ -381,29 +436,10 @@
     .ranking-item.rank-1 { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #fbbf24; }
     .ranking-item.rank-2 { background: linear-gradient(135deg, #f9fafb, #f3f4f6); border: 2px solid #9ca3af; }
     .ranking-item.rank-3 { background: linear-gradient(135deg, #fffaf0, #fef3e2); border: 2px solid #d97706; }
-    .rank-badge {
-      font-size: 36px;
-      min-width: 48px;
-      text-align: center;
-    }
-    .rank-team {
-      flex: 1;
-      font-size: clamp(22px, 3vw, 36px);
-      font-weight: 900;
-      color: #111827;
-    }
-    .rank-score {
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: 950;
-      color: #2563eb;
-      letter-spacing: -0.03em;
-    }
-    .rank-score-label {
-      font-size: 16px;
-      font-weight: 700;
-      color: #9ca3af;
-      margin-left: 4px;
-    }
+    .rank-badge { font-size: 36px; min-width: 48px; text-align: center; }
+    .rank-team { flex: 1; font-size: clamp(22px, 3vw, 36px); font-weight: 900; color: #111827; }
+    .rank-score { font-size: clamp(28px, 4vw, 48px); font-weight: 950; color: #2563eb; letter-spacing: -0.03em; }
+    .rank-score-label { font-size: 16px; font-weight: 700; color: #9ca3af; margin-left: 4px; }
     .final-next-btn {
       margin-top: 40px;
       padding: 18px 40px;
@@ -441,18 +477,6 @@
       margin-bottom: 48px;
       word-break: keep-all;
       line-height: 1.6;
-    }
-    .tiebreak-btn-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-    .tiebreak-pass-btn {
-      padding: 18px 40px;
-      border: 2px solid #e5e7eb;
-      border-radius: 999px;
-      background: #fff;
-      color: #6b7280;
-      font-size: 18px;
-      font-weight: 900;
-      cursor: pointer;
-      font-family: inherit;
     }
 
     /* ── 레크리에이션 뽑기 스크린 ── */
@@ -506,28 +530,9 @@
       gap: 24px;
     }
     .rec-emoji { font-size: 80px; line-height: 1; }
-    .rec-label {
-      font-size: 20px;
-      font-weight: 950;
-      color: #059669;
-      margin-bottom: 10px;
-      letter-spacing: 0.02em;
-    }
-    .rec-main {
-      font-size: clamp(28px, 3.5vw, 52px);
-      line-height: 1.35;
-      font-weight: 900;
-      word-break: keep-all;
-      color: #111827;
-    }
-    .rec-sub {
-      margin-top: 12px;
-      font-size: 20px;
-      font-weight: 700;
-      color: #6b7280;
-      word-break: keep-all;
-      line-height: 1.5;
-    }
+    .rec-label { font-size: 20px; font-weight: 950; color: #059669; margin-bottom: 10px; letter-spacing: 0.02em; }
+    .rec-main { font-size: clamp(28px, 3.5vw, 52px); line-height: 1.35; font-weight: 900; word-break: keep-all; color: #111827; }
+    .rec-sub { margin-top: 12px; font-size: 20px; font-weight: 700; color: #6b7280; word-break: keep-all; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -559,8 +564,22 @@
     <div class="quiz-layout">
       <button class="score-btn" onclick="window.open('scoreboard.html','점수판','width=900,height=700')">🏆 점수판</button>
       <div class="question-area" id="questionArea">
-        <div class="question-number" id="questionNumber">Q1</div>
+        <div class="question-number" id="questionNumber">
+          <span id="questionNumText">Q1</span>
+          <span class="question-type-badge badge-subjective" id="questionTypeBadge">주관식</span>
+        </div>
         <h2 class="question-text" id="questionText">문제를 불러오는 중...</h2>
+
+        <!-- 이미지 영역 (이미지 유형일 때만 표시) -->
+        <div class="question-image-wrap" id="questionImageWrap">
+          <div class="image-loading" id="imageLoading">이미지 불러오는 중...</div>
+          <img id="questionImage" src="" alt="문제 이미지" style="display:none;"
+               onload="onImageLoad()" onerror="onImageError()" />
+        </div>
+
+        <!-- 선택지 영역 (객관식 유형일 때만 표시) -->
+        <div class="options-area" id="optionsArea"></div>
+
         <div class="timer" id="timer">01:00</div>
         <div class="answer-box" id="answerBox"></div>
       </div>
@@ -610,11 +629,31 @@
   </section>
 
   <script>
-    /* ── 상수 ── */
+    /* ══════════════════════════════════════════════
+       ★ 설정값 — 여기만 수정하세요
+    ══════════════════════════════════════════════ */
+    /**
+     * GitHub 이미지 베이스 URL
+     * 예시: "https://raw.githubusercontent.com/your-org/your-repo/main/images/"
+     * 구글 시트 image 컬럼에는 파일명만 입력 (예: "q3_logo.png")
+     */
+    const GITHUB_IMAGE_BASE = "https://raw.githubusercontent.com/YOUR_ORG/YOUR_REPO/main/images/";
+
     const SHEET_URL      = "https://docs.google.com/spreadsheets/d/1B6AtoVN8a4kBMX7xcGotZEhRS_NWBISjy5l8OCFn4O8/export?format=csv&gid=0";
     const SCORE_URL      = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpMTMpqFtQVyu9efUUp10kRvpQMza3Ur9JxVkqWfb_7JFLYmQGogHznVf9s3NpeJa9QMPjfGX3HTPH/pub?gid=355034406&single=true&output=csv";
-    const TIMER_DURATION = 60;   // 초
-    const DANGER_AT      = 10;   // 위험 임계 초
+    const TIMER_DURATION = 60;
+    const DANGER_AT      = 10;
+
+    /* 문제 유형 상수 */
+    const TYPE = {
+      SUBJECTIVE    : "subjective",     // 주관식 (기본값)
+      MCQ           : "mcq",            // 객관식
+      IMAGE_MCQ     : "image-mcq",      // 이미지 + 객관식
+      IMAGE_SUBJ    : "image-subjective", // 이미지 + 주관식
+    };
+
+    /* 객관식 번호 기호 (①②③④⑤) */
+    const CIRCLE_NUMS = ["①","②","③","④","⑤"];
 
     const PROXIES = [
       url => url,
@@ -624,50 +663,35 @@
     ];
 
     const RULES = [
-      { emoji: "👥", label: "RULE 1", main: "퀴즈는 팀전으로 진행됩니다.",                                             sub: "팀당 5~6인 구성" },
+      { emoji: "👥", label: "RULE 1", main: "퀴즈는 팀전으로 진행됩니다.",                                               sub: "팀당 5~6인 구성" },
       { emoji: "✍️", label: "RULE 2", main: "질문을 보고 전달받은 스케치북에 답을 작성해주세요." },
       { emoji: "🏆", label: "RULE 3", main: "정답을 맞춘 팀에게 1점이 부여됩니다." },
       { emoji: "📊", label: "RULE 4", main: "모든 퀴즈 종료 후 점수가 높은 팀 순으로 최종 순위를 발표합니다." },
     ];
 
     const REC_RULES = [
-      {
-        emoji: "🎁",
-        label: "RULE 1",
-        main: "1~61번이 부여된 랜덤 상품을 준비했습니다!",
-        sub: "최고가: 신세계상품권 5만원권\n최저가: 바나프레소 아메리카노+디저트 세트",
-      },
-      {
-        emoji: "🏅",
-        label: "RULE 2",
-        main: "1등 팀부터 순서대로 랜덤으로 상품 번호표를 뽑습니다.",
-      },
-      {
-        emoji: "⭐",
-        label: "RULE 3",
-        main: "단, 1등 팀은 만 원 이상의 상품으로만 구성된 번호 풀에서 뽑습니다.",
-        sub: "1등 팀은 만원 이상 상품 확정!",
-      },
-      {
-        emoji: "🎉",
-        label: "RULE 4",
-        main: "모든 참여자들이 하나 이상의 상품을 가져갑니다!",
-        sub: "아무도 빈손으로 돌아가지 않습니다 :)",
-      },
+      { emoji: "🎁", label: "RULE 1", main: "1~61번이 부여된 랜덤 상품을 준비했습니다!", sub: "최고가: 신세계상품권 5만원권\n최저가: 바나프레소 아메리카노+디저트 세트" },
+      { emoji: "🏅", label: "RULE 2", main: "1등 팀부터 순서대로 랜덤으로 상품 번호표를 뽑습니다." },
+      { emoji: "⭐", label: "RULE 3", main: "단, 1등 팀은 만 원 이상의 상품으로만 구성된 번호 풀에서 뽑습니다.", sub: "1등 팀은 만원 이상 상품 확정!" },
+      { emoji: "🎉", label: "RULE 4", main: "모든 참여자들이 하나 이상의 상품을 가져갑니다!", sub: "아무도 빈손으로 돌아가지 않습니다 :)" },
     ];
 
+    /**
+     * 폴백 데이터 — 시트 연결 실패 시 사용
+     * type: "subjective" | "mcq" | "image-mcq" | "image-subjective"
+     * options: 객관식 선택지 배열 (주관식이면 빈 배열)
+     * image: 파일명 (이미지 문제면 GitHub 파일명, 없으면 "")
+     */
     const FALLBACK_DATA = [
-      { num: 1, question: "태그바이 창립일은?",                         answer: "[[2016년 6월 1일]]입니다." },
-      { num: 2, question: "그렇다면, 2016년 6월 1일은 무슨 요일이었을까요?", answer: "[[수요일]]이었습니다." },
+      { num: 1, question: "태그바이 창립일은?",
+        answer: "[[2016년 6월 1일]]입니다.",
+        type: TYPE.SUBJECTIVE, options: [], image: "" },
+      { num: 2, question: "다음 중 태그바이가 처음 서비스를 시작한 연도는?",
+        answer: "[[②2016년]]",
+        type: TYPE.MCQ,
+        options: ["2014년","2016년","2018년","2020년","2022년"],
+        image: "" },
     ];
-
-    const HINTS = {
-      idle:    "타이머 시작 버튼을 누르면 1분 카운트다운이 시작됩니다.",
-      running: "답을 생각해보세요. 화살표를 누르면 언제든 정답을 확인할 수 있습니다.",
-      end:     "시간 종료! 화살표를 눌러 정답을 확인하세요.",
-      answer:  "화살표를 한 번 더 누르면 다음 문제로 넘어갑니다.",
-      next:    "시작 버튼을 누르면 1분 타이머가 크게 표시됩니다.",
-    };
 
     /* ── DOM ── */
     const $  = id => document.getElementById(id);
@@ -677,8 +701,13 @@
     const ruleSlider    = $("ruleSlider");
     const ruleNextBtn   = $("ruleNextButton");
     const questionArea  = $("questionArea");
-    const questionNum   = $("questionNumber");
+    const questionNum   = $("questionNumText");
+    const questionTypeBadge = $("questionTypeBadge");
     const questionText  = $("questionText");
+    const questionImageWrap = $("questionImageWrap");
+    const questionImage = $("questionImage");
+    const imageLoading  = $("imageLoading");
+    const optionsArea   = $("optionsArea");
     const timer         = $("timer");
     const startBtn      = $("startButton");
     const answerBtn     = $("answerButton");
@@ -709,7 +738,7 @@
     `).join("");
 
     /* ── 레크리에이션 슬라이드 생성 ── */
-    document.getElementById("recSlider").innerHTML = REC_RULES.map(r => `
+    $("recSlider").innerHTML = REC_RULES.map(r => `
       <div class="rec-slide">
         <div class="rec-card">
           <div class="rec-emoji">${r.emoji}</div>
@@ -726,22 +755,56 @@
     function formatTime(s) {
       return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
     }
-
     function escapeHTML(text) {
       return String(text)
         .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
-
     function formatAnswer(answer) {
       return escapeHTML(answer).replace(/\[\[(.*?)\]\]/g, '<span class="answer-highlight">$1</span>');
     }
 
+    const HINTS = {
+      idle:    "타이머 시작 버튼을 누르면 1분 카운트다운이 시작됩니다.",
+      running: "답을 생각해보세요. 화살표를 누르면 언제든 정답을 확인할 수 있습니다.",
+      end:     "시간 종료! 화살표를 눌러 정답을 확인하세요.",
+      answer:  "화살표를 한 번 더 누르면 다음 문제로 넘어갑니다.",
+      next:    "시작 버튼을 누르면 1분 타이머가 크게 표시됩니다.",
+    };
     function setHint(key) { hintText.textContent = HINTS[key]; }
-
     function clearDanger() {
       timer.classList.remove("danger");
       quizScreen.classList.remove("danger-mode");
+    }
+
+    /* ── 문제 유형 배지 ── */
+    const BADGE_INFO = {
+      [TYPE.SUBJECTIVE] : { cls: "badge-subjective", label: "주관식" },
+      [TYPE.MCQ]        : { cls: "badge-mcq",        label: "객관식" },
+      [TYPE.IMAGE_MCQ]  : { cls: "badge-image-mcq",  label: "이미지 객관식" },
+      [TYPE.IMAGE_SUBJ] : { cls: "badge-image-subj", label: "이미지 주관식" },
+    };
+    function updateTypeBadge(type) {
+      const info = BADGE_INFO[type] || BADGE_INFO[TYPE.SUBJECTIVE];
+      questionTypeBadge.className = "question-type-badge " + info.cls;
+      questionTypeBadge.textContent = info.label;
+    }
+
+    /* ── 이미지 로드 콜백 ── */
+    function onImageLoad() {
+      imageLoading.style.display = "none";
+      questionImage.style.display = "block";
+    }
+    function onImageError() {
+      imageLoading.style.display = "none";
+      questionImage.style.display = "none";
+      const errEl = document.createElement("div");
+      errEl.className = "image-error";
+      errEl.textContent = "⚠️ 이미지를 불러올 수 없습니다";
+      // 이미 에러 메시지가 있으면 중복 추가 방지
+      if (!questionImageWrap.querySelector(".image-error")) {
+        questionImageWrap.appendChild(errEl);
+      }
     }
 
     /* ── CSV 파싱 ── */
@@ -762,17 +825,65 @@
       return rows;
     }
 
+    /**
+     * CSV rows → quizData 배열
+     *
+     * 구글 시트 헤더 예시 (순서 무관):
+     *   num | question | answer | type | options | image
+     *
+     * - type    : "subjective" / "mcq" / "image-mcq" / "image-subjective"
+     *             (없으면 "subjective" 로 처리)
+     * - options : 쉼표(,) 구분 선택지. 각 항목은 "보기 텍스트" 형식
+     *             예) "서울,부산,대구,인천,광주"
+     *             ①②... 기호는 자동으로 붙으므로 입력 불필요
+     * - image   : GitHub 파일명만 입력 (예: "q3_logo.png")
+     *             GITHUB_IMAGE_BASE + 파일명 으로 URL 조합
+     */
     function rowsToQuizData(rows) {
       if (!rows.length) return [];
       const header = rows[0].map(c => String(c).trim().toLowerCase());
-      const hasHeader = header.some(c => ["question","answer","문제","정답","num","번호","no"].includes(c));
+      const hasHeader = header.some(c =>
+        ["question","answer","문제","정답","num","번호","no","type","options","image"].includes(c)
+      );
       const body = hasHeader ? rows.slice(1) : rows;
-      const qi = [header.indexOf("question"), header.indexOf("문제"),  1].find(i => i !== -1);
-      const ai = [header.indexOf("answer"),   header.indexOf("정답"),  2].find(i => i !== -1);
-      const ni = [header.indexOf("num"), header.indexOf("번호"), header.indexOf("no"), 0].find(i => i !== -1);
+
+      // 컬럼 인덱스 찾기 (없으면 -1)
+      const idx = name => header.indexOf(name);
+      const qi = [idx("question"), idx("문제"),  1].find(i => i >= 0);
+      const ai = [idx("answer"),   idx("정답"),  2].find(i => i >= 0);
+      const ni = [idx("num"), idx("번호"), idx("no"), 0].find(i => i >= 0);
+      const ti = idx("type");
+      const oi = idx("options");
+      const ii = idx("image");
+
       return body
         .filter(r => r[qi]?.trim())
-        .map((r, i) => ({ num: r[ni] || i + 1, question: r[qi].trim(), answer: (r[ai] || "정답 없음").trim() }));
+        .map((r, i) => {
+          // 선택지: 세미콜론(;) 또는 줄바꿈으로도 구분 허용
+          // 시트에서 쉼표 구분으로 입력한 경우 CSV 파싱 후 이미 한 셀에 들어옴
+          const rawOptions = (oi >= 0 && r[oi]) ? r[oi] : "";
+          const options = rawOptions
+            ? rawOptions.split(/[;；]/).map(o => o.trim()).filter(Boolean)
+            : [];
+
+          const rawType = (ti >= 0 && r[ti]) ? r[ti].trim().toLowerCase() : "";
+          // type 정규화: 한글 입력도 허용
+          let type = TYPE.SUBJECTIVE;
+          if      (rawType === "mcq"              || rawType === "객관식")        type = TYPE.MCQ;
+          else if (rawType === "image-mcq"        || rawType === "이미지객관식"   || rawType === "이미지 객관식") type = TYPE.IMAGE_MCQ;
+          else if (rawType === "image-subjective" || rawType === "이미지주관식"   || rawType === "이미지 주관식") type = TYPE.IMAGE_SUBJ;
+
+          const imageFile = (ii >= 0 && r[ii]) ? r[ii].trim() : "";
+
+          return {
+            num    : r[ni] || i + 1,
+            question: r[qi].trim(),
+            answer  : (r[ai] || "정답 없음").trim(),
+            type,
+            options,
+            image   : imageFile,  // 파일명만 저장
+          };
+        });
     }
 
     /* ── 데이터 로드 ── */
@@ -784,7 +895,12 @@
       return text;
     }
 
-    // loadWithFallback은 아래에 url 파라미터 버전으로 통합
+    async function loadWithFallback(url = SHEET_URL) {
+      for (const makeUrl of PROXIES) {
+        try { return await tryFetch(makeUrl(url)); } catch {}
+      }
+      throw new Error("failed");
+    }
 
     async function loadQuizData() {
       try {
@@ -800,13 +916,59 @@
       renderQuestion();
     }
 
-    /* ── 렌더링 ── */
+    /* ══════════════════════════════════════════════
+       렌더링
+    ══════════════════════════════════════════════ */
     function renderQuestion() {
       if (!quizData.length) return;
       const q = quizData[currentIndex];
+
       questionNum.textContent  = `Q${currentIndex + 1}`;
       questionText.textContent = q.question;
+      updateTypeBadge(q.type);
+
+      /* ── 이미지 영역 ── */
+      const hasImage = q.image && (q.type === TYPE.IMAGE_MCQ || q.type === TYPE.IMAGE_SUBJ);
+      if (hasImage) {
+        questionImageWrap.classList.add("visible");
+        imageLoading.style.display = "flex";
+        questionImage.style.display = "none";
+        // 이전 에러 메시지 제거
+        questionImageWrap.querySelectorAll(".image-error").forEach(e => e.remove());
+        questionImage.src = GITHUB_IMAGE_BASE + q.image;
+      } else {
+        questionImageWrap.classList.remove("visible");
+        questionImage.src = "";
+      }
+
+      /* ── 선택지 영역 ── */
+      const hasMCQ = q.options.length > 0 && (q.type === TYPE.MCQ || q.type === TYPE.IMAGE_MCQ);
+      if (hasMCQ) {
+        renderOptions(q.options, -1 /* -1 = 아직 정답 강조 없음 */);
+        optionsArea.classList.add("visible");
+        // 5지선다면 한 줄씩
+        optionsArea.classList.toggle("single-col", q.options.length >= 5);
+      } else {
+        optionsArea.classList.remove("visible");
+        optionsArea.innerHTML = "";
+      }
+
       resetTimer();
+    }
+
+    /**
+     * 선택지 렌더링
+     * @param {string[]} options - 선택지 텍스트 배열
+     * @param {number}   correctIdx - 정답 인덱스 (-1 이면 하이라이트 없음)
+     */
+    function renderOptions(options, correctIdx) {
+      optionsArea.innerHTML = options.map((opt, i) => {
+        let cls = "option-item";
+        if (correctIdx >= 0) {
+          cls += i === correctIdx ? " correct" : " incorrect";
+        }
+        return `<div class="${cls}">${CIRCLE_NUMS[i] || (i+1)+"."} ${escapeHTML(opt)}</div>`;
+      }).join("");
     }
 
     /* ── 타이머 ── */
@@ -830,50 +992,36 @@
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       return audioCtx;
     }
-
-    // freq 배열을 순서대로 재생 (offset: 초 단위 시작 시간)
     async function playTone(freq, duration, volume = 0.7, offset = 0) {
       try {
         const ctx = getAudioCtx();
-        await ctx.resume(); // 브라우저 자동재생 정책 해제
+        await ctx.resume();
         const osc  = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.type = "sine";
-        osc.frequency.value = freq;
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = "sine"; osc.frequency.value = freq;
         const t = ctx.currentTime + offset;
         gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(volume, t + 0.01); // 클리핑 방지
+        gain.gain.linearRampToValueAtTime(volume, t + 0.01);
         gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
-        osc.start(t);
-        osc.stop(t + duration + 0.02);
+        osc.start(t); osc.stop(t + duration + 0.02);
       } catch {}
     }
-
-    // 카운트다운: 매 초마다 같은 음을 4번 빠르게 반복
     function playTickBeep(remainingSecs) {
-      const step = DANGER_AT - remainingSecs; // 0(10초) ~ 9(1초)
-      const freq = 600 + step * 55;           // 600 → 1095Hz
-      for (let i = 0; i < 4; i++) {
-        playTone(freq, 0.10, 0.75, i * 0.13); // 0.13초 간격으로 4연타
-      }
+      const step = DANGER_AT - remainingSecs;
+      const freq = 600 + step * 55;
+      for (let i = 0; i < 4; i++) playTone(freq, 0.10, 0.75, i * 0.13);
     }
-
-    // 종료: 사이렌 (저음↔고음 빠르게 반복, 2.5초)
     async function playEndBeep() {
       try {
         const ctx = getAudioCtx();
         await ctx.resume();
         const osc  = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.type = "sawtooth"; // 날카롭고 요란한 파형
-        const duration  = 2.5;
-        const cycleTime = 0.25; // 사이렌 한 주기 (빠를수록 요란함)
-        const cycles    = Math.ceil(duration / cycleTime);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = "sawtooth";
+        const duration = 2.5, cycleTime = 0.25;
+        const cycles = Math.ceil(duration / cycleTime);
         for (let i = 0; i < cycles; i++) {
           const t = ctx.currentTime + i * cycleTime;
           osc.frequency.setValueAtTime(400, t);
@@ -882,15 +1030,13 @@
         }
         gain.gain.setValueAtTime(0.85, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + duration);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + duration);
       } catch {}
     }
 
     function startTimer() {
       if (isRunning || !quizData.length) return;
-      isRunning = true;
-      startBtn.disabled = true;
+      isRunning = true; startBtn.disabled = true;
       timer.classList.add("visible");
       setHint("running");
       timerId = setInterval(() => {
@@ -903,17 +1049,24 @@
         }
         if (remainingSecs <= 0) {
           clearInterval(timerId); timerId = null; isRunning = false;
-          playEndBeep();
-          setHint("end");
+          playEndBeep(); setHint("end");
         }
       }, 1000);
     }
 
-    /* ── 정답 / 다음 ── */
+    /* ── 정답 표시 ── */
     function showAnswer() {
       clearInterval(timerId); timerId = null; isRunning = false;
       clearDanger();
-      answerBox.innerHTML = `A. ${formatAnswer(quizData[currentIndex].answer)}`;
+      const q = quizData[currentIndex];
+
+      // 객관식이면 정답 선택지 하이라이트
+      if ((q.type === TYPE.MCQ || q.type === TYPE.IMAGE_MCQ) && q.options.length) {
+        const correctIdx = findCorrectOptionIndex(q);
+        renderOptions(q.options, correctIdx);
+      }
+
+      answerBox.innerHTML = `A. ${formatAnswer(q.answer)}`;
       answerBox.classList.add("visible");
       questionArea.classList.add("answer-mode");
       startBtn.disabled = true;
@@ -921,24 +1074,58 @@
       setHint("answer");
     }
 
-    function goNext() {
-      if (currentIndex === quizData.length - 1) {
-        showFinalScreen();
-        return;
+    /**
+     * 정답 선택지 인덱스 찾기
+     * answer 에서 [[...]] 안의 텍스트, 또는 ①②... 기호로 매칭
+     */
+    function findCorrectOptionIndex(q) {
+      const match = q.answer.match(/\[\[(.*?)\]\]/);
+      const correctText = match ? match[1] : q.answer.replace(/\[\[|\]\]/g, "").trim();
+
+      // ① 기호가 답에 포함된 경우 (예: [[②2016년]])
+      for (let i = 0; i < CIRCLE_NUMS.length; i++) {
+        if (correctText.startsWith(CIRCLE_NUMS[i])) return i;
       }
+
+      // 숫자로 시작하는 경우 (예: [[2]] → 인덱스 1)
+      const numMatch = correctText.match(/^(\d+)/);
+      if (numMatch) {
+        const n = parseInt(numMatch[1], 10);
+        if (n >= 1 && n <= q.options.length) return n - 1;
+      }
+
+      // 선택지 텍스트와 부분 일치
+      return q.options.findIndex(opt =>
+        opt.toLowerCase().includes(correctText.toLowerCase()) ||
+        correctText.toLowerCase().includes(opt.toLowerCase())
+      );
+    }
+
+    function goNext() {
+      if (currentIndex === quizData.length - 1) { showFinalScreen(); return; }
       currentIndex++;
       renderQuestion();
       setHint("next");
     }
 
+    function goPrev() {
+      if (currentIndex === 0) return;
+      currentIndex--;
+      renderQuestion();
+      setHint("next");
+    }
+
+    function handleArrow() {
+      isAnswerShown ? goNext() : showAnswer();
+    }
+
+    /* ── 최종 결과 ── */
     const RANK_EMOJI = { 1: "🥇", 2: "🥈", 3: "🥉" };
 
     async function showFinalScreen() {
-      clearInterval(timerId);
-      clearDanger();
+      clearInterval(timerId); clearDanger();
       quizScreen.classList.remove("active");
-      document.getElementById("finalScreen").classList.add("active");
-
+      $("finalScreen").classList.add("active");
       try {
         const csv  = await loadWithFallback(SCORE_URL);
         const rows = parseCSV(csv);
@@ -953,72 +1140,51 @@
           })
           .sort((a, b) => b.score - a.score);
 
-        // 동점 처리: 같은 점수면 같은 순위, 다음 순위는 건너뜀
         let rank = 1;
         teams.forEach((t, i) => {
           if (i > 0 && t.score < teams[i - 1].score) rank = i + 1;
           t.rank = rank;
         });
 
-        document.getElementById("finalRanking").innerHTML = teams.map(t => `
+        $("finalRanking").innerHTML = teams.map(t => `
           <div class="ranking-item ${t.rank <= 3 ? "rank-" + t.rank : ""}">
             <div class="rank-badge">${RANK_EMOJI[t.rank] || t.rank + "위"}</div>
             <div class="rank-team">${t.name}</div>
-            <div>
-              <span class="rank-score">${t.score}</span>
-              <span class="rank-score-label">점</span>
-            </div>
+            <div><span class="rank-score">${t.score}</span><span class="rank-score-label">점</span></div>
           </div>`).join("");
 
-        // 동점 여부 감지 → 버튼 텍스트/분기 결정
         const scores = teams.map(t => t.score);
         const hasTie = scores.length !== new Set(scores).size;
-        const btn = document.getElementById("finalNextBtn");
+        const btn = $("finalNextBtn");
         btn.textContent = hasTie ? "⚡ 순위결정전 진행하기" : "🎁 레크리에이션 뽑기로 이동";
         btn.dataset.hasTie = hasTie;
         btn.style.display = "inline-block";
       } catch {
-        document.getElementById("finalRanking").innerHTML =
+        $("finalRanking").innerHTML =
           `<div style="color:#dc2626;font-weight:700;text-align:center;">점수를 불러오지 못했어요. 구글 시트 연결을 확인해주세요.</div>`;
       }
     }
 
     function goAfterFinal() {
-      const hasTie = document.getElementById("finalNextBtn").dataset.hasTie === "true";
-      document.getElementById("finalScreen").classList.remove("active");
-      if (hasTie) {
-        document.getElementById("tiebreakScreen").classList.add("active");
-      } else {
-        goRecreation("finalScreen");
-      }
+      const hasTie = $("finalNextBtn").dataset.hasTie === "true";
+      $("finalScreen").classList.remove("active");
+      hasTie ? $("tiebreakScreen").classList.add("active") : goRecreation("finalScreen");
     }
 
+    let recIndex = 0, recPrevScreen = "finalScreen";
     function goRecreation(from = "tiebreakScreen") {
       recPrevScreen = from;
-      document.getElementById("tiebreakScreen").classList.remove("active");
-      document.getElementById("finalScreen").classList.remove("active");
-      document.getElementById("recreationScreen").classList.add("active");
+      $("tiebreakScreen").classList.remove("active");
+      $("finalScreen").classList.remove("active");
+      $("recreationScreen").classList.add("active");
       recIndex = 0;
       updateRecSlider();
     }
-
-    async function loadWithFallback(url = SHEET_URL) {
-      for (const makeUrl of PROXIES) {
-        try { return await tryFetch(makeUrl(url)); } catch {}
-      }
-      throw new Error("failed");
+    function updateRecSlider() {
+      $("recSlider").style.transform = `translateX(-${recIndex * 100}%)`;
+      $("recNextBtn").style.display = recIndex === REC_RULES.length - 1 ? "none" : "block";
     }
-
-    function handleArrow() {
-      isAnswerShown ? goNext() : showAnswer();
-    }
-
-    function goPrev() {
-      if (currentIndex === 0) return;
-      currentIndex--;
-      renderQuestion();
-      setHint("next");
-    }
+    $("recNextBtn").addEventListener("click", () => { recIndex = (recIndex + 1) % REC_RULES.length; updateRecSlider(); });
 
     /* ── 룰 슬라이더 ── */
     function updateRuleSlider() {
@@ -1026,29 +1192,13 @@
       ruleNextBtn.style.display  = ruleIndex === RULES.length - 1 ? "none" : "block";
     }
 
-    /* ── 레크리에이션 슬라이더 ── */
-    let recIndex = 0;
-    let recPrevScreen = "finalScreen"; // 이전 화면 추적
-    function updateRecSlider() {
-      document.getElementById("recSlider").style.transform = `translateX(-${recIndex * 100}%)`;
-      document.getElementById("recNextBtn").style.display = recIndex === REC_RULES.length - 1 ? "none" : "block";
-    }
-    document.getElementById("recNextBtn").addEventListener("click", () => {
-      recIndex = (recIndex + 1) % REC_RULES.length;
-      updateRecSlider();
-    });
-
     /* ── 이벤트 ── */
     $("showRuleButton").addEventListener("click", () => {
       introScreen.classList.remove("active");
       ruleScreen.classList.add("active");
-      ruleIndex = 0;
-      updateRuleSlider();
+      ruleIndex = 0; updateRuleSlider();
     });
-    ruleNextBtn.addEventListener("click", () => {
-      ruleIndex = (ruleIndex + 1) % RULES.length;
-      updateRuleSlider();
-    });
+    ruleNextBtn.addEventListener("click", () => { ruleIndex = (ruleIndex + 1) % RULES.length; updateRuleSlider(); });
     $("enterQuizButton").addEventListener("click", () => {
       ruleScreen.classList.remove("active");
       quizScreen.classList.add("active");
@@ -1056,67 +1206,45 @@
     startBtn.addEventListener("click",  startTimer);
     answerBtn.addEventListener("click", handleArrow);
 
-    /* ── 키보드 방향키 네비게이션 ── */
+    /* ── 키보드 방향키 ── */
     function showScreen(id) {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
+      $(id).classList.add("active");
     }
-
     document.addEventListener("keydown", e => {
       if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
       const dir = e.key === "ArrowRight" ? 1 : -1;
-
-      // 인트로: → 룰 첫 카드
       if (introScreen.classList.contains("active")) {
         if (dir === 1) { ruleIndex = 0; updateRuleSlider(); showScreen("ruleScreen"); }
         return;
       }
-
-      // 룰 슬라이더: 경계에서 섹션 넘기
       if (ruleScreen.classList.contains("active")) {
-        if (dir === -1 && ruleIndex === 0) {
-          showScreen("introScreen");
-        } else if (dir === 1 && ruleIndex === RULES.length - 1) {
-          showScreen("quizScreen");                        // 룰 마지막 → 퀴즈
-        } else {
-          ruleIndex += dir;
-          updateRuleSlider();
-        }
+        if (dir === -1 && ruleIndex === 0) showScreen("introScreen");
+        else if (dir === 1 && ruleIndex === RULES.length - 1) showScreen("quizScreen");
+        else { ruleIndex += dir; updateRuleSlider(); }
         return;
       }
-
-      // 퀴즈: 첫 문제 ← 룰 마지막 카드 / 마지막 문제 → 최종결과(goNext가 처리)
       if (quizScreen.classList.contains("active")) {
         if (dir === -1 && currentIndex === 0 && !isAnswerShown) {
           ruleIndex = RULES.length - 1; updateRuleSlider(); showScreen("ruleScreen");
-        } else if (dir === 1) {
-          handleArrow();
-        } else if (dir === -1) {
-          goPrev();
-        }
+        } else if (dir === 1) handleArrow();
+        else if (dir === -1) goPrev();
         return;
       }
-
-      // 최종 결과: ← 퀴즈 / → 다음(동점or뽑기)
-      if (document.getElementById("finalScreen").classList.contains("active")) {
+      if ($("finalScreen").classList.contains("active")) {
         if (dir === -1) showScreen("quizScreen");
-        if (dir === 1) document.getElementById("finalNextBtn").click();
+        if (dir === 1)  $("finalNextBtn").click();
         return;
       }
-
-      // 순위결정전: ← 최종결과 / → 레크리에이션
-      if (document.getElementById("tiebreakScreen").classList.contains("active")) {
+      if ($("tiebreakScreen").classList.contains("active")) {
         if (dir === -1) showScreen("finalScreen");
-        if (dir === 1) goRecreation("tiebreakScreen");
+        if (dir === 1)  goRecreation("tiebreakScreen");
         return;
       }
-
-      // 레크리에이션 슬라이더
-      if (document.getElementById("recreationScreen").classList.contains("active")) {
+      if ($("recreationScreen").classList.contains("active")) {
         if (dir === -1 && recIndex === 0) {
-          // 첫 카드에서 ← → 이전 화면으로
-          document.getElementById("recreationScreen").classList.remove("active");
-          document.getElementById(recPrevScreen).classList.add("active");
+          $("recreationScreen").classList.remove("active");
+          $(recPrevScreen).classList.add("active");
         } else {
           recIndex = Math.max(0, Math.min(REC_RULES.length - 1, recIndex + dir));
           updateRecSlider();
