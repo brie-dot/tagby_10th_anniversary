@@ -828,60 +828,63 @@
     /**
      * CSV rows → quizData 배열
      *
-     * 구글 시트 헤더 예시 (순서 무관):
-     *   num | question | answer | type | options | image
+     * ★ 구글 시트 헤더 (한글, 순서 무관):
+     *   질문 넘버 | 질문 | 정답 | 타입 | 옵션 | 이미지
      *
-     * - type    : "subjective" / "mcq" / "image-mcq" / "image-subjective"
-     *             (없으면 "subjective" 로 처리)
-     * - options : 쉼표(,) 구분 선택지. 각 항목은 "보기 텍스트" 형식
-     *             예) "서울,부산,대구,인천,광주"
-     *             ①②... 기호는 자동으로 붙으므로 입력 불필요
-     * - image   : GitHub 파일명만 입력 (예: "q3_logo.png")
-     *             GITHUB_IMAGE_BASE + 파일명 으로 URL 조합
+     * - 타입 입력값: "주관식" / "객관식" / "주관식-이미지" / "객관식-이미지"
+     *   (비어있으면 "주관식" 으로 처리)
+     * - 옵션 : 세미콜론(;) 구분 선택지.  예) "서울;부산;대구;인천;광주"
+     *          ①②... 기호는 자동으로 붙으므로 입력 불필요
+     * - 이미지: GitHub 파일명만 입력  예) "q3_logo.png"
+     *           GITHUB_IMAGE_BASE + 파일명 으로 URL 조합
      */
     function rowsToQuizData(rows) {
       if (!rows.length) return [];
       const header = rows[0].map(c => String(c).trim().toLowerCase());
+
+      // ★ 한글 헤더 우선 인식, 영문 헤더 폴백
       const hasHeader = header.some(c =>
-        ["question","answer","문제","정답","num","번호","no","type","options","image"].includes(c)
+        ["질문 넘버","질문","정답","타입","옵션","이미지",
+         "question","answer","num","type","options","image"].includes(c)
       );
       const body = hasHeader ? rows.slice(1) : rows;
 
-      // 컬럼 인덱스 찾기 (없으면 -1)
       const idx = name => header.indexOf(name);
-      const qi = [idx("question"), idx("문제"),  1].find(i => i >= 0);
-      const ai = [idx("answer"),   idx("정답"),  2].find(i => i >= 0);
-      const ni = [idx("num"), idx("번호"), idx("no"), 0].find(i => i >= 0);
-      const ti = idx("type");
-      const oi = idx("options");
-      const ii = idx("image");
+
+      // 각 컬럼: 한글 헤더 → 영문 헤더 → 위치 기본값 순으로 탐색
+      const ni = [idx("질문 넘버"), idx("num"), idx("번호"), idx("no"), 0].find(i => i >= 0);
+      const qi = [idx("질문"),      idx("question"), idx("문제"),  1].find(i => i >= 0);
+      const ai = [idx("정답"),      idx("answer"),   2].find(i => i >= 0);
+      const ti = [idx("타입"),      idx("type")].find(i => i >= 0) ?? -1;
+      const oi = [idx("옵션"),      idx("options")].find(i => i >= 0) ?? -1;
+      const ii = [idx("이미지"),    idx("image")].find(i => i >= 0) ?? -1;
 
       return body
         .filter(r => r[qi]?.trim())
         .map((r, i) => {
-          // 선택지: 세미콜론(;) 또는 줄바꿈으로도 구분 허용
-          // 시트에서 쉼표 구분으로 입력한 경우 CSV 파싱 후 이미 한 셀에 들어옴
+          // 선택지: 세미콜론(;) 구분
           const rawOptions = (oi >= 0 && r[oi]) ? r[oi] : "";
           const options = rawOptions
             ? rawOptions.split(/[;；]/).map(o => o.trim()).filter(Boolean)
             : [];
 
-          const rawType = (ti >= 0 && r[ti]) ? r[ti].trim().toLowerCase() : "";
-          // type 정규화: 한글 입력도 허용
+          // ★ 타입 매핑 — 시트 입력값 그대로 인식
+          const rawType = (ti >= 0 && r[ti]) ? r[ti].trim() : "";
           let type = TYPE.SUBJECTIVE;
-          if      (rawType === "mcq"              || rawType === "객관식")        type = TYPE.MCQ;
-          else if (rawType === "image-mcq"        || rawType === "이미지객관식"   || rawType === "이미지 객관식") type = TYPE.IMAGE_MCQ;
-          else if (rawType === "image-subjective" || rawType === "이미지주관식"   || rawType === "이미지 주관식") type = TYPE.IMAGE_SUBJ;
+          if      (rawType === "객관식")        type = TYPE.MCQ;
+          else if (rawType === "객관식-이미지") type = TYPE.IMAGE_MCQ;
+          else if (rawType === "주관식-이미지") type = TYPE.IMAGE_SUBJ;
+          // "주관식" 또는 빈 값이면 기본값(SUBJECTIVE) 유지
 
           const imageFile = (ii >= 0 && r[ii]) ? r[ii].trim() : "";
 
           return {
-            num    : r[ni] || i + 1,
+            num     : r[ni] || i + 1,
             question: r[qi].trim(),
             answer  : (r[ai] || "정답 없음").trim(),
             type,
             options,
-            image   : imageFile,  // 파일명만 저장
+            image   : imageFile,
           };
         });
     }
