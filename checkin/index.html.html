@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TAGby 10th Check-in</title>
+  <style>
+    :root {
+      --blue:#0057ff; --blue-soft:#eef3ff; --bg:#f5f7fb; --card:#fff;
+      --text:#111827; --muted:#6b7280; --line:#e5e7eb; --danger:#ef4444;
+      --success:#16a34a; --shadow:0 14px 34px rgba(15,23,42,.08);
+      --r-xl:26px; --r-lg:18px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+    button,input{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
+    .app{max-width:480px;min-height:100vh;margin:0 auto;background:linear-gradient(180deg,#fff 0%,#f5f7fb 48%,#eef3ff 100%)}
+    .login-screen{min-height:100vh;padding:34px 22px;display:flex;flex-direction:column;justify-content:center;background:var(--blue);color:#fff}
+    .login-card{background:#fff;color:var(--text);border-radius:32px;padding:24px;box-shadow:var(--shadow)}
+    .eyebrow{margin:0 0 12px;font-size:13px;font-weight:900;letter-spacing:.08em;opacity:.78}
+    .login-title{margin:0;font-size:32px;line-height:1.12;letter-spacing:-.05em}
+    .login-desc{margin:14px 0 24px;color:var(--muted);font-size:15px;line-height:1.55}
+    .field{margin-bottom:14px}.field label{display:block;margin-bottom:7px;font-size:13px;font-weight:900}
+    .field input{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px 15px;font-size:16px;outline:none;background:#f9fafb}
+    .field input:focus{border-color:var(--blue);background:#fff}
+    .primary-button{width:100%;border:0;border-radius:18px;padding:15px 18px;background:var(--blue);color:#fff;font-size:16px;font-weight:900}
+    .error-message{margin-top:12px;color:var(--danger);font-size:13px;font-weight:800;line-height:1.5}
+    .top-nav{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 14px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(229,231,235,.86)}
+    .top-nav button{border:1px solid var(--line);border-radius:999px;background:#fff;padding:10px 6px;font-size:12px;font-weight:900;color:var(--text)}
+    .status-wrap{padding:18px 18px 0}.status-card{border-radius:var(--r-xl);padding:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}
+    .status-card.received{background:#111827;color:#fff;border-color:#111827}.status-title{margin:0 0 8px;font-size:20px;font-weight:900;letter-spacing:-.03em}
+    .status-desc{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.received .status-desc{color:rgba(255,255,255,.78)}
+    .cta-button{margin-top:14px;border:0;border-radius:16px;padding:13px 16px;background:#fff;color:#111827;font-weight:900;font-size:14px}
+    .intro-slider-wrap{padding:18px}.intro-slider{overflow:hidden;border-radius:32px;box-shadow:var(--shadow)}
+    .intro-track{display:flex;transition:transform .28s ease;touch-action:pan-y}.intro-slide{min-width:100%;min-height:500px;padding:30px 24px;display:flex;flex-direction:column;justify-content:space-between;background:#fff}
+    .intro-slide.blue{background:var(--blue);color:#fff}.intro-slide.soft{background:linear-gradient(160deg,#fff 0%,#eef3ff 100%)}
+    .intro-slide h1,.intro-slide h2{margin:0;font-size:32px;line-height:1.14;letter-spacing:-.05em}.intro-desc{margin:18px 0 0;font-size:16px;line-height:1.6;opacity:.88}
+    .mission-list{display:grid;gap:12px;margin:24px 0 0;padding:0;list-style:none}.mission-item{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:15px;background:#fff;border:1px solid var(--line);border-radius:20px}
+    .mission-number{width:34px;height:34px;border-radius:999px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900}
+    .mission-text{margin:0;font-size:15px;line-height:1.5;font-weight:800}
+    .slide-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px}
+    .slide-button{min-width:82px;border:0;border-radius:999px;padding:12px 16px;background:#111827;color:#fff;font-size:14px;font-weight:900}.blue .slide-button{background:#fff;color:var(--blue)}
+    .slide-dots{display:flex;gap:7px;justify-content:center;flex:1}.slide-dot{width:7px;height:7px;border-radius:999px;background:#cbd5e1;transition:.2s}.slide-dot.active{width:22px;background:var(--blue)}.blue .slide-dot{background:rgba(255,255,255,.45)}.blue .slide-dot.active{background:#fff}
+    .section{padding:24px 18px}.section-title{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}.section-title h2{margin:0;font-size:24px;letter-spacing:-.04em}.section-title span{color:var(--muted);font-size:12px;font-weight:800}
+    .content-card,.sticker-section-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-xl);padding:18px;box-shadow:var(--shadow)}
+    .timeline-list{margin:0;padding:0;list-style:none;display:grid;gap:12px}.timeline-item{display:grid;grid-template-columns:72px 1fr;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}.timeline-item:last-child{border-bottom:0;padding-bottom:0}.time{color:var(--blue);font-weight:900}.timeline-title{margin:0;font-weight:900;line-height:1.45}
+    .placeholder-box{min-height:260px;border:2px dashed #cbd5e1;border-radius:22px;background:linear-gradient(135deg,#f8fafc,#eef2ff);display:flex;align-items:center;justify-content:center;text-align:center;color:#94a3b8;font-size:15px;font-weight:900;line-height:1.5}
+    .sticker-category{margin-bottom:18px}.category-header{margin-bottom:12px}.category-kicker{margin:0 0 6px;color:var(--blue);font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.category-title{margin:0;font-size:22px;font-weight:900;letter-spacing:-.04em}.category-desc{margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.55}
+    .sticker-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.sticker-card{border:1px solid var(--line);border-radius:20px;padding:12px;background:#fff}.sticker-card.disabled{opacity:.48}
+    .sticker-img{width:100%;aspect-ratio:1/1;border:2px dashed #cbd5e1;border-radius:16px;background:linear-gradient(135deg,#f8fafc,#eef2ff);display:flex;align-items:center;justify-content:center;text-align:center;color:#94a3b8;font-size:12px;font-weight:900;line-height:1.4;margin-bottom:10px}
+    .sticker-name{margin:0 0 4px;font-size:14px;font-weight:900;line-height:1.35}.sticker-meta{margin:0;color:var(--muted);font-size:12px;font-weight:700}
+    .pill{display:inline-flex;border-radius:999px;padding:7px 10px;background:var(--blue-soft);color:var(--blue);font-size:11px;font-weight:900;margin-top:10px}
+    .add-button{width:100%;margin-top:10px;border:0;border-radius:14px;padding:11px 10px;background:var(--blue);color:#fff;font-size:13px;font-weight:900}.add-button.selected{background:#111827}.add-button:disabled{background:#d1d5db;color:#6b7280;cursor:not-allowed}
+    .cart-list{margin:0 0 14px;padding:0;list-style:none;display:grid;gap:10px}.cart-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#f9fafb;border:1px solid var(--line);border-radius:16px}.cart-item strong{font-size:14px}.cart-item span{color:var(--muted);font-size:12px;font-weight:800}
+    .remove-button{border:0;border-radius:999px;padding:8px 10px;background:#fff;color:var(--danger);font-size:12px;font-weight:900}.notice{border-radius:18px;padding:14px;background:var(--blue-soft);color:var(--blue);font-size:14px;line-height:1.55;font-weight:800;margin-bottom:14px}.code-panel{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+    .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:100;width:calc(100% - 36px);max-width:440px;border-radius:18px;padding:14px 16px;background:#111827;color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:var(--shadow)}
+    .bottom-safe{height:34px}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section id="loginScreen" class="login-screen">
+      <div class="login-card">
+        <p class="eyebrow">TAGby 10th Anniversary</p>
+        <h1 class="login-title">QR Check-in</h1>
+        <p class="login-desc">성함과 회사 이메일을 입력해주세요.<br>입력하신 정보로 체크인 여부를 확인합니다.</p>
+        <div class="field"><label for="nameInput">성함</label><input id="nameInput" type="text" placeholder="홍길동" autocomplete="name"></div>
+        <div class="field"><label for="emailInput">회사 이메일</label><input id="emailInput" type="email" placeholder="gildong@tagby.io" autocomplete="email"></div>
+        <button class="primary-button" onclick="handleLogin()">체크인하기</button>
+        <p id="loginError" class="error-message hidden"></p>
+      </div>
+    </section>
+
+    <section id="mainScreen" class="hidden">
+      <nav class="top-nav">
+        <button onclick="scrollToSection('timelineSection')">타임테이블</button>
+        <button onclick="scrollToSection('seatSection')">좌석배치도</button>
+        <button onclick="scrollToSection('stickerSection')">스티커 메뉴판</button>
+      </nav>
+
+      <div class="status-wrap">
+        <div id="statusCard" class="status-card">
+          <p id="statusTitle" class="status-title">🎉 체크인이 완료되었습니다!</p>
+          <p id="statusDesc" class="status-desc">TAGby 10주년 이벤트를 즐겨주세요.</p>
+          <button id="diyButton" class="cta-button hidden" onclick="alert('DIY A6 Sticker Set은 추후 구현 예정입니다.')">DIY A6 Sticker Set</button>
+        </div>
+      </div>
+
+      <section class="intro-slider-wrap">
+        <div class="intro-slider" id="introSlider">
+          <div class="intro-track" id="introTrack">
+            <article class="intro-slide blue">
+              <div>
+                <p class="eyebrow">TAGby 10th Anniversary</p>
+                <h1>태그바이컴퍼니<br>10주년 기념 이벤트에<br>오신 것을 환영합니다!</h1>
+                <p class="intro-desc"><strong id="welcomeName">홍길동</strong>님, 오늘의 이벤트를 즐겨주세요.</p>
+              </div>
+              <div class="slide-footer"><div class="slide-dots" id="introDots1"></div><button class="slide-button" onclick="nextIntroSlide()">다음</button></div>
+            </article>
+            <article class="intro-slide soft">
+              <div>
+                <p class="eyebrow">Entrance Mission</p><h2>입장 미션</h2>
+                <ul class="mission-list">
+                  <li class="mission-item"><span class="mission-number">1</span><p class="mission-text">포토존을 즐겨주세요.</p></li>
+                  <li class="mission-item"><span class="mission-number">2</span><p class="mission-text">같은 테이블에 함께하는 동료들과 팀명을 정해주세요.</p></li>
+                  <li class="mission-item"><span class="mission-number">3</span><p class="mission-text">스티커 메뉴판에서 가져가고 싶은 스티커를 담아주세요.<br><small>선착순 증정으로 품절 가능성이 있습니다.</small></p></li>
+                </ul>
+              </div>
+              <div class="slide-footer"><button class="slide-button" onclick="prevIntroSlide()">이전</button><div class="slide-dots" id="introDots2"></div><button class="slide-button" onclick="nextIntroSlide()">다음</button></div>
+            </article>
+            <article class="intro-slide soft">
+              <div>
+                <p class="eyebrow">Event Guide</p><h2>상단 메뉴에서<br>필요한 정보를<br>바로 확인하세요</h2>
+                <p class="intro-desc">타임테이블, 좌석배치도, 스티커 메뉴판을 상단 버튼으로 빠르게 이동할 수 있습니다.</p>
+              </div>
+              <div class="slide-footer"><button class="slide-button" onclick="prevIntroSlide()">이전</button><div class="slide-dots" id="introDots3"></div></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="timelineSection">
+        <div class="section-title"><h2>Time Table</h2><span>오늘의 순서</span></div>
+        <div class="content-card"><ul class="timeline-list" id="timelineList"></ul></div>
+      </section>
+
+      <section class="section" id="seatSection">
+        <div class="section-title"><h2>Seat Map</h2><span>좌석배치도</span></div>
+        <div class="placeholder-box" id="seatMapBox">좌석배치도 이미지 자리<br>시트 연동 예정</div>
+      </section>
+
+      <section class="section" id="stickerSection">
+        <div class="section-title"><h2>Sticker Menu</h2><span>스티커샵</span></div>
+
+        <div class="sticker-category"><div class="sticker-section-card">
+          <div class="category-header">
+            <p class="category-kicker">Everyone Gets</p><h3 class="category-title">10주년 기념 스티커셋</h3>
+            <p class="category-desc">🎁 모든 참석자에게 제공됩니다. 별도 선택 없이 리셉션에서 함께 수령하실 수 있습니다.</p>
+          </div>
+          <div class="placeholder-box">10주년 기념 스티커셋<br>이미지 자리</div>
+        </div></div>
+
+        <div class="sticker-category"><div class="sticker-section-card">
+          <div class="category-header">
+            <p class="category-kicker">2026.06.01 Exclusive</p><h3 class="category-title">Team Nutrition Stickers</h3>
+            <p class="category-desc">2026년 6월 1일, TAGby와 함께하고 있는 구성원들을 위한 스티커입니다.</p>
+          </div>
+          <div class="sticker-grid" id="exclusiveGrid"></div>
+        </div></div>
+
+        <div class="sticker-category"><div class="sticker-section-card">
+          <div class="category-header">
+            <p class="category-kicker">Team Logo</p><h3 class="category-title">소속팀 로고 스티커</h3>
+            <p class="category-desc">소속팀 로고 스티커 4종 중 1개를 선택해 장바구니에 담아주세요.</p>
+          </div>
+          <div class="sticker-grid" id="teamLogoGrid"></div>
+        </div></div>
+
+        <div class="sticker-category"><div class="sticker-section-card">
+          <div class="category-header">
+            <p class="category-kicker">Limited Stickers</p><h3 class="category-title">TAGby 밈 스티커</h3>
+            <p class="category-desc">선착순 수령 스티커입니다. 1인당 1개까지 선택할 수 있습니다.</p>
+          </div>
+          <div class="sticker-grid" id="memeGrid"></div>
+        </div></div>
+      </section>
+
+      <section class="section" id="receiveSection">
+        <div class="section-title"><h2>수령 확인</h2><span>리셉션 제시용</span></div>
+        <div class="content-card">
+          <p class="notice">리셉션에서 해당 화면을 보여주시면 선택한 스티커를 오피피 봉투에 담아드립니다 :)</p>
+          <ul class="cart-list" id="cartList"></ul>
+          <button class="primary-button" onclick="openReceivePanel()">스티커 수령 확인</button>
+          <div id="codePanel" class="code-panel hidden">
+            <div class="field"><label for="staffCodeInput">운영진 확인 코드</label><input id="staffCodeInput" type="text" placeholder="운영진 확인 코드 입력"></div>
+            <button class="primary-button" onclick="confirmReceive()">최종 수령 완료 처리</button>
+            <p id="receiveError" class="error-message hidden"></p>
+          </div>
+        </div>
+      </section>
+      <div class="bottom-safe"></div>
+    </section>
+  </main>
+  <div id="toast" class="toast hidden"></div>
+
+  <script>
+    const TEST_USER = { name:'홍길동', email:'gildong@tagby.io', team:'GNM' };
+    const STAFF_CODE = 'TAG10';
+    const STORAGE_KEY = 'tagby10th_user';
+    const RECEIVED_KEY = 'tagby10th_received';
+
+    const timelineData = [
+      { time:'14:00', title:'입장 / 포토존 / 자유 교류' },
+      { time:'15:00', title:'태그바이 10년 히스토리' },
+      { time:'15:30', title:'개인 회고 세션' },
+      { time:'16:00', title:'레크리에이션' },
+      { time:'18:00', title:'저녁 식사' }
+    ];
+
+    const exclusiveStickers = [
+      { id:'nutrition_gnm', name:'GNM Nutrition', team:'GNM' },
+      { id:'nutrition_product', name:'Product Nutrition', team:'Product' },
+      { id:'nutrition_design', name:'Design Business Nutrition', team:'Design Business' },
+      { id:'nutrition_affiliate', name:'Affiliate Nutrition', team:'Affiliate' },
+      { id:'nutrition_imc', name:'IMC Marketing Nutrition', team:'IMC Marketing' }
+    ];
+
+    const allTeamLogoStickers = [
+      { id:'gnm_logo_01', name:'GNM Logo 01', team:'GNM', category:'team_logo', stock:18, remain:18 },
+      { id:'gnm_logo_02', name:'GNM Logo 02', team:'GNM', category:'team_logo', stock:18, remain:18 },
+      { id:'gnm_logo_03', name:'GNM Logo 03', team:'GNM', category:'team_logo', stock:18, remain:18 },
+      { id:'gnm_logo_04', name:'GNM Logo 04', team:'GNM', category:'team_logo', stock:18, remain:18 },
+      { id:'product_logo_01', name:'Product Logo 01', team:'Product', category:'team_logo', stock:18, remain:18 },
+      { id:'product_logo_02', name:'Product Logo 02', team:'Product', category:'team_logo', stock:18, remain:18 }
+    ];
+
+    const memeStickers = [
+      { id:'meme_01', name:'TAGby Meme 01', category:'meme', stock:15, remain:15 },
+      { id:'meme_02', name:'TAGby Meme 02', category:'meme', stock:15, remain:15 },
+      { id:'meme_03', name:'TAGby Meme 03', category:'meme', stock:15, remain:15 }
+    ];
+
+    let currentUser = null, cart = [], received = false;
+    let currentIntroIndex = 0, introTouchStartX = 0, introTouchEndX = 0;
+
+    const loginScreen = document.getElementById('loginScreen');
+    const mainScreen = document.getElementById('mainScreen');
+    const introTrack = document.getElementById('introTrack');
+    const introSlider = document.getElementById('introSlider');
+    const introDotContainers = [document.getElementById('introDots1'),document.getElementById('introDots2'),document.getElementById('introDots3')];
+
+    async function findUserFromSheet(name,email){
+      // TODO: Google Apps Script Web App 연동 위치
+      const n = name.trim();
+      const e = email.trim().toLowerCase();
+      if(n === TEST_USER.name && e === TEST_USER.email) return { ok:true, user:TEST_USER };
+      return { ok:false, message:'테스트 계정은 홍길동 / gildong@tagby.io 입니다.' };
+    }
+
+    async function handleLogin(){
+      const name = document.getElementById('nameInput').value;
+      const email = document.getElementById('emailInput').value;
+      const error = document.getElementById('loginError');
+      error.classList.add('hidden');
+      if(!name.trim() || !email.trim()) return showLoginError('성함과 회사 이메일을 모두 입력해주세요.');
+      const result = await findUserFromSheet(name,email);
+      if(!result.ok) return showLoginError(result.message || '체크인 정보를 확인할 수 없습니다.');
+      currentUser = result.user;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+      localStorage.setItem('tagby10th_checkin_time', new Date().toISOString());
+      enterMain();
+    }
+
+    function showLoginError(msg){ const el=document.getElementById('loginError'); el.textContent=msg; el.classList.remove('hidden'); }
+    function enterMain(){
+      loginScreen.classList.add('hidden'); mainScreen.classList.remove('hidden');
+      document.getElementById('welcomeName').textContent = currentUser.name;
+      received = localStorage.getItem(RECEIVED_KEY) === 'true';
+      renderAll(); updateStatusCard();
+    }
+
+    function renderAll(){ renderIntroDots(); updateIntroSlide(); bindIntroSwipe(); renderTimeline(); renderExclusive(); renderTeamLogo(); renderMemes(); renderCart(); }
+    function renderTimeline(){ document.getElementById('timelineList').innerHTML = timelineData.map(i=>`<li class="timeline-item"><span class="time">${i.time}</span><p class="timeline-title">${i.title}</p></li>`).join(''); }
+    function renderExclusive(){ document.getElementById('exclusiveGrid').innerHTML = exclusiveStickers.map(s=>`<article class="sticker-card"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.name}</p><p class="sticker-meta">${s.team}</p><span class="pill">2026.06.01 Exclusive</span></article>`).join(''); }
+
+    function renderTeamLogo(){
+      const list = allTeamLogoStickers.filter(s=>s.team === currentUser.team);
+      const selected = cart.find(i=>i.category === 'team_logo');
+      document.getElementById('teamLogoGrid').innerHTML = list.map(s=>{
+        const isSelected = selected?.id === s.id;
+        const isDisabled = selected && !isSelected;
+        return `<article class="sticker-card ${isDisabled?'disabled':''}"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.name}</p><p class="sticker-meta">잔여 ${s.remain} / ${s.stock}</p><button class="add-button ${isSelected?'selected':''}" ${isDisabled||received?'disabled':''} onclick="toggleCart('${s.id}','team_logo')">${isSelected?'선택됨':'담기'}</button></article>`;
+      }).join('');
+    }
+
+    function renderMemes(){
+      const selected = cart.find(i=>i.category === 'meme');
+      document.getElementById('memeGrid').innerHTML = memeStickers.map(s=>{
+        const isSelected = selected?.id === s.id;
+        const isDisabled = selected && !isSelected;
+        const isSoldOut = s.remain <= 0;
+        return `<article class="sticker-card ${isDisabled||isSoldOut?'disabled':''}"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.name}</p><p class="sticker-meta">잔여 ${s.remain} / ${s.stock}</p><button class="add-button ${isSelected?'selected':''}" ${isDisabled||isSoldOut||received?'disabled':''} onclick="toggleCart('${s.id}','meme')">${isSoldOut?'품절':isSelected?'선택됨':'담기'}</button></article>`;
+      }).join('');
+    }
+
+    function toggleCart(id,category){
+      if(received) return showToast('이미 스티커 수령이 완료되었습니다.');
+      const exists = cart.find(i=>i.id===id);
+      if(exists){ cart = cart.filter(i=>i.id!==id); showToast('장바구니에서 제거되었습니다.'); }
+      else{
+        if(cart.find(i=>i.category===category)) return showToast(category==='meme'?'밈 스티커는 1개까지 선택 가능합니다.':'팀 로고 스티커는 1개까지 선택 가능합니다.');
+        const source = category==='meme' ? memeStickers.find(i=>i.id===id) : allTeamLogoStickers.find(i=>i.id===id);
+        cart.push(source); showToast('장바구니에 담겼습니다 ✨');
+      }
+      renderTeamLogo(); renderMemes(); renderCart(); document.getElementById('codePanel').classList.add('hidden');
+    }
+
+    function renderCart(){
+      const el=document.getElementById('cartList');
+      if(cart.length===0){ el.innerHTML='<li class="cart-item"><strong>아직 담은 스티커가 없습니다.</strong><span>스티커 메뉴판에서 담아주세요.</span></li>'; return; }
+      el.innerHTML = cart.map(i=>`<li class="cart-item"><div><strong>${i.name}</strong><br><span>${i.category==='meme'?'Limited Stickers':'Team Logo'}</span></div>${received?'':`<button class="remove-button" onclick="toggleCart('${i.id}','${i.category}')">삭제</button>`}</li>`).join('');
+    }
+
+    function openReceivePanel(){
+      if(received) return showToast('이미 수령 완료 처리되었습니다.');
+      if(cart.length===0) return showToast('수령할 스티커를 먼저 장바구니에 담아주세요.');
+      document.getElementById('codePanel').classList.remove('hidden');
+      document.getElementById('staffCodeInput').focus();
+    }
+
+    function confirmReceive(){
+      const code=document.getElementById('staffCodeInput').value.trim();
+      const error=document.getElementById('receiveError'); error.classList.add('hidden');
+      if(code !== STAFF_CODE){ error.textContent='운영진 확인 코드가 일치하지 않습니다.'; error.classList.remove('hidden'); return; }
+      received=true; localStorage.setItem(RECEIVED_KEY,'true');
+      // TODO: Google Apps Script 연동 위치: 재고 차감 / 로그 저장 / users.received TRUE
+      updateStatusCard(); renderTeamLogo(); renderMemes(); renderCart();
+      document.getElementById('codePanel').classList.add('hidden');
+      window.scrollTo({top:0,behavior:'smooth'});
+      showToast('스티커 수령이 완료되었습니다!');
+    }
+
+    function updateStatusCard(){
+      const card=document.getElementById('statusCard'), title=document.getElementById('statusTitle'), desc=document.getElementById('statusDesc'), btn=document.getElementById('diyButton');
+      if(received){ card.classList.add('received'); title.textContent='✓ 스티커 수령이 완료되었습니다!'; desc.textContent='다른 스티커도 갖고 싶으신가요? 나만의 DIY A6 Sticker Set을 만들어보세요.'; btn.classList.remove('hidden'); }
+      else{ card.classList.remove('received'); title.textContent='🎉 체크인이 완료되었습니다!'; desc.textContent='TAGby 10주년 이벤트를 즐겨주세요.'; btn.classList.add('hidden'); }
+    }
+
+    function renderIntroDots(){ introDotContainers.forEach(c=>{ c.innerHTML=[0,1,2].map(i=>`<span class="slide-dot ${i===currentIntroIndex?'active':''}"></span>`).join(''); }); }
+    function updateIntroSlide(){ introTrack.style.transform=`translateX(-${currentIntroIndex*100}%)`; renderIntroDots(); }
+    function nextIntroSlide(){ currentIntroIndex=Math.min(currentIntroIndex+1,2); updateIntroSlide(); }
+    function prevIntroSlide(){ currentIntroIndex=Math.max(currentIntroIndex-1,0); updateIntroSlide(); }
+    function bindIntroSwipe(){
+      if(introSlider.dataset.bound) return;
+      introSlider.dataset.bound = 'true';
+      introSlider.addEventListener('touchstart',e=>{ introTouchStartX=e.changedTouches[0].screenX; },{passive:true});
+      introSlider.addEventListener('touchend',e=>{ introTouchEndX=e.changedTouches[0].screenX; const gap=introTouchStartX-introTouchEndX; if(Math.abs(gap)<40)return; if(gap>0)nextIntroSlide(); if(gap<0)prevIntroSlide(); },{passive:true});
+    }
+    function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}); }
+    function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.remove('hidden'); clearTimeout(window.toastTimer); window.toastTimer=setTimeout(()=>t.classList.add('hidden'),1800); }
+    function boot(){ const saved=localStorage.getItem(STORAGE_KEY); if(saved){ currentUser=JSON.parse(saved); enterMain(); } }
+    boot();
+  </script>
+</body>
+</html>
