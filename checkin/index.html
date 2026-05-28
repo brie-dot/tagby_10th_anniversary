@@ -275,15 +275,9 @@
         </article>
        </div>
        <div class="carousel-actions">
-        <button class="arrow" onclick="moveCarousel('mapCarousel',-1)">
-         ‹
-        </button>
-        <span class="carousel-label">
-         Site Map / Seat Map을 넘겨볼 수 있습니다.
-        </span>
-        <button class="arrow" onclick="moveCarousel('mapCarousel',1)">
-         ›
-        </button>
+        <button class="arrow" onclick="moveCarousel('mapCarousel',-1)">‹</button>
+        <span class="carousel-label">Site Map / Seat Map을 넘겨볼 수 있습니다.</span>
+        <button class="arrow" onclick="moveCarousel('mapCarousel',1)">›</button>
        </div>
       </div>
      </div>
@@ -505,7 +499,6 @@ async function apiPost(payload){
     method:'POST',
     body:JSON.stringify(payload)
   });
-
   return await response.json();
 }
 
@@ -607,7 +600,7 @@ function renderTeamLogo(){
               const dis=!mine||(selected&&!sel)||received||soldOut;
 
               return `
-                <div class="logo-option ${dis&&!sel?'disabled':''}">
+                <div class="logo-option">
                   <div class="sticker-img">
                     <img src="${s.image}" alt="${s.name}" class="sticker-real-img"/>
                   </div>
@@ -640,7 +633,7 @@ function renderMemes(){
 
     return `
       <article class="meme-card">
-        <div class="sticker-card ${dis||soldOut?'disabled':''}">
+        <div class="sticker-card">
           <div class="sticker-img">
             <img src="${s.image}" alt="${s.name}" class="sticker-real-img"/>
           </div>
@@ -660,7 +653,7 @@ function renderMemes(){
 function toggleCart(id,category){if(received)return toast('이미 스티커 수령이 완료되었습니다.');const ex=cart.find(i=>i.id===id);if(ex){cart=cart.filter(i=>i.id!==id);toast('장바구니에서 제거되었습니다.')}else{if(cart.find(i=>i.category===category))return toast(category==='meme'?'밈 스티커는 1개까지 선택 가능합니다.':'팀 로고 스티커는 1개까지 선택 가능합니다.');const src=category==='meme'?memeStickers.find(i=>i.id===id):allTeamLogoStickers.find(i=>i.id===id);cart.push(src);toast('장바구니에 담겼습니다 ✨')}renderTeamLogo();renderMemes();renderCart();document.getElementById('codePanel').classList.add('hidden')}
 function renderCart(){const el=document.getElementById('cartList');if(!cart.length){el.innerHTML='<li class="cart-item"><strong>아직 담은 스티커가 없습니다.</strong><span>스티커 메뉴판에서 담아주세요.</span></li>';return}el.innerHTML=cart.map(i=>`<li class="cart-item"><div><strong>${i.name}</strong><br><span>${i.category==='meme'?'Limited Stickers':'Team Logo'}</span></div>${received?'':`<button class="remove" onclick="toggleCart('${i.id}','${i.category}')">삭제</button>`}</li>`).join('')}
 function openReceivePanel(){if(received)return toast('이미 수령 완료 처리되었습니다.');if(!cart.length)return toast('수령할 스티커를 먼저 장바구니에 담아주세요.');document.getElementById('codePanel').classList.remove('hidden');document.getElementById('staffCodeInput').focus()}
-async function confirmReceive(){
+async async function confirmReceive(){
   const code=document.getElementById('staffCodeInput').value.trim();
   const err=document.getElementById('receiveError');
 
