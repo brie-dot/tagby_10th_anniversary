@@ -14,6 +14,7 @@
       background: #f4f7ff;
       color: #111827;
       overflow-x: hidden;
+      overflow-y: hidden;
     }
 
     .screen {
@@ -257,9 +258,9 @@
     .quiz-slides-outer {
       flex: 1;
       overflow: hidden;
+      overflow-x: hidden;
       min-height: 0;
       position: relative;
-      max-height: calc(100vh - 160px);
     }
     .quiz-slides-track {
       display: flex;
@@ -289,7 +290,7 @@
 
     .question-text {
       margin: 0;
-      font-size: clamp(40px, 5.5vw, 88px);
+      font-size: clamp(32px, 5.5vh, 100px);
       line-height: 1.22;
       font-weight: 950;
       letter-spacing: -0.05em;
@@ -333,6 +334,7 @@
     .options-area.visible {
       display: flex !important;
       flex-direction: row !important;
+      flex: 1 !important;
       min-height: 0;
       gap: 12px !important;
       width: 100%;
@@ -362,18 +364,18 @@
     /* 옵션 이미지 */
     .option-img {
       display: block;
-      width: 80px;
-      height: 80px;
+      width: 100%;
+      flex: 1;
+      min-height: 0;
       object-fit: contain;
       border-radius: 10px;
-      flex-shrink: 0;
     }
     .option-label { display: block; }
 
     .answer-box {
       display: none;
       margin-top: 28px;
-      font-size: clamp(52px, 7vw, 110px);
+      font-size: clamp(48px, 8vh, 130px);
       font-weight: 950;
       line-height: 1.1;
       word-break: keep-all;
