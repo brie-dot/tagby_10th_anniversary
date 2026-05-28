@@ -28,7 +28,60 @@
 .carousel-shell{position:relative}.h-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x}.h-carousel::-webkit-scrollbar{display:none}
 .nutrition-card{flex:0 0 100%;scroll-snap-align:start}.logo-team{flex:0 0 100%;scroll-snap-align:start}.meme-card{flex:0 0 100%;scroll-snap-align:start}
 .sticker-card,.logo-team-inner,.logo-option{border:1px solid var(--line);border-radius:20px;padding:12px;background:#fff}.disabled{opacity:.48}.sticker-img{width:100%;aspect-ratio:1/1;border:2px dashed #cbd5e1;border-radius:16px;background:linear-gradient(135deg,#f8fafc,#eef2ff);display:flex;align-items:center;justify-content:center;text-align:center;color:#94a3b8;font-size:12px;font-weight:900;line-height:1.4;margin-bottom:10px}.sticker-name{margin:0 0 4px;font-size:14px;font-weight:900;line-height:1.35}.sticker-meta{margin:0;color:var(--muted);font-size:12px;font-weight:700}.pill{display:inline-flex;border-radius:999px;padding:7px 10px;background:var(--soft);color:var(--blue);font-size:11px;font-weight:900;margin-top:10px}
-.logo-title{margin:0 0 10px;font-size:16px;font-weight:900}.logo-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.add-btn{width:100%;margin-top:10px;border:0;border-radius:14px;padding:11px 10px;background:var(--blue);color:#fff;font-size:13px;font-weight:900}.add-btn.selected{background:#111827}.add-btn:disabled{background:#d1d5db;color:#6b7280;cursor:not-allowed}
+.logo-title{
+  margin:0 0 10px;
+  font-size:16px;
+  font-weight:900
+}
+
+.logo-options{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px
+}
+
+.logo-option{
+  padding:8px
+}
+
+.logo-option .sticker-img{
+  aspect-ratio:1/0.72;
+  margin-bottom:8px
+}
+
+.logo-option .sticker-name{
+  display:none
+}
+
+.logo-option-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:8px
+}
+
+.logo-option .sticker-meta{
+  margin:0;
+  font-size:11px;
+  white-space:nowrap
+}
+
+.add-btn{
+  width:auto;
+  min-width:64px;
+  margin-top:0;
+  border:0;
+  border-radius:12px;
+  padding:8px 12px;
+  background:var(--blue);
+  color:#fff;
+  font-size:12px;
+  font-weight:900
+}
+
+.add-btn.selected{background:#111827}
+.add-btn:disabled{background:#d1d5db;color:#6b7280;cursor:not-allowed}
 .carousel-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}.arrow{width:44px;height:44px;border:0;border-radius:999px;background:#fff;color:var(--text);font-size:22px;font-weight:900;box-shadow:0 8px 18px rgba(15,23,42,.08)}.carousel-label{flex:1;text-align:center;color:var(--muted);font-size:12px;font-weight:900}
 .cart-list{margin:0 0 14px;padding:0;list-style:none;display:grid;gap:10px}.cart-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#f9fafb;border:1px solid var(--line);border-radius:16px}.cart-item strong{font-size:14px}.cart-item span{color:var(--muted);font-size:12px;font-weight:800}.remove{border:0;border-radius:999px;padding:8px 10px;background:#fff;color:var(--danger);font-size:12px;font-weight:900}.notice{border-radius:18px;padding:14px;background:var(--soft);color:var(--blue);font-size:14px;line-height:1.55;font-weight:800;margin-bottom:14px}.code-panel{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:100;width:calc(100% - 36px);max-width:440px;border-radius:18px;padding:14px 16px;background:#111827;color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:var(--shadow)}.bottom-safe{height:34px}
@@ -399,7 +452,7 @@ function enterMain(){document.getElementById('loginScreen').classList.add('hidde
 function renderAll(){renderIntroDots();updateIntroSlide();bindIntroSwipe();renderTimeline();renderExclusive();renderTeamLogo();renderMemes();renderCart()}
 function renderTimeline(){document.getElementById('timelineList').innerHTML=timelineData.map(i=>`<li><span class="time">${i[0]}</span><p>${i[1]}</p></li>`).join('')}
 function renderExclusive(){document.getElementById('exclusiveGrid').innerHTML=exclusiveStickers.map(s=>`<article class="sticker-card nutrition-card"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.name}</p><p class="sticker-meta">${s.team}</p><span class="pill">2026.06.01 Exclusive</span></article>`).join('')}
-function renderTeamLogo(){const selected=cart.find(i=>i.category==='team_logo');document.getElementById('teamLogoGrid').innerHTML=teamNames.map(team=>{const logos=allTeamLogoStickers.filter(s=>s.team===team),mine=team===currentUser.team;return `<article class="logo-team"><div class="logo-team-inner ${mine?'':'disabled'}"><p class="logo-title">${team}</p><div class="logo-options">${logos.map(s=>{const sel=selected?.id===s.id,dis=!mine||(selected&&!sel)||received;return `<div class="logo-option ${dis&&!sel?'disabled':''}"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.name}</p><p class="sticker-meta">잔여 ${s.remain} / ${s.stock}</p><button class="add-btn ${sel?'selected':''}" ${dis?'disabled':''} onclick="toggleCart('${s.id}','team_logo')">${!mine?'소속팀 전용':sel?'선택됨':'담기'}</button></div>`}).join('')}</div></div></article>`}).join('')}
+function renderTeamLogo(){const selected=cart.find(i=>i.category==='team_logo');document.getElementById('teamLogoGrid').innerHTML=teamNames.map(team=>{const logos=allTeamLogoStickers.filter(s=>s.team===team),mine=team===currentUser.team;return `<article class="logo-team"><div class="logo-team-inner ${mine?'':'disabled'}"><p class="logo-title">${team}</p><div class="logo-options">${logos.map(s=>{const sel=selected?.id===s.id,dis=!mine||(selected&&!sel)||received;return `<div class="logo-option ${dis&&!sel?'disabled':''}"><div class="sticker-img">이미지 자리<br>${s.name}</div><div class="logo-option-footer"><p class="sticker-meta">${s.remain} / ${s.stock}</p><button class="add-btn ${sel?'selected':''}" ${dis?'disabled':''} onclick="toggleCart('${s.id}','team_logo')">${!mine?'전용':sel?'선택됨':'담기'}</button></div></div>`}).join('')}</div></div></article>`}).join('')}
 function renderMemes(){const selected=cart.find(i=>i.category==='meme');document.getElementById('memeGrid').innerHTML=memeStickers.map(s=>{const sel=selected?.id===s.id,dis=selected&&!sel,sold=s.remain<=0;return `<article class="meme-card"><div class="sticker-card ${dis||sold?'disabled':''}"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.name}</p><p class="sticker-meta">잔여 ${s.remain} / ${s.stock}</p><button class="add-btn ${sel?'selected':''}" ${dis||sold||received?'disabled':''} onclick="toggleCart('${s.id}','meme')">${sold?'품절':sel?'선택됨':'담기'}</button></div></article>`}).join('')}
 function toggleCart(id,category){if(received)return toast('이미 스티커 수령이 완료되었습니다.');const ex=cart.find(i=>i.id===id);if(ex){cart=cart.filter(i=>i.id!==id);toast('장바구니에서 제거되었습니다.')}else{if(cart.find(i=>i.category===category))return toast(category==='meme'?'밈 스티커는 1개까지 선택 가능합니다.':'팀 로고 스티커는 1개까지 선택 가능합니다.');const src=category==='meme'?memeStickers.find(i=>i.id===id):allTeamLogoStickers.find(i=>i.id===id);cart.push(src);toast('장바구니에 담겼습니다 ✨')}renderTeamLogo();renderMemes();renderCart();document.getElementById('codePanel').classList.add('hidden')}
 function renderCart(){const el=document.getElementById('cartList');if(!cart.length){el.innerHTML='<li class="cart-item"><strong>아직 담은 스티커가 없습니다.</strong><span>스티커 메뉴판에서 담아주세요.</span></li>';return}el.innerHTML=cart.map(i=>`<li class="cart-item"><div><strong>${i.name}</strong><br><span>${i.category==='meme'?'Limited Stickers':'Team Logo'}</span></div>${received?'':`<button class="remove" onclick="toggleCart('${i.id}','${i.category}')">삭제</button>`}</li>`).join('')}
