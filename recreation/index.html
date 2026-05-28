@@ -14,7 +14,7 @@
       background: #f4f7ff;
       color: #111827;
       overflow-x: hidden;
-      overflow-y: hidden;
+      overflow-y: auto;
     }
 
     .screen {
@@ -37,7 +37,7 @@
       margin-bottom: 28px;
       padding: 12px 22px;
       border-radius: 999px;
-      background: #2563eb;
+      background: #0078FF;
       color: #fff;
       font-size: 22px;
       font-weight: 900;
@@ -103,9 +103,9 @@
       justify-content: space-between;
     }
     .rule-emoji { font-size: 96px; }
-    .rule-label { font-size: 24px; font-weight: 950; color: #2563eb; margin-bottom: 12px; }
+    .rule-label { font-size: 24px; font-weight: 950; color: #0078FF; margin-bottom: 12px; }
     .rule-main { font-size: clamp(34px, 4vw, 64px); line-height: 1.25; font-weight: 900; word-break: keep-all; }
-    .rule-sub { margin-top: 16px; color: #6b7280; font-size: 24px; font-weight: 700; }
+    .rule-sub { margin-top: 16px; color: #6b7280; font-size: clamp(22px, 2.2vw, 39px); font-weight: 700; }
 
     .prize-screen {
       background: radial-gradient(circle at top right, #fef3c7 0, transparent 40%),
@@ -155,7 +155,7 @@
     .prize-emoji { font-size: 96px; }
     .prize-label { font-size: 24px; font-weight: 950; color: #d97706; margin-bottom: 12px; }
     .prize-main { font-size: clamp(34px, 4vw, 64px); line-height: 1.25; font-weight: 900; word-break: keep-all; }
-    .prize-sub { margin-top: 16px; color: #6b7280; font-size: 24px; font-weight: 700; white-space: pre-line; }
+    .prize-sub { margin-top: 16px; color: #6b7280; font-size: clamp(22px, 2.2vw, 39px); font-weight: 700; white-space: pre-line; }
 
     .pw-modal-overlay {
       display: none;
@@ -207,7 +207,7 @@
       transition: border-color 0.2s;
       background: #f9fafb;
     }
-    .pw-input:focus { border-color: #2563eb; background: #fff; }
+    .pw-input:focus { border-color: #0078FF; background: #fff; }
     .pw-input.error { border-color: #dc2626; background: #fff5f5; }
     .pw-error-msg { display: none; color: #dc2626; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
     .pw-error-msg.visible { display: block; }
@@ -227,6 +227,7 @@
       padding: 0;
       display: none;
       flex-direction: column;
+      height: 100vh;
     }
     .quiz-screen.active { display: flex; }
     .quiz-screen::after {
@@ -250,22 +251,25 @@
       z-index: 10;
     }
     .score-btn {
-      padding: 8px 16px; border-radius: 999px; background: #2563eb;
+      padding: 8px 16px; border-radius: 999px; background: #0078FF;
       color: #fff; font-size: 13px; font-weight: 900; border: 0; cursor: pointer;
     }
-    .question-progress { margin-left: auto; font-size: 15px; font-weight: 700; color: #9ca3af; white-space: nowrap; }
+    .question-progress { margin-left: auto; font-size: clamp(14px, 1.4vw, 28px); font-weight: 700; color: #9ca3af; white-space: nowrap; }
 
     .quiz-slides-outer {
       flex: 1;
       overflow: hidden;
-      overflow-x: hidden;
       min-height: 0;
       position: relative;
+      width: 100%;
+      height: 100%;
     }
     .quiz-slides-track {
       display: flex;
+      flex-wrap: nowrap;
       height: 100%;
       width: 100%;
+      align-items: stretch;
       transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
     }
     .quiz-slide {
@@ -275,22 +279,23 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 20px 80px !important;
+      align-items: flex-start;
+      padding: 48px 80px !important;
       overflow: hidden;
       box-sizing: border-box;
     }
 
     .question-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-    .q-num { font-size: clamp(22px, 2.5vw, 36px); font-weight: 950; color: #2563eb; letter-spacing: -0.04em; }
-    .question-type-badge { display: inline-block; padding: 4px 14px; border-radius: 999px; font-size: 14px; font-weight: 900; letter-spacing: 0.01em; }
-    .badge-subjective { background: #eff6ff; color: #2563eb; }
+    .q-num { font-size: clamp(34px, 4vmin, 64px); font-weight: 950; color: #0078FF; letter-spacing: -0.04em; }
+    .question-type-badge { display: inline-block; padding: 4px 14px; border-radius: 999px; font-size: clamp(34px, 4vmin, 64px); font-weight: 900; letter-spacing: 0.01em; }
+    .badge-subjective { background: #eff6ff; color: #0078FF; }
     .badge-mcq        { background: #f0fdf4; color: #16a34a; }
     .badge-image-mcq  { background: #fdf4ff; color: #9333ea; }
     .badge-image-subj { background: #fff7ed; color: #ea580c; }
 
     .question-text {
       margin: 0;
-      font-size: clamp(32px, 5.5vh, 100px);
+      font-size: 200px; /* JS로 동적 조정 */
       line-height: 1.22;
       font-weight: 950;
       letter-spacing: -0.05em;
@@ -300,17 +305,17 @@
     .question-text .q-highlight { color: #529AF8; }
 
     .slide-timer {
-      margin-top: 36px;
+      margin-top: 20px;
       font-size: clamp(48px, 7vw, 100px);
       font-weight: 950;
       letter-spacing: -0.04em;
-      color: #2563eb;
+      color: #0078FF;
       line-height: 1;
     }
     .slide-timer.danger { color: #dc2626; animation: shake 0.28s infinite; }
 
     .slide-question-ref {
-      font-size: 15px; font-weight: 700; color: #9ca3af;
+      font-size: clamp(14px, 1.4vw, 28px); font-weight: 700; color: #9ca3af;
       margin-bottom: 28px; word-break: keep-all; white-space: pre-line; line-height: 1.5;
     }
 
@@ -319,14 +324,15 @@
       border-radius: 20px;
       overflow: hidden;
       background: #f3f4f6;
-      max-height: 420px;
-      width: fit-content;
-      max-width: 100%;
+      flex: 1;
+      min-height: 0;
+      max-height: 70vh;
+      width: 100%;
     }
     .question-image-wrap.visible { display: flex; align-items: center; justify-content: center; }
     .question-image-wrap img {
-      display: none; max-width: 100%; max-height: 420px;
-      width: auto; height: auto; object-fit: contain; border-radius: 16px;
+      display: none; max-width: 100%; max-height: 100%;
+      width: 100%; height: 100%; object-fit: contain; border-radius: 16px;
     }
     .image-loading { display: flex; align-items: center; justify-content: center; min-height: 120px; width: 240px; color: #9ca3af; font-size: 15px; font-weight: 700; }
     .image-error   { display: flex; align-items: center; justify-content: center; min-height: 80px;  width: 240px; color: #dc2626; font-size: 14px; font-weight: 700; }
@@ -343,8 +349,9 @@
     .option-item {
       flex: 1 !important;
       min-height: 0;
-      padding: 32px 24px !important;
-      font-size: clamp(28px, 3vw, 48px) !important;
+      overflow: hidden;
+      padding: 20px 16px !important;
+      /* font-size: JS로 동적 제어 */
       font-weight: 800;
       line-height: 1.3;
       word-break: keep-all;
@@ -365,29 +372,29 @@
     .option-img {
       display: block;
       width: 100%;
-      flex: 1;
-      min-height: 0;
-      object-fit: contain;
+      height: 200px;
+      object-fit: cover;
       border-radius: 10px;
+      flex-shrink: 0;
     }
     .option-label { display: block; }
 
     .answer-box {
       display: none;
-      margin-top: 28px;
-      font-size: clamp(48px, 8vh, 130px);
+      margin-top: 16px;
+      font-size: clamp(48px, 7vw, 150px);
       font-weight: 950;
       line-height: 1.1;
       word-break: keep-all;
       color: #111827;
     }
     .answer-box.visible { display: block; }
-    .answer-highlight { color: #2563eb; }
+    .answer-highlight { color: #0078FF; }
 
     /* 정답 설명 */
     .answer-desc {
-      margin-top: 20px;
-      font-size: clamp(22px, 2.5vw, 38px);
+      margin-top: 12px;
+      font-size: clamp(22px, 2.2vw, 39px);
       font-weight: 800;
       color: #F14646;
       line-height: 1.5;
@@ -396,24 +403,41 @@
     }
 
     .quiz-slide.answer-mode .question-meta { opacity: 0.3; }
-    .quiz-slide.answer-mode .question-text { font-size: clamp(22px, 2.5vw, 38px); opacity: 0.38; }
+    .quiz-slide.answer-mode .question-text { font-size: clamp(34px, 4vw, 64px); opacity: 0.38; }
     .quiz-slide.answer-mode .slide-timer { display: none; }
-    .quiz-slide.answer-mode .slide-question-ref { opacity: 0.4; font-size: 13px; }
-    .quiz-slide.answer-mode .options-area { opacity: 0.5; pointer-events: none; }
+    .quiz-slide.answer-mode .slide-question-ref { opacity: 0.4; }
+    .quiz-slide.answer-mode .options-area { pointer-events: none; }
+    .quiz-slide.answer-mode .options-area .option-item { transition: opacity 0.2s; }
+    .quiz-slide.answer-mode .options-area .option-item:not(.correct) { opacity: 0.25; }
+    .quiz-slide.answer-mode .options-area .option-item.correct { box-shadow: 0 8px 32px rgba(22,163,74,0.2); }
 
     .bottom-bar {
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 40px;
+      padding: 14px 40px 14px 40px;
       border-top: 1px solid #f3f4f6;
       background: #fff;
       z-index: 10;
     }
+    .bottom-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .bottom-timer {
+      font-size: clamp(48px, 7vw, 100px);
+      font-weight: 950;
+      letter-spacing: -0.04em;
+      color: #0CA678;
+      line-height: 1;
+      min-width: 160px;
+    }
+    .bottom-timer.danger { color: #F14646; animation: shake 0.28s infinite; }
     .timer-start-button {
-      padding: 10px 24px; border-radius: 999px; background: #2563eb;
-      color: #fff; font-size: 15px; font-weight: 900; border: 0;
+      padding: 10px 24px; border-radius: 999px; background: #0078FF;
+      color: #fff; font-size: 24px; font-weight: 900; border: 0;
     }
     .answer-button {
       display: inline-flex; align-items: center; justify-content: center;
@@ -443,6 +467,8 @@
       background: radial-gradient(circle at bottom right, #dbeafe 0, transparent 40%),
                   linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
       flex-direction: column; gap: 48px;
+      overflow-y: auto;
+      align-items: center;
     }
     .final-content { width: min(100%, 860px); text-align: center; }
     .final-title { margin: 16px 0 8px; font-size: clamp(48px, 7vw, 96px); font-weight: 950; letter-spacing: -0.05em; line-height: 1.1; color: #111827; }
@@ -464,7 +490,7 @@
     .ranking-item.rank-3 { background: linear-gradient(135deg, #fffaf0, #fef3e2); border: 2px solid #d97706; }
     .rank-badge { font-size: 36px; min-width: 48px; text-align: center; }
     .rank-team { flex: 1; font-size: clamp(22px, 3vw, 36px); font-weight: 900; color: #111827; }
-    .rank-score { font-size: clamp(28px, 4vw, 48px); font-weight: 950; color: #2563eb; letter-spacing: -0.03em; }
+    .rank-score { font-size: clamp(28px, 4vw, 48px); font-weight: 950; color: #0078FF; letter-spacing: -0.03em; }
     .rank-score-label { font-size: 16px; font-weight: 700; color: #9ca3af; margin-left: 4px; }
     .final-next-btn { margin-top: 40px; padding: 18px 40px; border: 0; border-radius: 999px; background: #111827; color: #fff; font-size: 20px; font-weight: 900; cursor: pointer; font-family: inherit; }
 
@@ -474,17 +500,17 @@
     .tiebreak-sub { font-size: 22px; font-weight: 700; color: #6b7280; margin-bottom: 48px; word-break: keep-all; line-height: 1.6; }
 
     .reception-screen { background: radial-gradient(circle at bottom left, #d1fae5 0, transparent 40%), linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); flex-direction: column; gap: 40px; }
-    .reception-content { width: min(100%, 1200px); text-align: left; }
-    .reception-title { margin: 16px 0 40px; font-size: clamp(48px, 6vw, 88px); font-weight: 950; letter-spacing: -0.05em; line-height: 1.1; color: #111827; word-break: keep-all; }
+    .reception-content { width: min(100%, 1100px); text-align: left; }
+    .reception-title { margin: 16px 0 52px; font-size: clamp(54px, 7vw, 100px); font-weight: 950; letter-spacing: -0.05em; line-height: 1.1; color: #111827; word-break: keep-all; }
     .rec-slider-wrap { position: relative; min-height: 380px; overflow: hidden; }
     .rec-next-button { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 999px; border: 1px solid rgba(17,24,39,0.08); background: rgba(255,255,255,0.3); backdrop-filter: blur(8px); color: rgba(17,24,39,0.9); font-size: 20px; font-weight: 900; cursor: pointer; z-index: 10; font-family: inherit; }
     .rec-slider { display: flex; transition: transform 0.4s ease; }
     .rec-slide { width: 100%; flex-shrink: 0; padding: 12px; }
     .rec-card { padding: 48px 52px; border-radius: 36px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); box-shadow: 0 10px 40px rgba(16,185,129,0.1); min-height: 380px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
-    .rec-emoji { font-size: 80px; line-height: 1; }
-    .rec-label { font-size: 20px; font-weight: 950; color: #059669; margin-bottom: 10px; letter-spacing: 0.02em; }
-    .rec-main { font-size: clamp(28px, 3.5vw, 52px); line-height: 1.35; font-weight: 900; word-break: keep-all; color: #111827; }
-    .rec-sub { margin-top: 12px; font-size: 20px; font-weight: 700; color: #6b7280; word-break: keep-all; line-height: 1.5; }
+    .rec-emoji { font-size: 96px; line-height: 1; }
+    .rec-label { font-size: 24px; font-weight: 950; color: #059669; margin-bottom: 12px; letter-spacing: 0.01em; }
+    .rec-main { font-size: clamp(34px, 4vw, 64px); line-height: 1.25; font-weight: 900; word-break: keep-all; color: #111827; }
+    .rec-sub { margin-top: 16px; font-size: clamp(22px, 2.2vw, 39px); font-weight: 700; color: #6b7280; word-break: keep-all; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -507,7 +533,6 @@
         <button class="rule-next-button" id="ruleNextButton">→</button>
         <div class="rule-slider" id="ruleSlider"></div>
       </div>
-      <button class="intro-button" id="goToPrizeButton">상품 확인하기 →</button>
     </div>
   </section>
 
@@ -520,7 +545,6 @@
         <button class="prize-next-button" id="prizeNextButton">→</button>
         <div class="prize-slider" id="prizeSlider"></div>
       </div>
-      <button class="intro-button" id="enterQuizButton">퀴즈 시작하기 →</button>
     </div>
   </section>
 
@@ -542,10 +566,6 @@
 
   <!-- 퀴즈 -->
   <section class="screen quiz-screen" id="quizScreen">
-    <div class="quiz-topbar">
-      <button class="score-btn" onclick="window.open('scoreboard.html','점수판','width=900,height=700')">🏆 점수판</button>
-      <span class="question-progress" id="questionProgress"></span>
-    </div>
     <div class="quiz-slides-outer">
       <div class="quiz-slides-track" id="quizSlidesTrack">
         <!-- 슬라이드 0: 질문 -->
@@ -555,7 +575,6 @@
             <span class="question-type-badge badge-subjective" id="questionTypeBadge">주관식</span>
           </div>
           <h2 class="question-text" id="questionText">문제를 불러오는 중...</h2>
-          <div class="slide-timer" id="slideTimerQ">01:00</div>
           <!-- 주관식 정답 박스 -->
           <div class="answer-box" id="answerBoxQ"></div>
         </div>
@@ -567,7 +586,6 @@
             <img id="questionImage" src="" alt="문제 이미지" />
           </div>
           <div class="options-area" id="optionsArea"></div>
-          <div class="slide-timer" id="slideTimerE">01:00</div>
           <!-- 비주관식 정답 박스 -->
           <div class="answer-box" id="answerBoxE"></div>
         </div>
@@ -575,7 +593,10 @@
     </div>
     <div class="timer" id="timer"></div>
     <div class="bottom-bar">
-      <button class="timer-start-button" id="startButton">▶ 시작</button>
+      <div class="bottom-left">
+        <span class="bottom-timer" id="bottomTimer">01:00</span>
+        <button class="timer-start-button" id="startButton">▶ 시작</button>
+      </div>
       <button class="answer-button" id="answerButton">→</button>
     </div>
   </section>
@@ -630,7 +651,7 @@
     const GITHUB_IMAGE_BASE = "https://brie-dot.github.io/tagby_10th_anniversary/recreation/images/";
     const SHEET_URL      = "https://docs.google.com/spreadsheets/d/1B6AtoVN8a4kBMX7xcGotZEhRS_NWBISjy5l8OCFn4O8/export?format=csv&gid=0";
     const SCORE_URL      = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpMTMpqFtQVyu9efUUp10kRvpQMza3Ur9JxVkqWfb_7JFLYmQGogHznVf9s3NpeJa9QMPjfGX3HTPH/pub?gid=355034406&single=true&output=csv";
-    const TIMER_DURATION = 60;
+    const TIMER_DURATION = 40;
     const DANGER_AT      = 10;
 
     const TYPE = {
@@ -724,6 +745,7 @@
     const answerBtn         = $("answerButton");
     const answerBoxQ        = $("answerBoxQ");  // 주관식 정답
     const answerBoxE        = $("answerBoxE");  // 비주관식 정답
+    const bottomTimerEl     = $("bottomTimer");
 
     /* ── 상태 ── */
     let quizData      = [];
@@ -837,8 +859,7 @@
       return escapeHTML(answer).replace(/\[\[(.*?)\]\]/g, '<span class="answer-highlight">$1</span>');
     }
     function setTimerDanger(on) {
-      slideTimerQ.classList.toggle("danger", on);
-      slideTimerE.classList.toggle("danger", on);
+      $("bottomTimer").classList.toggle("danger", on);
       quizScreen.classList.toggle("danger-mode", on);
     }
     function clearDanger() { setTimerDanger(false); }
@@ -960,7 +981,10 @@
        렌더링
     ══════════════════════════════════════════════ */
     function hasExtraSlide(q) { return q.type !== TYPE.SUBJECTIVE; }
-    function goToSlide(idx) { quizSlidesTrack.style.transform = `translateX(-${idx * 100}%)`; }
+    function goToSlide(idx) {
+      const w = document.querySelector('.quiz-slides-outer').offsetWidth;
+      quizSlidesTrack.style.transform = `translateX(-${idx * w}px)`;
+    }
 
     function renderQuestion() {
       if (!quizData.length) return;
@@ -969,10 +993,9 @@
 
       questionNum.textContent = `Q${currentIndex + 1}`;
       questionText.innerHTML  = formatQuestion(q.question);
-      questionProgress.textContent = `${currentIndex + 1} / ${quizData.length}`;
+      if (questionProgress) questionProgress.textContent = `${currentIndex + 1} / ${quizData.length}`;
       updateTypeBadge(q.type);
 
-      slideTimerQ.style.display = q.type === TYPE.SUBJECTIVE ? "block" : "none";
       answerBoxQ.classList.remove("visible");
       answerBoxQ.innerHTML = "";
       answerBoxE.classList.remove("visible");
@@ -1003,10 +1026,45 @@
         optionsArea.innerHTML = "";
       }
 
-      slideTimerE.style.display = hasExtraSlide(q) ? "block" : "none";
       resetTimer();
       goToSlide(0);
+      setTimeout(adjustQuestionFontSize, 50);
     }
+
+    /* 질문 텍스트 폰트 동적 조정 */
+    function adjustQuestionFontSize() {
+      const el = questionText;
+      const slide = slideQuestion;
+      if (!el || !slide) return;
+
+      const maxSize = 200;
+      const minSize = 40;
+      const maxH = slide.clientHeight * 0.55; // 슬라이드 높이의 55% (Q번호+타이머 공간 제외)
+      const maxW = slide.clientWidth - 160;   // 좌우 패딩 80px씩 제외
+
+      let size = maxSize;
+      el.style.fontSize = size + 'px';
+
+      while (size > minSize) {
+        if (el.scrollHeight <= maxH && el.scrollWidth <= maxW) break;
+        size -= 2;
+        el.style.fontSize = size + 'px';
+      }
+    }
+    window.addEventListener('resize', adjustQuestionFontSize);
+
+    /* 보기 카드 폰트 동적 조정 */
+    function adjustOptionFontSize() {
+      const items = document.querySelectorAll('.option-item');
+      if (!items.length) return;
+      items.forEach(item => {
+        const w = item.offsetWidth;
+        const h = item.offsetHeight;
+        const size = Math.min(w * 0.18, h * 0.35, 120);
+        item.style.fontSize = Math.max(size, 20) + 'px';
+      });
+    }
+    window.addEventListener('resize', adjustOptionFontSize);
 
     function renderOptions(options, correctIdx, optionImages = []) {
       optionsArea.innerHTML = options.map((opt, i) => {
@@ -1018,6 +1076,7 @@
           : "";
         return `<div class="${cls}">${imgHtml}<span class="option-label">${CIRCLE_NUMS[i] || (i+1)+"."} ${escapeHTML(opt)}</span></div>`;
       }).join("");
+      setTimeout(adjustOptionFontSize, 50);
     }
 
     /* ══════════════════════════════════════════════
@@ -1025,8 +1084,7 @@
     ══════════════════════════════════════════════ */
     function setTimerDisplay(secs) {
       const txt = formatTime(secs);
-      slideTimerQ.textContent = txt;
-      slideTimerE.textContent = txt;
+      $("bottomTimer").textContent = txt;
     }
 
     function resetTimer() {
@@ -1064,6 +1122,8 @@
     function showAnswer() {
       clearInterval(timerId); timerId = null; isRunning = false;
       setTimerDanger(false);
+      window.removeEventListener("resize", adjustOptionFontSize);
+      window.removeEventListener("resize", adjustQuestionFontSize);
       const q = quizData[currentIndex];
       if ((q.type === TYPE.MCQ || q.type === TYPE.IMAGE_MCQ) && q.options.length) {
         renderOptions(q.options, findCorrectOptionIndex(q), q.optionImages);
@@ -1072,15 +1132,18 @@
         ? `<div class="answer-desc">${escapeHTML(q.answerDesc)}</div>`
         : "";
       const answerHtml = `A. ${formatAnswer(q.answer)}${descHtml}`;
-      slideTimerQ.style.display = "none";
-      slideTimerE.style.display = "none";
       startBtn.disabled = true;
       slideStep = 2;
 
       if (hasExtraSlide(q)) {
-        // 비주관식: 슬라이드1에서 정답 표시 (슬라이드 이동 없음)
-        answerBoxE.innerHTML = answerHtml;
-        answerBoxE.classList.add("visible");
+        // 비주관식: 슬라이드1에서 정답 표시
+        // MCQ는 하이라이트만, 주관식-이미지는 answerBox 표시
+        if (q.type === TYPE.MCQ || q.type === TYPE.IMAGE_MCQ) {
+          // 객관식: answerBox 숨기고 카드 하이라이트만
+        } else {
+          answerBoxE.innerHTML = answerHtml;
+          answerBoxE.classList.add("visible");
+        }
         slideExtra.classList.add("answer-mode");
         goToSlide(1);
       } else {
@@ -1121,6 +1184,8 @@
         else {
           if (currentIndex === quizData.length - 1) { showFinalScreen(); return; }
           currentIndex++;
+          window.addEventListener("resize", adjustOptionFontSize);
+          window.addEventListener("resize", adjustQuestionFontSize);
           renderQuestion();
         }
       } else {
@@ -1273,7 +1338,7 @@
       ruleIndex = Math.min(ruleIndex + 1, RULES.length - 1);
       updateRuleSlider();
     });
-    $("goToPrizeButton").addEventListener("click", () => {
+    if ($("goToPrizeButton")) $("goToPrizeButton").addEventListener("click", () => {
       ruleScreen.classList.remove("active");
       prizeScreen.classList.add("active");
       prizeIndex = 0; updatePrizeSlider();
@@ -1282,7 +1347,7 @@
       prizeIndex = Math.min(prizeIndex + 1, PRIZES.length - 1);
       updatePrizeSlider();
     });
-    $("enterQuizButton").addEventListener("click", openPwModal);
+    if ($("enterQuizButton")) $("enterQuizButton").addEventListener("click", openPwModal);
     startBtn.addEventListener("click", startTimer);
     answerBtn.addEventListener("click", () => quizArrow(1));
 
