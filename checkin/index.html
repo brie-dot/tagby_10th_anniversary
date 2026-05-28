@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>TAGby 10th Check-in</title>
-<style>
-:root{--blue:#0057ff;--soft:#eef3ff;--bg:#f5f7fb;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--danger:#ef4444;--shadow:0 14px 34px rgba(15,23,42,.08);--r:26px}
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   TAGby 10th Check-in
+  </title>
+  <style>
+   :root{--blue:#0057ff;--soft:#eef3ff;--bg:#f5f7fb;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--danger:#ef4444;--shadow:0 14px 34px rgba(15,23,42,.08);--r:26px}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",sans-serif;background:var(--blue);color:var(--text)}button,input{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
 .app{max-width:480px;min-height:100vh;margin:0 auto;background:var(--blue)}
 .login-screen{min-height:100vh;padding:34px 22px;display:flex;flex-direction:column;justify-content:center;background:var(--blue);color:#fff}
@@ -30,122 +32,358 @@
 .carousel-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}.arrow{width:44px;height:44px;border:0;border-radius:999px;background:#fff;color:var(--text);font-size:22px;font-weight:900;box-shadow:0 8px 18px rgba(15,23,42,.08)}.carousel-label{flex:1;text-align:center;color:var(--muted);font-size:12px;font-weight:900}
 .cart-list{margin:0 0 14px;padding:0;list-style:none;display:grid;gap:10px}.cart-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#f9fafb;border:1px solid var(--line);border-radius:16px}.cart-item strong{font-size:14px}.cart-item span{color:var(--muted);font-size:12px;font-weight:800}.remove{border:0;border-radius:999px;padding:8px 10px;background:#fff;color:var(--danger);font-size:12px;font-weight:900}.notice{border-radius:18px;padding:14px;background:var(--soft);color:var(--blue);font-size:14px;line-height:1.55;font-weight:800;margin-bottom:14px}.code-panel{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:100;width:calc(100% - 36px);max-width:440px;border-radius:18px;padding:14px 16px;background:#111827;color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:var(--shadow)}.bottom-safe{height:34px}
-</style>
-</head>
-<body>
-<main class="app">
-<section id="loginScreen" class="login-screen">
-  <div class="login-card">
-    <p class="eyebrow">TAGby 10th Anniversary</p>
-    <h1 class="login-title">QR Check-in</h1>
-    <p class="login-desc">성함과 회사 이메일을 입력해주세요.<br>입력하신 정보로 체크인 여부를 확인합니다.</p>
-    <div class="field"><label for="nameInput">성함</label><input id="nameInput" type="text" placeholder="홍길동"></div>
-    <div class="field"><label for="emailInput">회사 이메일</label><input id="emailInput" type="email" placeholder="gildong@tagby.io"></div>
-    <button class="primary" onclick="handleLogin()">체크인하기</button>
-    <p id="loginError" class="error hidden"></p>
-  </div>
-</section>
-
-<section id="mainScreen" class="hidden">
-<nav class="top-nav">
-  <button id="navTimeline" onclick="scrollToSection('timelineSection')">타임테이블</button>
-  <button id="navSeat" onclick="scrollToSection('seatSection')">좌석배치도</button>
-  <button id="navSticker" onclick="scrollToSection('stickerSection')">스티커 메뉴판</button>
-</nav>
-
-<div class="status-wrap">
-  <div id="statusCard" class="status-card">
-    <p id="statusTitle" class="status-title">🎉 체크인이 완료되었습니다!</p>
-    <p id="statusDesc" class="status-desc">TAGby 10주년 이벤트를 즐겨주세요.</p>
-    <button id="diyButton" class="cta hidden" onclick="alert('DIY A6 Sticker Set은 추후 구현 예정입니다.')">DIY A6 Sticker Set</button>
-  </div>
-</div>
-
-<section class="intro-wrap">
-  <div class="intro" id="introSlider">
-    <div class="intro-track" id="introTrack">
-      <article class="intro-slide blue">
-        <div><p class="eyebrow">TAGby 10th Anniversary</p><h1>태그바이컴퍼니<br>10주년 기념 이벤트에<br>오신 것을 환영합니다!</h1><p class="intro-desc"><strong id="welcomeName">홍길동</strong>님, 오늘의 이벤트를 즐겨주세요.</p></div>
-        <div class="slide-footer"><div class="slide-dots" id="introDots1"></div><button class="slide-btn" onclick="nextIntroSlide()">다음</button></div>
-      </article>
-      <article class="intro-slide soft">
-        <div><p class="eyebrow">Entrance Mission</p><h2>입장 미션</h2>
-          <ul class="mission-list">
-            <li class="mission-item"><span class="mission-number">1</span><p class="mission-text">포토존을 즐겨주세요.</p></li>
-            <li class="mission-item"><span class="mission-number">2</span><p class="mission-text">같은 테이블에 함께하는 동료들과 팀명을 정해주세요.</p></li>
-            <li class="mission-item"><span class="mission-number">3</span><p class="mission-text">스티커 메뉴판에서 가져가고 싶은 스티커를 담아주세요.<br><small>선착순 증정으로 품절 가능성이 있습니다.</small></p></li>
-          </ul>
+  </style>
+ </head>
+ <body>
+  <main class="app">
+   <section class="login-screen" id="loginScreen">
+    <div class="login-card">
+     <p class="eyebrow">
+      TAGby 10th Anniversary
+     </p>
+     <h1 class="login-title">
+      QR Check-in
+     </h1>
+     <p class="login-desc">
+      성함과 회사 이메일을 입력해주세요.
+      <br/>
+      입력하신 정보로 체크인 여부를 확인합니다.
+     </p>
+     <div class="field">
+      <label for="nameInput">
+       성함
+      </label>
+      <input id="nameInput" placeholder="홍길동" type="text"/>
+     </div>
+     <div class="field">
+      <label for="emailInput">
+       회사 이메일
+      </label>
+      <input id="emailInput" placeholder="gildong@tagby.io" type="email"/>
+     </div>
+     <button class="primary" onclick="handleLogin()">
+      체크인하기
+     </button>
+     <p class="error hidden" id="loginError">
+     </p>
+    </div>
+   </section>
+   <section class="hidden" id="mainScreen">
+    <nav class="top-nav">
+     <button id="navTimeline" onclick="scrollToSection('timelineSection')">
+      타임테이블
+     </button>
+     <button id="navSeat" onclick="scrollToSection('seatSection')">
+      좌석배치도
+     </button>
+     <button id="navSticker" onclick="scrollToSection('stickerSection')">
+      스티커 메뉴판
+     </button>
+    </nav>
+    <div class="status-wrap">
+     <div class="status-card" id="statusCard">
+      <p class="status-title" id="statusTitle">
+       🎉 체크인이 완료되었습니다!
+      </p>
+      <p class="status-desc" id="statusDesc">
+       TAGby 10주년 이벤트를 즐겨주세요.
+      </p>
+      <button class="cta hidden" id="diyButton" onclick="alert('DIY A6 Sticker Set은 추후 구현 예정입니다.')">
+       DIY A6 Sticker Set
+      </button>
+     </div>
+    </div>
+    <section class="intro-wrap">
+     <div class="intro" id="introSlider">
+      <div class="intro-track" id="introTrack">
+       <article class="intro-slide blue">
+        <div>
+         <p class="eyebrow">
+          TAGby 10th Anniversary
+         </p>
+         <h1>
+          태그바이컴퍼니
+          <br/>
+          10주년 기념 이벤트에
+          <br/>
+          오신 것을 환영합니다!
+         </h1>
+         <p class="intro-desc">
+          <strong id="welcomeName">
+           홍길동
+          </strong>
+          님, 오늘의 이벤트를 즐겨주세요.
+         </p>
         </div>
-        <div class="slide-footer"><button class="slide-btn" onclick="prevIntroSlide()">이전</button><div class="slide-dots" id="introDots2"></div><button class="slide-btn" onclick="nextIntroSlide()">다음</button></div>
-      </article>
-      <article class="intro-slide soft">
-        <div><p class="eyebrow">Event Guide</p><h2>상단 메뉴에서<br>필요한 정보를<br>바로 확인하세요</h2><p class="intro-desc">타임테이블, 좌석배치도, 스티커 메뉴판을 상단 버튼으로 빠르게 이동할 수 있습니다.</p></div>
-        <div class="slide-footer"><button class="slide-btn" onclick="prevIntroSlide()">이전</button><div class="slide-dots" id="introDots3"></div></div>
-      </article>
+        <div class="slide-footer">
+         <div class="slide-dots" id="introDots1">
+         </div>
+         <button class="slide-btn" onclick="nextIntroSlide()">
+          다음
+         </button>
+        </div>
+       </article>
+       <article class="intro-slide soft">
+        <div>
+         <p class="eyebrow">
+          Entrance Mission
+         </p>
+         <h2>
+          입장 미션
+         </h2>
+         <ul class="mission-list">
+          <li class="mission-item">
+           <span class="mission-number">
+            1
+           </span>
+           <p class="mission-text">
+            포토존을 즐겨주세요.
+           </p>
+          </li>
+          <li class="mission-item">
+           <span class="mission-number">
+            2
+           </span>
+           <p class="mission-text">
+            같은 테이블에 함께하는 동료들과 팀명을 정해주세요.
+           </p>
+          </li>
+          <li class="mission-item">
+           <span class="mission-number">
+            3
+           </span>
+           <p class="mission-text">
+            스티커 메뉴판에서 가져가고 싶은 스티커를 담아주세요.
+            <br/>
+            <small>
+             선착순 증정으로 품절 가능성이 있습니다.
+            </small>
+           </p>
+          </li>
+         </ul>
+        </div>
+        <div class="slide-footer">
+         <button class="slide-btn" onclick="prevIntroSlide()">
+          이전
+         </button>
+         <div class="slide-dots" id="introDots2">
+         </div>
+         <button class="slide-btn" onclick="nextIntroSlide()">
+          다음
+         </button>
+        </div>
+       </article>
+       <article class="intro-slide soft">
+        <div>
+         <p class="eyebrow">
+          Event Guide
+         </p>
+         <h2>
+          상단 메뉴에서
+          <br/>
+          필요한 정보를
+          <br/>
+          바로 확인하세요
+         </h2>
+         <p class="intro-desc">
+          타임테이블, 좌석배치도, 스티커 메뉴판을 상단 버튼으로 빠르게 이동할 수 있습니다.
+         </p>
+        </div>
+        <div class="slide-footer">
+         <button class="slide-btn" onclick="prevIntroSlide()">
+          이전
+         </button>
+         <div class="slide-dots" id="introDots3">
+         </div>
+        </div>
+       </article>
+      </div>
+     </div>
+    </section>
+    <section class="section" id="timelineSection">
+     <div class="section-title">
+      <h2>
+       Time Table
+      </h2>
+      <span>
+       오늘의 순서
+      </span>
+     </div>
+     <div class="card">
+      <ul class="timeline" id="timelineList">
+      </ul>
+     </div>
+    </section>
+    <section class="section" id="seatSection">
+     <div class="section-title">
+      <h2>
+       Seat Map
+      </h2>
+      <span>
+       좌석배치도
+      </span>
+     </div>
+     <div class="card">
+      <div class="placeholder">
+       좌석배치도 이미지 자리
+       <br/>
+       시트 연동 예정
+      </div>
+     </div>
+    </section>
+    <section class="section" id="stickerSection">
+     <div class="section-title">
+      <h2>
+       Sticker Menu
+      </h2>
+      <span>
+       스티커샵
+      </span>
+     </div>
+     <div class="sticker-section">
+      <p class="kicker">
+       Everyone Gets
+      </p>
+      <h3 class="category-title">
+       10주년 기념 스티커셋
+      </h3>
+      <p class="desc">
+       🎁 모든 참석자에게 제공됩니다. 
+        <br/>
+        별도 선택 없이 리셉션에서 함께 수령하실 수 있습니다.
+      </p>
+      <div class="placeholder">
+       10주년 기념 스티커셋
+       <br/>
+       이미지 자리
+      </div>
+     </div>
+     <div class="sticker-section">
+      <p class="kicker">
+       2026.06.01 Exclusive
+      </p>
+      <h3 class="category-title">
+       Team Nutrition Facts Stickers
+      </h3>
+      <p class="desc">
+       2026년 6월 1일, 
+       <br/> 
+       TAGby와 함께하고 있는 구성원들을 위한 스티커입니다.
+      </p>
+      <div class="carousel-shell">
+       <div class="h-carousel" id="exclusiveGrid">
+       </div>
+       <div class="carousel-actions">
+        <button class="arrow" onclick="moveCarousel('exclusiveGrid',-1)">
+         ‹
+        </button>
+        <span class="carousel-label">
+         옆으로 넘겨 다른 팀 디자인을 구경해보세요.
+        </span>
+        <button class="arrow" onclick="moveCarousel('exclusiveGrid',1)">
+         ›
+        </button>
+       </div>
+      </div>
+     </div>
+     <div class="sticker-section">
+      <p class="kicker">
+       Team Exclusive
+      </p>
+      <h3 class="category-title">
+       Team LOGO Stickers
+      </h3>
+      <p class="desc">
+       팀별 로고 카드가 4종씩 표시됩니다. 
+       <br/>
+       소속팀 로고 스티커 4종 중 1개를 선택해 장바구니에 담아주세요.
+      </p>
+      <div class="carousel-shell">
+       <div class="h-carousel" id="teamLogoGrid">
+       </div>
+       <div class="carousel-actions">
+        <button class="arrow" onclick="moveCarousel('teamLogoGrid',-1)">
+         ‹
+        </button>
+        <span class="carousel-label">
+         팀별 카드가 4종씩 표시됩니다.
+        </span>
+        <button class="arrow" onclick="moveCarousel('teamLogoGrid',1)">
+         ›
+        </button>
+       </div>
+      </div>
+     </div>
+     <div class="sticker-section">
+      <p class="kicker">
+       Limited ONLY
+      </p>
+      <h3 class="category-title">
+       TAGby 밈 스티커
+      </h3>
+      <p class="desc">
+       선착순 수령 스티커입니다. 
+       <br/>
+       1인당 1개까지 선택할 수 있습니다.
+      </p>
+      <div class="carousel-shell">
+       <div class="h-carousel" id="memeGrid">
+       </div>
+       <div class="carousel-actions">
+        <button class="arrow" onclick="moveCarousel('memeGrid',-1)">
+         ‹
+        </button>
+        <span class="carousel-label">
+         한 장씩 크게 확인할 수 있습니다.
+        </span>
+        <button class="arrow" onclick="moveCarousel('memeGrid',1)">
+         ›
+        </button>
+       </div>
+      </div>
+     </div>
+    </section>
+    <section class="section" id="receiveSection">
+     <div class="section-title">
+      <h2>
+       수령 확인
+      </h2>
+      <span>
+       리셉션 제시용
+      </span>
+     </div>
+     <div class="card">
+      <p class="notice">
+       리셉션에서 해당 화면을 보여주시면 선택한 스티커를 오피피 봉투에 담아드립니다 :)
+      </p>
+      <ul class="cart-list" id="cartList">
+      </ul>
+      <button class="primary" onclick="openReceivePanel()">
+       스티커 수령 확인
+      </button>
+      <div class="code-panel hidden" id="codePanel">
+       <div class="field">
+        <label for="staffCodeInput">
+         운영진 확인 코드
+        </label>
+        <input id="staffCodeInput" placeholder="운영진 확인 코드 입력" type="text"/>
+       </div>
+       <button class="primary" onclick="confirmReceive()">
+        최종 수령 완료 처리
+       </button>
+       <p class="error hidden" id="receiveError">
+       </p>
+      </div>
+     </div>
+    </section>
+    <div class="bottom-safe">
     </div>
+   </section>
+  </main>
+  <div class="toast hidden" id="toast">
   </div>
-</section>
-
-<section class="section" id="timelineSection"><div class="section-title"><h2>Time Table</h2><span>오늘의 순서</span></div><div class="card"><ul class="timeline" id="timelineList"></ul></div></section>
-<section class="section" id="seatSection"><div class="section-title"><h2>Seat Map</h2><span>좌석배치도</span></div><div class="card"><div class="placeholder">좌석배치도 이미지 자리<br>시트 연동 예정</div></div></section>
-
-<section class="section" id="stickerSection">
-  <div class="section-title"><h2>Sticker Menu</h2><span>스티커샵</span></div>
-
-  <div class="sticker-section">
-    <p class="kicker">Everyone Gets</p><h3 class="category-title">10주년 기념 스티커셋</h3>
-    <p class="desc">🎁 모든 참석자에게 제공됩니다. 별도 선택 없이 리셉션에서 함께 수령하실 수 있습니다.</p>
-    <div class="placeholder">10주년 기념 스티커셋<br>이미지 자리</div>
-  </div>
-
-  <div class="sticker-section">
-    <p class="kicker">2026.06.01 Exclusive</p><h3 class="category-title">Team Nutrition Stickers</h3>
-    <p class="desc">2026년 6월 1일, TAGby와 함께하고 있는 구성원들을 위한 스티커입니다.</p>
-    <div class="carousel-shell">
-      <div class="h-carousel" id="exclusiveGrid"></div>
-      <div class="carousel-actions"><button class="arrow" onclick="moveCarousel('exclusiveGrid',-1)">‹</button><span class="carousel-label">옆으로 넘겨 다른 팀 디자인을 구경해보세요.</span><button class="arrow" onclick="moveCarousel('exclusiveGrid',1)">›</button></div>
-    </div>
-  </div>
-
-  <div class="sticker-section">
-    <p class="kicker">Team Logo</p><h3 class="category-title">소속팀 로고 스티커</h3>
-    <p class="desc">팀별 로고 카드가 4종씩 표시됩니다. 소속팀 로고 스티커 4종 중 1개를 선택해 장바구니에 담아주세요.</p>
-    <div class="carousel-shell">
-      <div class="h-carousel" id="teamLogoGrid"></div>
-      <div class="carousel-actions"><button class="arrow" onclick="moveCarousel('teamLogoGrid',-1)">‹</button><span class="carousel-label">팀별 카드가 4종씩 표시됩니다.</span><button class="arrow" onclick="moveCarousel('teamLogoGrid',1)">›</button></div>
-    </div>
-  </div>
-
-  <div class="sticker-section">
-    <p class="kicker">Limited Stickers</p><h3 class="category-title">TAGby 밈 스티커</h3>
-    <p class="desc">선착순 수령 스티커입니다. 1인당 1개까지 선택할 수 있습니다.</p>
-    <div class="carousel-shell">
-      <div class="h-carousel" id="memeGrid"></div>
-      <div class="carousel-actions"><button class="arrow" onclick="moveCarousel('memeGrid',-1)">‹</button><span class="carousel-label">한 장씩 크게 확인할 수 있습니다.</span><button class="arrow" onclick="moveCarousel('memeGrid',1)">›</button></div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="receiveSection">
-  <div class="section-title"><h2>수령 확인</h2><span>리셉션 제시용</span></div>
-  <div class="card">
-    <p class="notice">리셉션에서 해당 화면을 보여주시면 선택한 스티커를 오피피 봉투에 담아드립니다 :)</p>
-    <ul class="cart-list" id="cartList"></ul>
-    <button class="primary" onclick="openReceivePanel()">스티커 수령 확인</button>
-    <div id="codePanel" class="code-panel hidden">
-      <div class="field"><label for="staffCodeInput">운영진 확인 코드</label><input id="staffCodeInput" type="text" placeholder="운영진 확인 코드 입력"></div>
-      <button class="primary" onclick="confirmReceive()">최종 수령 완료 처리</button>
-      <p id="receiveError" class="error hidden"></p>
-    </div>
-  </div>
-</section>
-<div class="bottom-safe"></div>
-</section>
-</main>
-<div id="toast" class="toast hidden"></div>
-
-<script>
-const TEST_USER={name:'홍길동',email:'gildong@tagby.io',team:'GNM'}, STAFF_CODE='TAG10', STORAGE_KEY='tagby10th_user', RECEIVED_KEY='tagby10th_received';
+  <script>
+   const TEST_USER={name:'홍길동',email:'gildong@tagby.io',team:'GNM'}, STAFF_CODE='TAG10', STORAGE_KEY='tagby10th_user', RECEIVED_KEY='tagby10th_received';
 const timelineData=[['14:00','입장 / 포토존 / 자유 교류'],['15:00','태그바이 10년 히스토리'],['15:30','개인 회고 세션'],['16:00','레크리에이션'],['18:00','저녁 식사']];
 const exclusiveStickers=['GNM','Product','Design Business','Affiliate','IMC Marketing','Creative','Sales','Finance','Strategy'].map(t=>({id:'nutrition_'+slug(t),name:t+' Nutrition',team:t}));
 const teamNames=['GNM','Product','Design Business','Affiliate','IMC Marketing','Creative','Sales','Finance','Strategy'];
@@ -178,6 +416,6 @@ function setActiveNav(id){const map={timelineSection:'navTimeline',seatSection:'
 function bindNavObserver(){if(window.navBound)return;window.navBound=true;const sections=['timelineSection','seatSection','stickerSection'];const obs=new IntersectionObserver(entries=>{const v=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(v)setActiveNav(v.target.id)},{threshold:[.25,.4,.6],rootMargin:'-70px 0px -45% 0px'});sections.forEach(id=>obs.observe(document.getElementById(id)))}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hidden');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.add('hidden'),1800)}
 (function boot(){const saved=localStorage.getItem(STORAGE_KEY);if(saved){currentUser=JSON.parse(saved);enterMain()}})();
-</script>
-</body>
+  </script>
+ </body>
 </html>
