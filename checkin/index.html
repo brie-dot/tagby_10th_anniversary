@@ -7,7 +7,7 @@
    TAGby 10th Check-in
   </title>
   <style>
-   :root{--blue:#0057ff;--soft:#eef3ff;--bg:#f5f7fb;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--danger:#ef4444;--shadow:0 14px 34px rgba(15,23,42,.08);--r:26px}
+   :root{--blue:#0078FF;--sub-blue:#529AF8;--soft:#EAF4FF;--bg:#f5f7fb;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--success:#0CA678;--danger:#F14646;--shadow:0 14px 34px rgba(15,23,42,.08);--r:26px}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Segoe UI",sans-serif;background:var(--blue);color:var(--text)}button,input{font-family:inherit}button{cursor:pointer}.hidden{display:none!important}
 .app{max-width:480px;min-height:100vh;margin:0 auto;background:var(--blue)}
 .login-screen{min-height:100vh;padding:34px 22px;display:flex;flex-direction:column;justify-content:center;background:var(--blue);color:#fff}
@@ -15,19 +15,31 @@
 .login-card{padding:24px;color:var(--text)}.eyebrow{margin:0 0 12px;font-size:13px;font-weight:900;letter-spacing:.08em;opacity:.78}.login-title{margin:0;font-size:32px;line-height:1.12;letter-spacing:-.05em}.login-desc{margin:14px 0 24px;color:var(--muted);font-size:15px;line-height:1.55}
 .field{margin-bottom:14px}.field label{display:block;margin-bottom:7px;font-size:13px;font-weight:900}.field input{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px 15px;font-size:16px;outline:none;background:#f9fafb}.field input:focus{border-color:var(--blue);background:#fff}
 .primary{width:100%;border:0;border-radius:18px;padding:15px 18px;background:var(--blue);color:#fff;font-size:16px;font-weight:900}.error{margin-top:12px;color:var(--danger);font-size:13px;font-weight:800;line-height:1.5}
-#mainScreen{background:var(--blue);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 14px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(229,231,235,.86)}
-.top-nav button{border:1px solid var(--line);border-radius:999px;background:#fff;padding:10px 6px;font-size:12px;font-weight:900;color:var(--text);transition:.2s}.top-nav button.active{background:var(--blue);border-color:var(--blue);color:#fff}
-.status-wrap{padding:18px 18px 0}.status-card{padding:18px}.status-card.received{background:#111827;color:#fff;border-color:#111827}.status-title{margin:0 0 8px;font-size:20px;font-weight:900;letter-spacing:-.03em}.status-desc{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.received .status-desc{color:rgba(255,255,255,.78)}.cta{margin-top:14px;border:0;border-radius:16px;padding:13px 16px;background:#fff;color:#111827;font-weight:900;font-size:14px}
-.intro-wrap{padding:18px}.intro{overflow:hidden;border-radius:32px;box-shadow:var(--shadow)}.intro-track{display:flex;transition:transform .28s ease;touch-action:pan-y}.intro-slide{min-width:100%;min-height:500px;padding:30px 24px;display:flex;flex-direction:column;justify-content:space-between;background:#fff}.intro-slide.blue{background:var(--blue);color:#fff}.intro-slide.soft{background:linear-gradient(160deg,#fff 0%,#eef3ff 100%)}.intro-slide h1,.intro-slide h2{margin:0;font-size:32px;line-height:1.14;letter-spacing:-.05em}.intro-desc{margin:18px 0 0;font-size:16px;line-height:1.6;opacity:.88}
+#mainScreen{background:var(--blue);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 14px;background:var(--blue);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.18)}
+.top-nav button{border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.16);padding:10px 6px;font-size:12px;font-weight:900;color:#fff;transition:.2s}.top-nav button.active{background:#fff;border-color:#fff;color:var(--blue);box-shadow:0 8px 18px rgba(0,0,0,.08)}
+.status-wrap{padding:18px 18px 0}.status-card{padding:18px}.status-card.received{background:var(--success);color:#fff;border-color:var(--success)}.status-title{margin:0 0 8px;font-size:20px;font-weight:900;letter-spacing:-.03em}.status-desc{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.received .status-desc{color:rgba(255,255,255,.78)}.cta{margin-top:14px;border:0;border-radius:16px;padding:13px 16px;background:#fff;color:#111827;font-weight:900;font-size:14px}
+.intro-wrap{padding:18px}.intro{overflow:hidden;border-radius:32px;box-shadow:var(--shadow)}.intro-track{display:flex;transition:transform .28s ease;touch-action:pan-y}.intro-slide{min-width:100%;min-height:500px;padding:30px 24px;display:flex;flex-direction:column;justify-content:space-between;background:#fff}.intro-slide.blue{
+  background:#fff;
+  color:var(--blue);
+}.intro-slide.soft{background:linear-gradient(160deg,#fff 0%,#EAF4FF 100%)}.intro-slide h1,.intro-slide h2{margin:0;font-size:32px;line-height:1.14;letter-spacing:-.05em}.intro-desc{margin:18px 0 0;font-size:16px;line-height:1.6;opacity:.88}
 .mission-list{display:grid;gap:12px;margin:24px 0 0;padding:0;list-style:none}.mission-item{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:15px;background:#fff;border:1px solid var(--line);border-radius:20px}.mission-number{width:34px;height:34px;border-radius:999px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900}.mission-text{margin:0;font-size:15px;line-height:1.5;font-weight:800}
-.slide-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px}.slide-btn{min-width:82px;border:0;border-radius:999px;padding:12px 16px;background:#111827;color:#fff;font-size:14px;font-weight:900}.blue .slide-btn{background:#fff;color:var(--blue)}.slide-dots{display:flex;gap:7px;justify-content:center;flex:1}.slide-dot{width:7px;height:7px;border-radius:999px;background:#cbd5e1;transition:.2s}.slide-dot.active{width:22px;background:var(--blue)}.blue .slide-dot{background:rgba(255,255,255,.45)}.blue .slide-dot.active{background:#fff}
+.slide-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px}.slide-btn{min-width:82px;border:0;border-radius:999px;padding:12px 16px;background:var(--blue);color:#fff;font-size:14px;font-weight:900}.blue .slide-btn{
+  background:var(--blue);
+  color:#fff;
+}.slide-dots{display:flex;gap:7px;justify-content:center;flex:1}.slide-dot{width:7px;height:7px;border-radius:999px;background:#BFD6F5;transition:.2s}.slide-dot.active{width:22px;background:var(--blue)}.blue .slide-dot{
+  background:#BFD6F5;
+}
+
+.blue .slide-dot.active{
+  background:var(--blue);
+}
 .section{padding:24px 18px}.section-title{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;color:#fff}.section-title h2{margin:0;font-size:24px;letter-spacing:-.04em}.section-title span{font-size:12px;font-weight:800;opacity:.8}.card{padding:18px}
 .timeline{margin:0;padding:0;list-style:none;display:grid;gap:12px}.timeline li{display:grid;grid-template-columns:72px 1fr;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}.timeline li:last-child{border-bottom:0;padding-bottom:0}.time{color:var(--blue);font-weight:900}.timeline p{margin:0;font-weight:900;line-height:1.45}
-.placeholder{min-height:250px;border:2px dashed #cbd5e1;border-radius:22px;background:linear-gradient(135deg,#f8fafc,#eef2ff);display:flex;align-items:center;justify-content:center;text-align:center;color:#94a3b8;font-size:15px;font-weight:900;line-height:1.5}
+.placeholder{min-height:250px;border:2px dashed #BFD6F5;border-radius:22px;background:linear-gradient(135deg,#f8fafc,#eef2ff);display:flex;align-items:center;justify-content:center;text-align:center;color:#7A93B8;font-size:15px;font-weight:900;line-height:1.5}
 .sticker-section{padding:18px;margin-bottom:18px}.kicker{margin:0 0 6px;color:var(--blue);font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.category-title{margin:0;font-size:22px;font-weight:900;letter-spacing:-.04em}.desc{margin:8px 0 14px;color:var(--muted);font-size:14px;line-height:1.55}
 .carousel-shell{position:relative}.h-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x}.h-carousel::-webkit-scrollbar{display:none}
 .nutrition-card{flex:0 0 100%;scroll-snap-align:start}.logo-team{flex:0 0 100%;scroll-snap-align:start}.meme-card{flex:0 0 100%;scroll-snap-align:start}
-.sticker-card,.logo-team-inner,.logo-option{border:1px solid var(--line);border-radius:20px;padding:12px;background:#fff}.disabled{opacity:.48}.sticker-img{width:100%;aspect-ratio:1/1;border:2px dashed #cbd5e1;border-radius:16px;background:linear-gradient(135deg,#f8fafc,#eef2ff);display:flex;align-items:center;justify-content:center;text-align:center;color:#94a3b8;font-size:12px;font-weight:900;line-height:1.4;margin-bottom:10px}.sticker-name{margin:0 0 4px;font-size:14px;font-weight:900;line-height:1.35}.sticker-meta{margin:0;color:var(--muted);font-size:12px;font-weight:700}
+.sticker-card,.logo-team-inner,.logo-option{border:1px solid var(--line);border-radius:20px;padding:12px;background:#fff}.disabled{opacity:.48}.sticker-img{width:100%;aspect-ratio:1/1;border:2px dashed #BFD6F5;border-radius:16px;background:linear-gradient(135deg,#f8fafc,#eef2ff);display:flex;align-items:center;justify-content:center;text-align:center;color:#7A93B8;font-size:12px;font-weight:900;line-height:1.4;margin-bottom:10px}.sticker-name{margin:0 0 4px;font-size:14px;font-weight:900;line-height:1.35}.sticker-meta{margin:0;color:var(--muted);font-size:12px;font-weight:700}
 .logo-title{
   margin:0 0 10px;
   font-size:16px;
@@ -80,11 +92,19 @@
   font-weight:900
 }
 
-.add-btn.selected{background:#111827}
+.add-btn.selected{background:var(--success)}
 .add-btn:disabled{background:#d1d5db;color:#6b7280;cursor:not-allowed}
 .carousel-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}.arrow{width:44px;height:44px;border:0;border-radius:999px;background:#fff;color:var(--text);font-size:22px;font-weight:900;box-shadow:0 8px 18px rgba(15,23,42,.08)}.carousel-label{flex:1;text-align:center;color:var(--muted);font-size:12px;font-weight:900}
 .cart-list{margin:0 0 14px;padding:0;list-style:none;display:grid;gap:10px}.cart-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#f9fafb;border:1px solid var(--line);border-radius:16px}.cart-item strong{font-size:14px}.cart-item span{color:var(--muted);font-size:12px;font-weight:800}.remove{border:0;border-radius:999px;padding:8px 10px;background:#fff;color:var(--danger);font-size:12px;font-weight:900}.notice{border-radius:18px;padding:14px;background:var(--soft);color:var(--blue);font-size:14px;line-height:1.55;font-weight:800;margin-bottom:14px}.code-panel{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
-.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:100;width:calc(100% - 36px);max-width:440px;border-radius:18px;padding:14px 16px;background:#111827;color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:var(--shadow)}.bottom-safe{height:34px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:100;width:calc(100% - 36px);max-width:440px;border-radius:18px;padding:14px 16px;background:var(--blue);color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:var(--shadow)}
+.sticker-real-img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+.bottom-safe{height:34px}
   </style>
  </head>
  <body>
@@ -441,7 +461,32 @@ const timelineData=[['14:00','입장 / 포토존 / 자유 교류'],['15:00','태
 const exclusiveStickers=['GNM','Product','Design Business','Affiliate','IMC Marketing','Creative','Sales','Finance','Strategy'].map(t=>({id:'nutrition_'+slug(t),name:t+' Nutrition',team:t}));
 const teamNames=['GNM','Product','Design Business','Affiliate','IMC Marketing','Creative','Sales','Finance','Strategy'];
 const allTeamLogoStickers=teamNames.flatMap(t=>[1,2,3,4].map(n=>({id:slug(t)+'_logo_'+String(n).padStart(2,'0'),name:t+' Logo '+String(n).padStart(2,'0'),team:t,category:'team_logo',stock:18,remain:18})));
-const memeStickers=[1,2,3].map(n=>({id:'meme_0'+n,name:'TAGby Meme 0'+n,category:'meme',stock:15,remain:15}));
+const memeStickers=[
+  {
+    id:'meme_01',
+    name:'TAGby DNA',
+    category:'meme',
+    stock:15,
+    remain:15,
+    image:'images/meme-tagby-dna.png?v=1'
+  },
+  {
+    id:'meme_02',
+    name:'Oldschool',
+    category:'meme',
+    stock:15,
+    remain:15,
+    image:'images/meme-oldschool.png?v=1'
+  },
+  {
+    id:'meme_03',
+    name:'초고수',
+    category:'meme',
+    stock:15,
+    remain:15,
+    image:'images/meme-chogosu.png?v=1'
+  }
+];
 let currentUser=null,cart=[],received=false,currentIntroIndex=0,introTouchStartX=0,introTouchEndX=0;
 
 function slug(t){return t.toLowerCase().replaceAll(' ','_')}
@@ -451,9 +496,27 @@ function showError(el,msg){el.textContent=msg;el.classList.remove('hidden')}
 function enterMain(){document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainScreen').classList.remove('hidden');document.getElementById('welcomeName').textContent=currentUser.name;received=localStorage.getItem(RECEIVED_KEY)==='true';renderAll();updateStatusCard();bindNavObserver()}
 function renderAll(){renderIntroDots();updateIntroSlide();bindIntroSwipe();renderTimeline();renderExclusive();renderTeamLogo();renderMemes();renderCart()}
 function renderTimeline(){document.getElementById('timelineList').innerHTML=timelineData.map(i=>`<li><span class="time">${i[0]}</span><p>${i[1]}</p></li>`).join('')}
-function renderExclusive(){document.getElementById('exclusiveGrid').innerHTML=exclusiveStickers.map(s=>`<article class="sticker-card nutrition-card"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.team}</p></article>`).join('')}
-function renderTeamLogo(){const selected=cart.find(i=>i.category==='team_logo');document.getElementById('teamLogoGrid').innerHTML=teamNames.map(team=>{const logos=allTeamLogoStickers.filter(s=>s.team===team),mine=team===currentUser.team;return `<article class="logo-team"><div class="logo-team-inner ${mine?'':'disabled'}"><p class="logo-title">${team}</p><div class="logo-options">${logos.map(s=>{const sel=selected?.id===s.id,dis=!mine||(selected&&!sel)||received;return `<div class="logo-option ${dis&&!sel?'disabled':''}"><div class="sticker-img">이미지 자리<br>${s.name}</div><div class="logo-option-footer"><p class="sticker-meta">${s.remain} / ${s.stock}</p><button class="add-btn ${sel?'selected':''}" ${dis?'disabled':''} onclick="toggleCart('${s.id}','team_logo')">${!mine?'전용':sel?'선택됨':'담기'}</button></div></div>`}).join('')}</div></div></article>`}).join('')}
-function renderMemes(){const selected=cart.find(i=>i.category==='meme');document.getElementById('memeGrid').innerHTML=memeStickers.map(s=>{const sel=selected?.id===s.id,dis=selected&&!sel,sold=s.remain<=0;return `<article class="meme-card"><div class="sticker-card ${dis||sold?'disabled':''}"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.name}</p><p class="sticker-meta">잔여 ${s.remain} / ${s.stock}</p><button class="add-btn ${sel?'selected':''}" ${dis||sold||received?'disabled':''} onclick="toggleCart('${s.id}','meme')">${sold?'품절':sel?'선택됨':'담기'}</button></div></article>`}).join('')}
+function renderExclusive(){document.getElementById('exclusiveGrid').innerHTML=exclusiveStickers.map(s=>`<article class="sticker-card nutrition-card"><div class="sticker-img">
+  <img
+    src="images/nutrition-${slug(s.team)}.png?v=1"
+    alt="${s.team}"
+    class="sticker-real-img"
+  >
+</div><p class="sticker-name">${s.team}</p></article>`).join('')}
+function renderTeamLogo(){const selected=cart.find(i=>i.category==='team_logo');document.getElementById('teamLogoGrid').innerHTML=teamNames.map(team=>{const logos=allTeamLogoStickers.filter(s=>s.team===team),mine=team===currentUser.team;return `<article class="logo-team"><div class="logo-team-inner ${mine?'':'disabled'}"><p class="logo-title">${team}</p><div class="logo-options">${logos.map(s=>{const sel=selected?.id===s.id,dis=!mine||(selected&&!sel)||received;return `<div class="logo-option ${dis&&!sel?'disabled':''}"><div class="sticker-img">
+      <img
+        src="images/logo-${slug(s.team)}-${s.id.slice(-2)}.png?v=1"
+        alt="${s.name}"
+        class="sticker-real-img"
+      >
+    </div><div class="logo-option-footer"><p class="sticker-meta">${s.remain} / ${s.stock}</p><button class="add-btn ${sel?'selected':''}" ${dis?'disabled':''} onclick="toggleCart('${s.id}','team_logo')">${!mine?'전용':sel?'선택됨':'담기'}</button></div></div>`}).join('')}</div></div></article>`}).join('')}
+function renderMemes(){const selected=cart.find(i=>i.category==='meme');document.getElementById('memeGrid').innerHTML=memeStickers.map(s=>{const sel=selected?.id===s.id,dis=selected&&!sel,sold=s.remain<=0;return `<article class="meme-card"><div class="sticker-card ${dis||sold?'disabled':''}"><div class="sticker-img">
+      <img
+        src="images/logo-${slug(s.team)}-${s.id.slice(-2)}.png?v=1"
+        alt="${s.name}"
+        class="sticker-real-img"
+      >
+    </div><p class="sticker-name">${s.name}</p><p class="sticker-meta">잔여 ${s.remain} / ${s.stock}</p><button class="add-btn ${sel?'selected':''}" ${dis||sold||received?'disabled':''} onclick="toggleCart('${s.id}','meme')">${sold?'품절':sel?'선택됨':'담기'}</button></div></article>`}).join('')}
 function toggleCart(id,category){if(received)return toast('이미 스티커 수령이 완료되었습니다.');const ex=cart.find(i=>i.id===id);if(ex){cart=cart.filter(i=>i.id!==id);toast('장바구니에서 제거되었습니다.')}else{if(cart.find(i=>i.category===category))return toast(category==='meme'?'밈 스티커는 1개까지 선택 가능합니다.':'팀 로고 스티커는 1개까지 선택 가능합니다.');const src=category==='meme'?memeStickers.find(i=>i.id===id):allTeamLogoStickers.find(i=>i.id===id);cart.push(src);toast('장바구니에 담겼습니다 ✨')}renderTeamLogo();renderMemes();renderCart();document.getElementById('codePanel').classList.add('hidden')}
 function renderCart(){const el=document.getElementById('cartList');if(!cart.length){el.innerHTML='<li class="cart-item"><strong>아직 담은 스티커가 없습니다.</strong><span>스티커 메뉴판에서 담아주세요.</span></li>';return}el.innerHTML=cart.map(i=>`<li class="cart-item"><div><strong>${i.name}</strong><br><span>${i.category==='meme'?'Limited Stickers':'Team Logo'}</span></div>${received?'':`<button class="remove" onclick="toggleCart('${i.id}','${i.category}')">삭제</button>`}</li>`).join('')}
 function openReceivePanel(){if(received)return toast('이미 수령 완료 처리되었습니다.');if(!cart.length)return toast('수령할 스티커를 먼저 장바구니에 담아주세요.');document.getElementById('codePanel').classList.remove('hidden');document.getElementById('staffCodeInput').focus()}
