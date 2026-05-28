@@ -17,7 +17,7 @@
     }
 
     .screen {
-      width: 100vw;
+      width: 100%;
       min-height: 100vh;
       display: none;
       align-items: center;
@@ -25,17 +25,6 @@
       padding: 48px 64px;
     }
     .screen.active { display: flex; }
-    .quiz-screen {
-      position: relative;
-      background: #fff;
-      overflow: hidden !important;
-      padding: 0;
-      display: none;
-      flex-direction: column;
-      height: 100vh !important;
-      max-height: 100vh !important;
-    }
-
     .intro-screen {
       background: radial-gradient(circle at top left, #dbeafe 0, transparent 36%),
                   linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
@@ -636,7 +625,7 @@
        ★ 설정값
     ══════════════════════════════════════════════ */
     const QUIZ_PASSWORD  = "tagby2025";
-    const GITHUB_IMAGE_BASE = "https://raw.githubusercontent.com/brie-dot/tagby_10th_anniversary/main/recreation/images/";
+    const GITHUB_IMAGE_BASE = "https://brie-dot.github.io/tagby_10th_anniversary/recreation/images/";
     const SHEET_URL      = "https://docs.google.com/spreadsheets/d/1B6AtoVN8a4kBMX7xcGotZEhRS_NWBISjy5l8OCFn4O8/export?format=csv&gid=0";
     const SCORE_URL      = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpMTMpqFtQVyu9efUUp10kRvpQMza3Ur9JxVkqWfb_7JFLYmQGogHznVf9s3NpeJa9QMPjfGX3HTPH/pub?gid=355034406&single=true&output=csv";
     const TIMER_DURATION = 60;
