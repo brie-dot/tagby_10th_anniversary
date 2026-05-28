@@ -54,6 +54,20 @@
     .cart-list{margin:0 0 14px;padding:0;list-style:none;display:grid;gap:10px}.cart-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#f9fafb;border:1px solid var(--line);border-radius:16px}.cart-item strong{font-size:14px}.cart-item span{color:var(--muted);font-size:12px;font-weight:800}
     .remove-button{border:0;border-radius:999px;padding:8px 10px;background:#fff;color:var(--danger);font-size:12px;font-weight:900}.notice{border-radius:18px;padding:14px;background:var(--blue-soft);color:var(--blue);font-size:14px;line-height:1.55;font-weight:800;margin-bottom:14px}.code-panel{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
     .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:100;width:calc(100% - 36px);max-width:440px;border-radius:18px;padding:14px 16px;background:#111827;color:#fff;font-size:14px;font-weight:900;text-align:center;box-shadow:var(--shadow)}
+    .horizontal-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 12px;scrollbar-width:none}
+    .horizontal-carousel::-webkit-scrollbar{display:none}
+    .nutrition-slide{flex:0 0 60%;scroll-snap-align:start}
+    .logo-team-slide{flex:0 0 86%;scroll-snap-align:start}
+    .meme-slide{flex:0 0 100%;scroll-snap-align:start}
+    .logo-card{border:1px solid var(--line);border-radius:22px;padding:14px;background:#fff}
+    .logo-card-title{margin:0 0 10px;font-size:16px;font-weight:900;letter-spacing:-.03em}
+    .logo-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .logo-option{border:1px solid var(--line);border-radius:16px;padding:10px;background:#fff}
+    .logo-option.disabled{opacity:.48}
+    .logo-option .sticker-img{margin-bottom:8px}
+    .meme-slide .sticker-card{min-height:100%}
+    .meme-slide .sticker-img{aspect-ratio:1/1.05}
+    .carousel-hint{margin:8px 0 0;color:var(--muted);font-size:12px;font-weight:800}
     .bottom-safe{height:34px}
   </style>
 </head>
@@ -145,7 +159,7 @@
             <p class="category-kicker">2026.06.01 Exclusive</p><h3 class="category-title">Team Nutrition Stickers</h3>
             <p class="category-desc">2026년 6월 1일, TAGby와 함께하고 있는 구성원들을 위한 스티커입니다.</p>
           </div>
-          <div class="sticker-grid" id="exclusiveGrid"></div>
+          <div class="horizontal-carousel" id="exclusiveGrid"></div><p class="carousel-hint">옆으로 넘겨 다른 팀 디자인을 구경해보세요.</p>
         </div></div>
 
         <div class="sticker-category"><div class="sticker-section-card">
@@ -153,7 +167,7 @@
             <p class="category-kicker">Team Logo</p><h3 class="category-title">소속팀 로고 스티커</h3>
             <p class="category-desc">소속팀 로고 스티커 4종 중 1개를 선택해 장바구니에 담아주세요.</p>
           </div>
-          <div class="sticker-grid" id="teamLogoGrid"></div>
+          <div class="horizontal-carousel" id="teamLogoGrid"></div><p class="carousel-hint">팀별 로고 카드가 4종씩 표시됩니다. 소속팀 로고만 선택할 수 있습니다.</p>
         </div></div>
 
         <div class="sticker-category"><div class="sticker-section-card">
@@ -161,7 +175,7 @@
             <p class="category-kicker">Limited Stickers</p><h3 class="category-title">TAGby 밈 스티커</h3>
             <p class="category-desc">선착순 수령 스티커입니다. 1인당 1개까지 선택할 수 있습니다.</p>
           </div>
-          <div class="sticker-grid" id="memeGrid"></div>
+          <div class="horizontal-carousel" id="memeGrid"></div><p class="carousel-hint">밈 스티커는 한 장씩 크게 확인할 수 있습니다.</p>
         </div></div>
       </section>
 
@@ -211,7 +225,37 @@
       { id:'gnm_logo_03', name:'GNM Logo 03', team:'GNM', category:'team_logo', stock:18, remain:18 },
       { id:'gnm_logo_04', name:'GNM Logo 04', team:'GNM', category:'team_logo', stock:18, remain:18 },
       { id:'product_logo_01', name:'Product Logo 01', team:'Product', category:'team_logo', stock:18, remain:18 },
-      { id:'product_logo_02', name:'Product Logo 02', team:'Product', category:'team_logo', stock:18, remain:18 }
+      { id:'product_logo_02', name:'Product Logo 02', team:'Product', category:'team_logo', stock:18, remain:18 },
+      { id:'product_logo_03', name:'Product Logo 03', team:'Product', category:'team_logo', stock:18, remain:18 },
+      { id:'product_logo_04', name:'Product Logo 04', team:'Product', category:'team_logo', stock:18, remain:18 },
+      { id:'design_business_logo_01', name:'Design Business Logo 01', team:'Design Business', category:'team_logo', stock:18, remain:18 },
+      { id:'design_business_logo_02', name:'Design Business Logo 02', team:'Design Business', category:'team_logo', stock:18, remain:18 },
+      { id:'design_business_logo_03', name:'Design Business Logo 03', team:'Design Business', category:'team_logo', stock:18, remain:18 },
+      { id:'design_business_logo_04', name:'Design Business Logo 04', team:'Design Business', category:'team_logo', stock:18, remain:18 },
+      { id:'affiliate_logo_01', name:'Affiliate Logo 01', team:'Affiliate', category:'team_logo', stock:18, remain:18 },
+      { id:'affiliate_logo_02', name:'Affiliate Logo 02', team:'Affiliate', category:'team_logo', stock:18, remain:18 },
+      { id:'affiliate_logo_03', name:'Affiliate Logo 03', team:'Affiliate', category:'team_logo', stock:18, remain:18 },
+      { id:'affiliate_logo_04', name:'Affiliate Logo 04', team:'Affiliate', category:'team_logo', stock:18, remain:18 },
+      { id:'imc_marketing_logo_01', name:'IMC Marketing Logo 01', team:'IMC Marketing', category:'team_logo', stock:18, remain:18 },
+      { id:'imc_marketing_logo_02', name:'IMC Marketing Logo 02', team:'IMC Marketing', category:'team_logo', stock:18, remain:18 },
+      { id:'imc_marketing_logo_03', name:'IMC Marketing Logo 03', team:'IMC Marketing', category:'team_logo', stock:18, remain:18 },
+      { id:'imc_marketing_logo_04', name:'IMC Marketing Logo 04', team:'IMC Marketing', category:'team_logo', stock:18, remain:18 },
+      { id:'creative_logo_01', name:'Creative Logo 01', team:'Creative', category:'team_logo', stock:18, remain:18 },
+      { id:'creative_logo_02', name:'Creative Logo 02', team:'Creative', category:'team_logo', stock:18, remain:18 },
+      { id:'creative_logo_03', name:'Creative Logo 03', team:'Creative', category:'team_logo', stock:18, remain:18 },
+      { id:'creative_logo_04', name:'Creative Logo 04', team:'Creative', category:'team_logo', stock:18, remain:18 },
+      { id:'sales_logo_01', name:'Sales Logo 01', team:'Sales', category:'team_logo', stock:18, remain:18 },
+      { id:'sales_logo_02', name:'Sales Logo 02', team:'Sales', category:'team_logo', stock:18, remain:18 },
+      { id:'sales_logo_03', name:'Sales Logo 03', team:'Sales', category:'team_logo', stock:18, remain:18 },
+      { id:'sales_logo_04', name:'Sales Logo 04', team:'Sales', category:'team_logo', stock:18, remain:18 },
+      { id:'finance_logo_01', name:'Finance Logo 01', team:'Finance', category:'team_logo', stock:18, remain:18 },
+      { id:'finance_logo_02', name:'Finance Logo 02', team:'Finance', category:'team_logo', stock:18, remain:18 },
+      { id:'finance_logo_03', name:'Finance Logo 03', team:'Finance', category:'team_logo', stock:18, remain:18 },
+      { id:'finance_logo_04', name:'Finance Logo 04', team:'Finance', category:'team_logo', stock:18, remain:18 },
+      { id:'strategy_logo_01', name:'Strategy Logo 01', team:'Strategy', category:'team_logo', stock:18, remain:18 },
+      { id:'strategy_logo_02', name:'Strategy Logo 02', team:'Strategy', category:'team_logo', stock:18, remain:18 },
+      { id:'strategy_logo_03', name:'Strategy Logo 03', team:'Strategy', category:'team_logo', stock:18, remain:18 },
+      { id:'strategy_logo_04', name:'Strategy Logo 04', team:'Strategy', category:'team_logo', stock:18, remain:18 }
     ];
 
     const memeStickers = [
@@ -261,15 +305,49 @@
 
     function renderAll(){ renderIntroDots(); updateIntroSlide(); bindIntroSwipe(); renderTimeline(); renderExclusive(); renderTeamLogo(); renderMemes(); renderCart(); }
     function renderTimeline(){ document.getElementById('timelineList').innerHTML = timelineData.map(i=>`<li class="timeline-item"><span class="time">${i.time}</span><p class="timeline-title">${i.title}</p></li>`).join(''); }
-    function renderExclusive(){ document.getElementById('exclusiveGrid').innerHTML = exclusiveStickers.map(s=>`<article class="sticker-card"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.name}</p><p class="sticker-meta">${s.team}</p><span class="pill">2026.06.01 Exclusive</span></article>`).join(''); }
+    function renderExclusive(){
+      document.getElementById('exclusiveGrid').innerHTML = exclusiveStickers.map(s=>`
+        <article class="sticker-card nutrition-slide">
+          <div class="sticker-img">이미지 자리<br>${s.name}</div>
+          <p class="sticker-name">${s.name}</p>
+          <p class="sticker-meta">${s.team}</p>
+          <span class="pill">2026.06.01 Exclusive</span>
+        </article>
+      `).join('');
+    }
 
     function renderTeamLogo(){
-      const list = allTeamLogoStickers.filter(s=>s.team === currentUser.team);
       const selected = cart.find(i=>i.category === 'team_logo');
-      document.getElementById('teamLogoGrid').innerHTML = list.map(s=>{
-        const isSelected = selected?.id === s.id;
-        const isDisabled = selected && !isSelected;
-        return `<article class="sticker-card ${isDisabled?'disabled':''}"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.name}</p><p class="sticker-meta">잔여 ${s.remain} / ${s.stock}</p><button class="add-button ${isSelected?'selected':''}" ${isDisabled||received?'disabled':''} onclick="toggleCart('${s.id}','team_logo')">${isSelected?'선택됨':'담기'}</button></article>`;
+
+      const teams = [...new Set(allTeamLogoStickers.map(s => s.team))];
+      document.getElementById('teamLogoGrid').innerHTML = teams.map(team => {
+        const logos = allTeamLogoStickers.filter(s => s.team === team);
+        const isMyTeam = team === currentUser.team;
+
+        return `
+          <article class="logo-team-slide">
+            <div class="logo-card ${!isMyTeam ? 'disabled' : ''}">
+              <p class="logo-card-title">${team}</p>
+              <div class="logo-options">
+                ${logos.map(s => {
+                  const isSelected = selected?.id === s.id;
+                  const hasOtherSelected = selected && !isSelected;
+                  const isDisabled = !isMyTeam || hasOtherSelected || received;
+                  return `
+                    <div class="logo-option ${isDisabled && !isSelected ? 'disabled' : ''}">
+                      <div class="sticker-img">이미지 자리<br>${s.name}</div>
+                      <p class="sticker-name">${s.name}</p>
+                      <p class="sticker-meta">잔여 ${s.remain} / ${s.stock}</p>
+                      <button class="add-button ${isSelected ? 'selected' : ''}" ${isDisabled ? 'disabled' : ''} onclick="toggleCart('${s.id}','team_logo')">
+                        ${!isMyTeam ? '소속팀 전용' : isSelected ? '선택됨' : '담기'}
+                      </button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </article>
+        `;
       }).join('');
     }
 
@@ -279,7 +357,18 @@
         const isSelected = selected?.id === s.id;
         const isDisabled = selected && !isSelected;
         const isSoldOut = s.remain <= 0;
-        return `<article class="sticker-card ${isDisabled||isSoldOut?'disabled':''}"><div class="sticker-img">이미지 자리<br>${s.name}</div><p class="sticker-name">${s.name}</p><p class="sticker-meta">잔여 ${s.remain} / ${s.stock}</p><button class="add-button ${isSelected?'selected':''}" ${isDisabled||isSoldOut||received?'disabled':''} onclick="toggleCart('${s.id}','meme')">${isSoldOut?'품절':isSelected?'선택됨':'담기'}</button></article>`;
+        return `
+          <article class="meme-slide">
+            <div class="sticker-card ${isDisabled||isSoldOut?'disabled':''}">
+              <div class="sticker-img">이미지 자리<br>${s.name}</div>
+              <p class="sticker-name">${s.name}</p>
+              <p class="sticker-meta">잔여 ${s.remain} / ${s.stock}</p>
+              <button class="add-button ${isSelected?'selected':''}" ${isDisabled||isSoldOut||received?'disabled':''} onclick="toggleCart('${s.id}','meme')">
+                ${isSoldOut?'품절':isSelected?'선택됨':'담기'}
+              </button>
+            </div>
+          </article>
+        `;
       }).join('');
     }
 
