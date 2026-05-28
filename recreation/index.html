@@ -236,7 +236,7 @@
       inset: 0;
       background: rgba(220,38,38,0);
       pointer-events: none;
-      z-index: 2;
+      z-index: 20;
     }
     .quiz-screen.danger-mode::after { animation: screenFlash 0.45s infinite; }
 
@@ -289,7 +289,7 @@
     .q-num { font-size: clamp(34px, 4vmin, 64px); font-weight: 950; color: #0078FF; letter-spacing: -0.04em; }
     .question-type-badge { display: inline-block; padding: 4px 14px; border-radius: 999px; font-size: clamp(34px, 4vmin, 64px); font-weight: 900; letter-spacing: 0.01em; }
     .badge-subjective { background: #eff6ff; color: #0078FF; }
-    .badge-mcq        { background: #f0fdf4; color: #16a34a; }
+    .badge-mcq        { background: #f0fdf4; color: #0CA678; }
     .badge-image-mcq  { background: #fdf4ff; color: #9333ea; }
     .badge-image-subj { background: #fff7ed; color: #ea580c; }
 
@@ -365,7 +365,7 @@
       justify-content: center;
       gap: 12px;
     }
-    .option-item.correct { background: #dcfce7 !important; border-color: #16a34a !important; color: #15803d !important; }
+    .option-item.correct { background: #dcfce7 !important; border-color: #0CA678 !important; color: #15803d !important; }
     .option-item.incorrect { opacity: 0.35; }
 
     /* 옵션 이미지 */
@@ -416,10 +416,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 40px 14px 40px;
+      padding: 14px 40px;
       border-top: 1px solid #f3f4f6;
       background: #fff;
       z-index: 10;
+      width: 100%;
+      box-sizing: border-box;
     }
     .bottom-left {
       display: flex;
@@ -434,7 +436,7 @@
       line-height: 1;
       min-width: 160px;
     }
-    .bottom-timer.danger { color: #F14646; animation: shake 0.28s infinite; }
+    .bottom-timer.danger { color: #dc2626; animation: shake 0.28s infinite; }
     .timer-start-button {
       padding: 10px 24px; border-radius: 999px; background: #0078FF;
       color: #fff; font-size: 24px; font-weight: 900; border: 0;
@@ -651,7 +653,7 @@
     const GITHUB_IMAGE_BASE = "https://brie-dot.github.io/tagby_10th_anniversary/recreation/images/";
     const SHEET_URL      = "https://docs.google.com/spreadsheets/d/1B6AtoVN8a4kBMX7xcGotZEhRS_NWBISjy5l8OCFn4O8/export?format=csv&gid=0";
     const SCORE_URL      = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpMTMpqFtQVyu9efUUp10kRvpQMza3Ur9JxVkqWfb_7JFLYmQGogHznVf9s3NpeJa9QMPjfGX3HTPH/pub?gid=355034406&single=true&output=csv";
-    const TIMER_DURATION = 40;
+    const TIMER_DURATION = 60;
     const DANGER_AT      = 10;
 
     const TYPE = {
