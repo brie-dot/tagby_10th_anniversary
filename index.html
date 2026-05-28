@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <title>TAGby 10th Anniversary | Main Session</title>
   <style>
     :root {
-      --tagby-blue: #005BFF;
+      --tagby-blue: #0078FF;
       --deep-blue: #0038A8;
       --white: #ffffff;
       --soft-white: rgba(255, 255, 255, 0.82);
@@ -25,7 +28,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      font-family: "Noto Sans KR", sans-serif;
       background: var(--tagby-blue);
       color: var(--white);
     }
@@ -370,15 +373,15 @@
     }
 
     .gradient-stage-1 {
-      background: #005BFF;
+      background: #0078FF;
     }
 
     .gradient-stage-2 {
-      background: #003DB2;
+      background: #0262cf;
     }
 
     .gradient-stage-3 {
-      background: #232842;
+      background: #0251ab;
     }
 
     .gradient-stage-4 {
@@ -399,7 +402,14 @@
       border-radius: 28px;
       pointer-events: none;
     }
-
+    
+    .bg-photo-slide {
+      background-image: url("./10th_photo_bg.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    
     .image-stage {
       width: min(860px, 78vw);
       min-height: min(520px, 48vh);
@@ -820,10 +830,7 @@
       </div>
     </section>
 
-    <section class="slide">
-      <div class="mega-brand">TAGby</div>
-      <p class="subtitle">10th Anniversary</p>
-    </section>
+    <section class="slide bg-photo-slide"></section>
 
     <section class="slide exit-guide-slide">
       <div class="exit-guide-copy">
