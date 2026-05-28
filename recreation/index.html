@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🥳TAGby 10주년 기념 퀴즈쇼🎉</title>
+  <title>TAGby 10주년 기념 퀴즈쇼</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -26,17 +26,7 @@
       padding: 48px 64px;
     }
     .screen.active { display: flex; }
-    .quiz-screen {
-      position: relative;
-      background: #fff;
-      overflow: hidden !important;
-      padding: 0;
-      display: none;
-      flex-direction: column;
-      /* 화면 밖으로 터져 나가는 것 방지 */
-      height: 100vh !important;
-      max-height: 100vh !important;
-    }
+    .quiz-screen { height: 100vh; overflow: hidden; }
 
     /* ── 인트로 / 룰 스크린 ── */
     .intro-screen {
@@ -328,8 +318,6 @@
       overflow: hidden;
       min-height: 0;
       position: relative;
-      /* 내부 자식들이 부모 높이를 넘지 못하게 제어 */
-      max-height: calc(100vh - 160px);
     }
     .quiz-slides-track {
       display: flex;
@@ -340,12 +328,11 @@
     .quiz-slide {
       flex-shrink: 0;
       width: 100%;
-      height: 100% !important;
+      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      /* 상하 여백을 줄여 선택지 공간 확보 */
-      padding: 20px 80px !important;
+      padding: 48px 80px;
       overflow: hidden;
       box-sizing: border-box;
     }
@@ -444,31 +431,24 @@
     }
 
     /* 선택지 */
-    .options-area.visible {
-      display: flex !important;
-      /* 가로가 아닌 세로 정렬로 변경하여 폰트 크기 극대화 */
-      flex-direction: column !important;
-      /* 남은 높이를 다 쓰도록 설정 */
-      flex: 1 !important;
-      min-height: 0;
-      gap: 12px !important;
+    .options-area {
+      display: none;
+      flex-direction: row;
+      gap: 12px;
       width: 100%;
-      justify-content: center;
     }
+    .options-area.visible { display: flex; }
     .option-item {
-      /* 5개 보기가 남은 공간을 정확히 5등분 */
-      flex: 1 !important;
-      min-height: 0;
-      /* 상하 패딩을 줄이고 폰트 크기 대폭 확대 */
-      padding: 10px 32px !important;
-      font-size: clamp(32px, 3.5vw, 56px) !important;
-      font-weight: 800;
-      line-height: 1.2;
-      word-break: keep-all;
-      border-radius: 24px !important;
+      flex: 1;
+      padding: 32px 24px;
+      border-radius: 20px;
       background: #f8faff;
+      font-size: clamp(28px, 3vw, 48px);
+      font-weight: 800;
+      line-height: 1.4;
+      word-break: keep-all;
       transition: background 0.2s, opacity 0.2s, border 0.2s;
-      border: 3px solid #e5e7eb !important;
+      border: 2px solid #e5e7eb;
       display: flex;
       align-items: center;
     }
@@ -478,6 +458,28 @@
       color: #15803d !important;
     }
     .option-item.incorrect { opacity: 0.35; }
+
+    /* 옵션 이미지 */
+    .option-img {
+      display: block;
+      width: 100%;
+      max-height: 120px;
+      object-fit: contain;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .option-label { display: block; }
+
+    /* 정답 설명 */
+    .answer-desc {
+      margin-top: 20px;
+      font-size: clamp(22px, 2.5vw, 38px);
+      font-weight: 800;
+      color: #F14646;
+      line-height: 1.5;
+      word-break: keep-all;
+      white-space: pre-line;
+    }
 
     /* ── 정답 박스 ── */
     .answer-box {
@@ -877,7 +879,7 @@
     ══════════════════════════════════════════════ */
     const QUIZ_PASSWORD  = "tagby2025";   // ← 비밀번호 여기서 변경
 
-    const GITHUB_IMAGE_BASE = "https://raw.githubusercontent.com/YOUR_ORG/YOUR_REPO/main/images/";
+    const GITHUB_IMAGE_BASE = "https://raw.githubusercontent.com/brie-dot/tagby_10th_anniversary/main/recreation/images/";
     const SHEET_URL      = "https://docs.google.com/spreadsheets/d/1B6AtoVN8a4kBMX7xcGotZEhRS_NWBISjy5l8OCFn4O8/export?format=csv&gid=0";
     const SCORE_URL      = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpMTMpqFtQVyu9efUUp10kRvpQMza3Ur9JxVkqWfb_7JFLYmQGogHznVf9s3NpeJa9QMPjfGX3HTPH/pub?gid=355034406&single=true&output=csv";
     const TIMER_DURATION = 60;
@@ -902,47 +904,58 @@
     /* ── 룰 데이터 ── */
     const RULES = [
       { emoji: "👥", label: "RULE 1", main: "퀴즈는 팀전으로 진행됩니다.",                                               sub: "팀당 5~6인 구성" },
-      { emoji: "🤔", label: "RULE 2", main: "퀴즈는 두 가지 질문으로 나누어집니다.",                           sub: "1. 스케치북 퀴즈 2. 스피드 퀴즈" },
-      { emoji: "✍️", label: "RULE 3", main: "스케치북 퀴즈 : 40초 안에 스케치북에 정답을 적어 보여주세요.",  sub: "정답을 맞춘 모든 팀에게 1점을 부여합니다." },
-      { emoji: "⁉️", label: "RULE 4", main: "스피드 퀴즈 : 가장 먼저 팀명을 외친 팀부터 정답을 맞출 수 있습니다.",     sub: "최초의 1팀만 3점을 가져갑니다." },
-      { emoji: "🏆", label: "RULE 5", main: "모든 퀴즈 종료 후 점수가 높은 팀 순으로 최종 순위를 발표합니다." },
+      { emoji: "✍️", label: "RULE 2", main: "질문을 보고 전달받은 스케치북에 답을 작성해주세요." },
+      { emoji: "🏆", label: "RULE 3", main: "정답을 맞춘 팀에게 1점이 부여됩니다." },
+      { emoji: "📊", label: "RULE 4", main: "모든 퀴즈 종료 후 점수가 높은 팀 순으로 최종 순위를 발표합니다." },
     ];
 
-    /* ── 상품 설명 데이터 ── */
+    /* ── 상품 설명 데이터 (신규) ── */
     const PRIZES = [
       {
         emoji: "🎁",
         label: "TOTAL PRIZES",
         main: "총 61개의 상품이 준비되어 있습니다!",
-        sub: "아메리카노부터 신세계 상품권까지, 모든 상품은 랜덤 번호가 부여되어 있습니다."
+        sub: "최고가: 신세계상품권 5만원권\n최저가: 바나프레소 아메리카노+디저트 세트"
+      },
+      {
+        emoji: "🥇",
+        label: "1등 팀 특권",
+        main: "1등 팀은 만 원 이상 상품 풀에서 먼저 뽑습니다!",
+        sub: "1등 팀은 만원 이상 상품 확정!"
       },
       {
         emoji: "🎉",
         label: "ALL WIN",
-        main: "점수가 높은 팀부터 차례대로 랜덤 상품 교환권(번호표)를 뽑습니다.",
-        sub: "모든 참여자가 하나 이상의 상품을 받아가요! 아무도 빈손으로 돌아가지 않습니다 :)"
-      },
-      {
-        emoji: "🥇",
-        label: "1등 팀 특전",
-        main: "1등 팀은 1만원 이상의 상품 풀에서 먼저 뽑습니다!",
-        sub: "1등 팀이 뽑은 후 남은 교환권들을 포함하여 다음 뽑기를 이어갑니다"
+        main: "모든 참여자가 하나 이상의 상품을 받아가요!",
+        sub: "아무도 빈손으로 돌아가지 않습니다 :)"
       },
     ];
 
-    /* ── 상품 수령 안내 데이터 ── */
+    /* ── 상품 수령 안내 데이터 (기존 REC_RULES 교체) ── */
     const REC_RULES = [
       {
+        emoji: "📋",
+        label: "STEP 1",
+        main: "최종 순위 발표 후, 1등 팀부터 번호표를 뽑습니다.",
+        sub: "번호표는 랜덤으로 배정됩니다"
+      },
+      {
+        emoji: "🥇",
+        label: "STEP 2",
+        main: "1등 팀은 만 원 이상 상품으로만 구성된 번호 풀에서 뽑습니다.",
+        sub: "1등 팀 특별 혜택!"
+      },
+      {
         emoji: "🎁",
-        label: "유의 사항 1",
-        main: "상품 교환권은 잘 보관해주신 후, 모든 콘텐츠가 종료된 후 리셉션에 제시해주세요.",
-        sub: "리셉션에서 실물 상품으로 교환해드립니다."
+        label: "STEP 3",
+        main: "뽑은 번호에 해당하는 상품을 현장에서 수령합니다.",
+        sub: "상품 교환 및 양도는 불가합니다"
       },
       {
         emoji: "🎉",
-        label: "유의 사항 2",
-        main: "실물 상품이 아닌 기프티콘/모바일 교환권을 수령하신 경우 세리맨에게 DM으로 말씀해주세요!",
-        sub: "행사 종료 후 일괄적으로 전달드립니다."
+        label: "STEP 4",
+        main: "모든 참여자가 상품을 수령하면 행사가 마무리됩니다!",
+        sub: "오늘 함께해 주셔서 감사합니다 :)"
       },
     ];
 
@@ -1166,17 +1179,19 @@
       if (!rows.length) return [];
       const header = rows[0].map(c => String(c).trim().toLowerCase());
       const hasHeader = header.some(c =>
-        ["질문 넘버","질문","정답","타입","옵션","이미지",
-         "question","answer","num","type","options","image"].includes(c)
+        ["질문 넘버","질문","정답","타입","옵션","옵션이미지","질문이미지","정답설명",
+         "question","answer","num","type","options","option_image","image","description"].includes(c)
       );
       const body = hasHeader ? rows.slice(1) : rows;
       const idx = name => header.indexOf(name);
-      const ni = [idx("질문 넘버"), idx("num"), idx("번호"), idx("no"), 0].find(i => i >= 0);
-      const qi = [idx("질문"),      idx("question"), idx("문제"),  1].find(i => i >= 0);
-      const ai = [idx("정답"),      idx("answer"),   2].find(i => i >= 0);
-      const ti = [idx("타입"),      idx("type")].find(i => i >= 0) ?? -1;
-      const oi = [idx("옵션"),      idx("options")].find(i => i >= 0) ?? -1;
-      const ii = [idx("이미지"),    idx("image")].find(i => i >= 0) ?? -1;
+      const ni  = [idx("질문 넘버"), idx("num"), idx("번호"), idx("no"), 0].find(i => i >= 0);
+      const qi  = [idx("질문"),      idx("question"), idx("문제"),  1].find(i => i >= 0);
+      const ai  = [idx("정답"),      idx("answer"),   2].find(i => i >= 0);
+      const ti  = [idx("타입"),      idx("type")].find(i => i >= 0) ?? -1;
+      const oi  = [idx("옵션"),      idx("options")].find(i => i >= 0) ?? -1;
+      const oii = [idx("옵션이미지"), idx("option_image")].find(i => i >= 0) ?? -1;
+      const ii  = [idx("질문이미지"), idx("image")].find(i => i >= 0) ?? -1;
+      const di  = [idx("정답설명"),  idx("description")].find(i => i >= 0) ?? -1;
 
       return body
         .filter(r => r[qi]?.trim())
@@ -1185,18 +1200,24 @@
           const options = rawOptions
             ? rawOptions.split(/[;；]/).map(o => o.trim()).filter(Boolean)
             : [];
+          const rawOptionImages = (oii >= 0 && r[oii]) ? r[oii] : "";
+          const optionImages = rawOptionImages
+            ? rawOptionImages.split(/[;；]/).map(o => o.trim())
+            : [];
           const rawType = (ti >= 0 && r[ti]) ? r[ti].trim() : "";
           let type = TYPE.SUBJECTIVE;
           if      (rawType === "객관식")        type = TYPE.MCQ;
           else if (rawType === "객관식-이미지") type = TYPE.IMAGE_MCQ;
           else if (rawType === "주관식-이미지") type = TYPE.IMAGE_SUBJ;
-          const imageFile = (ii >= 0 && r[ii]) ? r[ii].trim() : "";
+          const imageFile  = (ii >= 0 && r[ii]) ? r[ii].trim() : "";
+          const answerDesc = (di >= 0 && r[di]) ? r[di].trim() : "";
           return {
             num     : r[ni] || i + 1,
             question: r[qi].trim(),
             answer  : (r[ai] || "정답 없음").trim(),
-            type, options,
+            type, options, optionImages,
             image   : imageFile,
+            answerDesc,
           };
         });
     }
@@ -1281,7 +1302,7 @@
       // 보기
       const hasMCQ = q.options.length > 0 && (q.type === TYPE.MCQ || q.type === TYPE.IMAGE_MCQ);
       if (hasMCQ) {
-        renderOptions(q.options, -1);
+        renderOptions(q.options, -1, q.optionImages);
         optionsArea.classList.add("visible");
       } else {
         optionsArea.classList.remove("visible");
@@ -1295,11 +1316,15 @@
       goToSlide(0);
     }
 
-    function renderOptions(options, correctIdx) {
+    function renderOptions(options, correctIdx, optionImages = []) {
       optionsArea.innerHTML = options.map((opt, i) => {
         let cls = "option-item";
         if (correctIdx >= 0) cls += i === correctIdx ? " correct" : " incorrect";
-        return `<div class="${cls}">${CIRCLE_NUMS[i] || (i+1)+"."} ${escapeHTML(opt)}</div>`;
+        const imgFile = optionImages[i] || "";
+        const imgHtml = imgFile
+          ? `<img src="${GITHUB_IMAGE_BASE}${imgFile}" class="option-img" alt="${escapeHTML(opt)}" />`
+          : "";
+        return `<div class="${cls}">${imgHtml}<span class="option-label">${CIRCLE_NUMS[i] || (i+1)+"."} ${escapeHTML(opt)}</span></div>`;
       }).join("");
     }
 
@@ -1354,9 +1379,12 @@
       setTimerDanger(false);
       const q = quizData[currentIndex];
       if ((q.type === TYPE.MCQ || q.type === TYPE.IMAGE_MCQ) && q.options.length) {
-        renderOptions(q.options, findCorrectOptionIndex(q));
+        renderOptions(q.options, findCorrectOptionIndex(q), q.optionImages);
       }
-      answerBox.innerHTML = `A. ${formatAnswer(q.answer)}`;
+      const descHtml = q.answerDesc
+        ? `<div class="answer-desc">${escapeHTML(q.answerDesc)}</div>`
+        : "";
+      answerBox.innerHTML = `A. ${formatAnswer(q.answer)}${descHtml}`;
       answerBox.classList.add("visible");
       slideQuestion.classList.add("answer-mode");
       startBtn.disabled = true;
