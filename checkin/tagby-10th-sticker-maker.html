@@ -264,23 +264,18 @@
       color: var(--text);
     }
 
-    .sheet-header {
-      height: 18%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .sheet-header.image-header {
+      height: 15%;
       padding: 0;
       pointer-events: none;
       position: relative;
       z-index: 5;
       overflow: hidden;
-    }
     
-    .sheet-banner {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+      background-image: url("./sheet-banner.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
     }
 
     .sheet-brand {
@@ -318,7 +313,7 @@
       position: absolute;
       left: 0;
       right: 0;
-      top: 18%;
+      top: 15%;
       bottom: 6.8%;
       overflow: hidden;
     }
@@ -407,8 +402,8 @@
       align-items: center;
       justify-content: center;
       color: #71717a;
-      font-size: clamp(10px, 2.8vw, 13px);
-      font-weight: 700;
+      font-size: clamp(8px, 2.2vw, 11px);
+      font-weight: 500;
       letter-spacing: 0.02em;
       pointer-events: none;
       z-index: 5;
@@ -590,19 +585,12 @@
       <section class="panel workspace">
         <div class="sheet-wrap">
           <div class="a6-sheet" id="a6Sheet" aria-label="A6 스티커 시트 미리보기">
-            <div class="sheet-header image-header">
-              <img
-                src="./sheet-banner.png"
-                alt="TAGby 10th Anniversary DIY Sticker Sheet"
-                class="sheet-banner"
-              />
-            </div>
-
+            <div class="sheet-header image-header"></div>
             <div class="sticker-stage" id="stickerStage">
               <div class="empty-hint" id="emptyHint">왼쪽 또는 아래 메뉴에서<br>스티커를 추가해주세요</div>
             </div>
 
-            <div class="sheet-footer">TAGby 2026.06.01</div>
+            <div class="sheet-footer" id="sheetFooter">TAGby</div>
           </div>
 
           <div class="controls">
@@ -651,6 +639,7 @@
     const downloadBtn = document.querySelector("#downloadBtn");
     const driveLink = document.querySelector("#driveLink");
     const toast = document.querySelector("#toast");
+    const sheetFooter = document.querySelector("#sheetFooter");
 
     let stickers = [];
     let currentCategory = "all";
@@ -667,6 +656,15 @@
       toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
     }
 
+    function getTodayText() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const date = String(today.getDate()).padStart(2, "0");
+    
+      return `TAGby ${year}.${month}.${date}`;
+    }
+    
     function isMobileDevice() {
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
       const isMobileUA = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(userAgent);
@@ -681,8 +679,8 @@
       setTimeout(() => {
         alert(
           "모바일에서는 저장이 안 되더라고요,,," +
-          "캡쳐,,, 또는 PC로 접속 부탁드려요" +
-          "비개발자의 한계입니다 🥹"
+          "캡쳐,,, 또는 PC로 접속 부탁드려요😭" +
+          "비개발자의 한계입니다 ˃̣̣̥ᯅ˂̣̣̥"
         );
       }, 250);
     }
@@ -1019,6 +1017,8 @@
     clearBtn.addEventListener("click", clearStickers);
     downloadBtn.addEventListener("click", downloadStickerSheet);
 
+    sheetFooter.textContent = getTodayText();
+    
     loadStickerManifest();
     updateCount();
     updateDownloadButtonLabel();
