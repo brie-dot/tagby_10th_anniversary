@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>TAGby 10th Anniversary DIY Sticker Sheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --tagby-blue: #006CFF;
+      --tagby-blue-dark: #0055cc;
+      --text: #1d1d1f;
+      --muted: #71717a;
+      --line: #e5e7eb;
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --shadow: 0 18px 50px rgba(15, 23, 42, 0.10);
+      --radius: 22px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top left, rgba(0, 108, 255, 0.12), transparent 34%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button, a {
+      font-family: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 28px 20px 34px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(26px, 5vw, 44px);
+      line-height: 1.05;
+      letter-spacing: -0.055em;
+    }
+
+    .hero .brand {
+      color: var(--tagby-blue);
+      font-weight: 800;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .drive-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 340px) 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(229, 231, 235, 0.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .sticker-panel {
+      padding: 18px;
+      position: sticky;
+      top: 18px;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .panel-title h2 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -0.03em;
+    }
+
+    .count-badge {
+      min-width: 28px;
+      height: 28px;
+      padding: 0 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(0, 108, 255, 0.10);
+      color: var(--tagby-blue);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+
+    .category-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: -2px 0 14px;
+    }
+
+    .category-tab {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .category-tab.is-active {
+      border-color: rgba(0, 108, 255, 0.26);
+      background: rgba(0, 108, 255, 0.10);
+      color: var(--tagby-blue);
+    }
+
+    .sticker-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      max-height: calc(100vh - 180px);
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .loading-message {
+      grid-column: 1 / -1;
+      padding: 18px 12px;
+      border: 1px dashed var(--line);
+      border-radius: 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .loading-message.error {
+      color: #b91c1c;
+      background: #fff5f5;
+    }
+
+    .sticker-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .sticker-preview {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #f8fafc, #eef4ff);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .sticker-preview img {
+      max-width: 82%;
+      max-height: 82%;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .sticker-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #3f3f46;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .add-btn {
+      border: 0;
+      background: var(--tagby-blue);
+      color: #fff;
+      border-radius: 999px;
+      height: 32px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .add-btn:active { transform: translateY(1px); }
+
+    .workspace {
+      padding: 20px;
+      display: grid;
+      place-items: center;
+      min-height: 680px;
+    }
+
+    .sheet-wrap {
+      width: min(100%, 440px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .a6-sheet {
+      width: min(100%, 420px);
+      aspect-ratio: 105 / 148;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.18);
+      overflow: hidden;
+      position: relative;
+      color: var(--text);
+    }
+
+    .sheet-header {
+      height: 15%;
+      width: 100%;
+      padding: 0;
+      pointer-events: none;
+      position: relative;
+      z-index: 5;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .sheet-banner {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .sticker-stage {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 15%;
+      bottom: 6.8%;
+      overflow: hidden;
+    }
+
+    .empty-hint {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+      color: #a1a1aa;
+      font-size: 14px;
+      line-height: 1.5;
+      pointer-events: none;
+    }
+
+    .placed-sticker {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 92px;
+      height: 92px;
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
+      transform-origin: center center;
+      display: grid;
+      place-items: center;
+    }
+
+    .placed-sticker:active { cursor: grabbing; }
+
+    .placed-sticker.is-active {
+      outline: 2px dashed rgba(0, 108, 255, 0.55);
+      outline-offset: 5px;
+      border-radius: 12px;
+    }
+
+    .placed-sticker img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .sheet-footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 6.8%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #71717a;
+      font-size: clamp(10px, 2.8vw, 13px);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .sheet-footer::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 62%;
+      height: 1px;
+      background: #e4e4e7;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .control-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      min-height: 42px;
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .control-btn.primary {
+      border-color: var(--tagby-blue);
+      background: var(--tagby-blue);
+      color: #fff;
+    }
+
+    .control-btn.danger {
+      color: #ef4444;
+    }
+
+    .usage-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(24px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(29, 29, 31, 0.92);
+      color: #fff;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.22s ease;
+      z-index: 1000;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 860px) {
+      .app {
+        padding: 22px 14px calc(96px + var(--safe-bottom));
+      }
+
+      .hero {
+        display: block;
+      }
+
+      .hero p { font-size: 14px; }
+
+      .drive-link {
+        margin-top: 14px;
+      }
+
+      .layout {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 14px;
+      }
+
+      .workspace {
+        width: 100%;
+        min-height: auto;
+        padding: 14px;
+      }
+
+      .sheet-wrap {
+        width: 100%;
+      }
+
+      .a6-sheet {
+        width: min(100%, 390px);
+        border-radius: 16px;
+      }
+
+      .sticker-panel {
+        position: static;
+        width: 100%;
+        padding: 14px;
+      }
+
+      .sticker-list {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        max-height: none;
+        padding-bottom: 4px;
+        scroll-snap-type: x mandatory;
+      }
+
+      .sticker-card {
+        min-width: 132px;
+        scroll-snap-align: start;
+      }
+
+      .controls {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 50;
+        padding: 10px 12px calc(10px + var(--safe-bottom));
+        background: rgba(246, 248, 251, 0.92);
+        backdrop-filter: blur(12px);
+        border-top: 1px solid rgba(229, 231, 235, 0.9);
+        justify-content: center;
+      }
+
+      .control-btn {
+        min-height: 44px;
+        padding: 10px 13px;
+        font-size: 13px;
+        flex: 1 1 auto;
+      }
+
+      .usage-note {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div>
+        <h1><span class="brand">TAGby</span><br>DIY Sticker Sheet</h1>
+        <p>스티커를 추가하고 위치를 옮긴 뒤, A6 세로형 PNG 이미지로 저장해보세요.</p>
+      </div>
+      <a class="drive-link" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer" id="driveLink">스티커 원본 폴더</a>
+    </header>
+
+    <section class="layout">
+      <aside class="panel sticker-panel">
+        <div class="panel-title">
+          <h2>스티커 메뉴판</h2>
+          <span class="count-badge" id="selectedCount">0</span>
+        </div>
+        <div class="category-tabs" id="categoryTabs" aria-label="스티커 카테고리"></div>
+        <div class="sticker-list" id="stickerList" aria-label="스티커 목록"></div>
+      </aside>
+
+      <section class="panel workspace">
+        <div class="sheet-wrap">
+          <div class="a6-sheet" id="a6Sheet" aria-label="A6 스티커 시트 미리보기">
+            <div class="sheet-header">
+              <img
+                src="./images/banner-sticker-sheet.png"
+                alt="TAGby 10th Anniversary DIY Sticker Sheet"
+                class="sheet-banner"
+                draggable="false"
+              />
+            </div>
+
+            <div class="sticker-stage" id="stickerStage">
+              <div class="empty-hint" id="emptyHint">왼쪽 또는 아래 메뉴에서<br>스티커를 추가해주세요</div>
+            </div>
+
+            <div class="sheet-footer">TAGby 2016–2026</div>
+          </div>
+
+          <div class="controls">
+            <button class="control-btn" type="button" id="shuffleBtn">🎲 랜덤배치</button>
+            <button class="control-btn danger" type="button" id="clearBtn">전체삭제</button>
+            <button class="control-btn primary" type="button" id="downloadBtn">PNG 다운로드</button>
+          </div>
+          <p class="usage-note">스티커는 드래그로 이동할 수 있고, 더블클릭하면 삭제됩니다.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // ✅ 현재 파일 위치: /checkin/tagby-10th-sticker.html
+    // ✅ 스티커 목록 파일: /checkin/stickers.json
+    // ✅ 스티커 이미지 폴더: /checkin/images/
+    // ✅ 저장 이미지 상단 배너: /checkin/images/banner-sticker-sheet.png
+    //
+    // stickers.json은 아래 두 형식을 모두 지원합니다.
+    // 1) 파일명만 적기: ["logo-tagby.png", "meme-happy.png"]
+    // 2) 객체로 적기: [{ "name": "TAGby", "src": "./images/logo-tagby.png" }]
+    // 파일명이 logo- / meme- / nutrition- 으로 시작하면 카테고리 탭에 자동 분류됩니다.
+
+    const stickerManifestUrl = "./stickers.json";
+
+    // ✅ 원본 스티커 Google Drive 폴더 링크를 여기에 넣어주세요.
+    const stickerOriginalDriveUrl = "https://drive.google.com/";
+
+    const categoryMeta = {
+      all: { label: "전체" },
+      logo: { label: "Logo" },
+      meme: { label: "Meme" },
+      nutrition: { label: "Nutrition" }
+    };
+
+    const stickerList = document.querySelector("#stickerList");
+    const categoryTabs = document.querySelector("#categoryTabs");
+    const stickerStage = document.querySelector("#stickerStage");
+    const a6Sheet = document.querySelector("#a6Sheet");
+    const emptyHint = document.querySelector("#emptyHint");
+    const selectedCount = document.querySelector("#selectedCount");
+    const shuffleBtn = document.querySelector("#shuffleBtn");
+    const clearBtn = document.querySelector("#clearBtn");
+    const downloadBtn = document.querySelector("#downloadBtn");
+    const driveLink = document.querySelector("#driveLink");
+    const toast = document.querySelector("#toast");
+
+    let stickers = [];
+    let currentCategory = "all";
+    let stickerIndex = 0;
+    let activeEl = null;
+    let toastTimer = null;
+
+    driveLink.href = stickerOriginalDriveUrl;
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function getFileNameFromPath(src) {
+      return String(src).split("/").pop() || "sticker.png";
+    }
+
+    function getCategoryFromFileName(fileName) {
+      const prefix = String(fileName).split("-")[0].toLowerCase();
+      return categoryMeta[prefix] ? prefix : "meme";
+    }
+
+    function makeDisplayName(fileName) {
+      const withoutExt = fileName.replace(/\.[^/.]+$/, "");
+      return withoutExt
+        .replace(/^(logo|meme|nutrition)-/i, "")
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
+    }
+
+    function normalizeSticker(item, index) {
+      const isString = typeof item === "string";
+      const rawSrc = isString ? item : item.src;
+      const fileName = getFileNameFromPath(rawSrc);
+      const src = rawSrc.startsWith("./") || rawSrc.startsWith("/") || rawSrc.startsWith("http")
+        ? rawSrc
+        : `./images/${rawSrc}`;
+      const category = (isString ? null : item.category) || getCategoryFromFileName(fileName);
+
+      return {
+        id: (isString ? fileName : item.id) || `${category}-${index}`,
+        name: (isString ? null : item.name) || makeDisplayName(fileName),
+        src,
+        category
+      };
+    }
+
+    async function loadStickerManifest() {
+      stickerList.innerHTML = `<div class="loading-message">스티커를 불러오는 중...</div>`;
+
+      try {
+        const response = await fetch(stickerManifestUrl, { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const manifest = await response.json();
+        stickers = manifest.map(normalizeSticker);
+
+        renderCategoryTabs();
+        renderStickerMenu();
+      } catch (error) {
+        console.error(error);
+        stickerList.innerHTML = `
+          <div class="loading-message error">
+            stickers.json을 불러오지 못했어요.<br>
+            checkin 폴더 안에 stickers.json이 있는지 확인해주세요.
+          </div>
+        `;
+        showToast("stickers.json 경로를 확인해주세요");
+      }
+    }
+
+    function renderCategoryTabs() {
+      const usedCategories = new Set(stickers.map(sticker => sticker.category));
+      const categories = ["all", "logo", "meme", "nutrition"].filter(category => {
+        return category === "all" || usedCategories.has(category);
+      });
+
+      categoryTabs.innerHTML = categories.map(category => `
+        <button class="category-tab ${category === currentCategory ? "is-active" : ""}" type="button" data-category="${category}">
+          ${categoryMeta[category].label}
+        </button>
+      `).join("");
+
+      categoryTabs.querySelectorAll(".category-tab").forEach(button => {
+        button.addEventListener("click", () => {
+          currentCategory = button.dataset.category;
+          renderCategoryTabs();
+          renderStickerMenu();
+        });
+      });
+    }
+
+    function renderStickerMenu() {
+      const visibleStickers = currentCategory === "all"
+        ? stickers
+        : stickers.filter(sticker => sticker.category === currentCategory);
+
+      if (!visibleStickers.length) {
+        stickerList.innerHTML = `<div class="loading-message">표시할 스티커가 없어요.</div>`;
+        return;
+      }
+
+      stickerList.innerHTML = visibleStickers.map(sticker => `
+        <article class="sticker-card">
+          <div class="sticker-preview">
+            <img src="${sticker.src}" alt="${sticker.name}" loading="lazy" onerror="this.style.display='none'; this.parentElement.textContent='이미지 경로 확인';" />
+          </div>
+          <div class="sticker-name" title="${sticker.name}">${sticker.name}</div>
+          <button class="add-btn" type="button" data-sticker-id="${sticker.id}">추가하기</button>
+        </article>
+      `).join("");
+
+      stickerList.querySelectorAll(".add-btn").forEach(button => {
+        button.addEventListener("click", () => {
+          const sticker = stickers.find(item => item.id === button.dataset.stickerId);
+          if (sticker) addSticker(sticker);
+        });
+      });
+    }
+
+    function getStageSize() {
+      return {
+        width: stickerStage.clientWidth,
+        height: stickerStage.clientHeight
+      };
+    }
+
+    function randomBetween(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function getRandomPlacement(size) {
+      const stage = getStageSize();
+      const x = randomBetween(12, Math.max(14, stage.width - size - 12));
+      const y = randomBetween(12, Math.max(14, stage.height - size - 12));
+      const rotate = randomBetween(-12, 12);
+      return { x, y, rotate };
+    }
+
+    function updateCount() {
+      const count = stickerStage.querySelectorAll(".placed-sticker").length;
+      selectedCount.textContent = count;
+      emptyHint.style.display = count ? "none" : "grid";
+    }
+
+    function setActive(el) {
+      if (activeEl) activeEl.classList.remove("is-active");
+      activeEl = el;
+      if (activeEl) activeEl.classList.add("is-active");
+    }
+
+    function addSticker(sticker) {
+      const stage = getStageSize();
+      const baseSize = Math.min(stage.width, stage.height);
+      const size = Math.round(randomBetween(baseSize * 0.18, baseSize * 0.27));
+      const placement = getRandomPlacement(size);
+
+      const el = document.createElement("div");
+      el.className = "placed-sticker";
+      el.dataset.id = `${sticker.id}-${stickerIndex++}`;
+      el.dataset.x = placement.x;
+      el.dataset.y = placement.y;
+      el.dataset.rotate = placement.rotate;
+      el.style.width = `${size}px`;
+      el.style.height = `${size}px`;
+      el.style.transform = `translate(${placement.x}px, ${placement.y}px) rotate(${placement.rotate}deg)`;
+      el.innerHTML = `<img src="${sticker.src}" alt="${sticker.name}" draggable="false" />`;
+
+      makeDraggable(el);
+      el.addEventListener("click", () => setActive(el));
+      el.addEventListener("dblclick", () => {
+        el.remove();
+        setActive(null);
+        updateCount();
+      });
+
+      stickerStage.appendChild(el);
+      setActive(el);
+      updateCount();
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function applyTransform(el) {
+      const x = Number(el.dataset.x || 0);
+      const y = Number(el.dataset.y || 0);
+      const rotate = Number(el.dataset.rotate || 0);
+      el.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
+    }
+
+    function makeDraggable(el) {
+      let startX = 0;
+      let startY = 0;
+      let originX = 0;
+      let originY = 0;
+      let isDragging = false;
+
+      el.addEventListener("pointerdown", event => {
+        event.preventDefault();
+        setActive(el);
+        isDragging = true;
+        startX = event.clientX;
+        startY = event.clientY;
+        originX = Number(el.dataset.x || 0);
+        originY = Number(el.dataset.y || 0);
+        el.setPointerCapture(event.pointerId);
+      });
+
+      el.addEventListener("pointermove", event => {
+        if (!isDragging) return;
+        const stage = getStageSize();
+        const nextX = originX + event.clientX - startX;
+        const nextY = originY + event.clientY - startY;
+        const maxX = stage.width - el.offsetWidth;
+        const maxY = stage.height - el.offsetHeight;
+        el.dataset.x = clamp(nextX, 0, maxX);
+        el.dataset.y = clamp(nextY, 0, maxY);
+        applyTransform(el);
+      });
+
+      el.addEventListener("pointerup", event => {
+        isDragging = false;
+        try { el.releasePointerCapture(event.pointerId); } catch (error) {}
+      });
+
+      el.addEventListener("pointercancel", () => {
+        isDragging = false;
+      });
+    }
+
+    function shuffleStickers() {
+      const placed = stickerStage.querySelectorAll(".placed-sticker");
+      if (!placed.length) {
+        showToast("먼저 스티커를 추가해주세요");
+        return;
+      }
+
+      placed.forEach(el => {
+        const size = el.offsetWidth;
+        const placement = getRandomPlacement(size);
+        el.dataset.x = placement.x;
+        el.dataset.y = placement.y;
+        el.dataset.rotate = placement.rotate;
+        applyTransform(el);
+      });
+      showToast("랜덤으로 다시 배치했어요");
+    }
+
+    function clearStickers() {
+      const placed = stickerStage.querySelectorAll(".placed-sticker");
+      if (!placed.length) {
+        showToast("삭제할 스티커가 없어요");
+        return;
+      }
+      placed.forEach(el => el.remove());
+      setActive(null);
+      updateCount();
+      showToast("전체 삭제했어요");
+    }
+
+    async function downloadStickerSheet() {
+      const placed = stickerStage.querySelectorAll(".placed-sticker");
+      if (!placed.length) {
+        showToast("스티커를 하나 이상 추가해주세요");
+        return;
+      }
+
+      setActive(null);
+      const originalText = downloadBtn.textContent;
+
+      try {
+        downloadBtn.disabled = true;
+        downloadBtn.textContent = "저장 준비중...";
+
+        // ✅ 저장할 A6 영역 안의 이미지가 전부 로딩될 때까지 기다립니다.
+        // 모바일 Safari/Chrome에서 저장이 무한 로딩처럼 보이는 문제를 줄여줍니다.
+        const images = a6Sheet.querySelectorAll("img");
+        await Promise.all(
+          Array.from(images).map(img => {
+            if (img.complete && img.naturalWidth !== 0) return Promise.resolve();
+
+            return new Promise(resolve => {
+              img.onload = resolve;
+              img.onerror = resolve;
+            });
+          })
+        );
+
+        // 브라우저가 레이아웃을 한 번 더 계산할 시간을 줍니다.
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
+        downloadBtn.textContent = "이미지 생성중...";
+
+        const canvas = await html2canvas(a6Sheet, {
+          backgroundColor: "#ffffff",
+          scale: 2,
+          useCORS: false,
+          allowTaint: true,
+          logging: false,
+          imageTimeout: 15000
+        });
+
+        const imageUrl = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = imageUrl;
+        link.download = "TAGby_10th_DIY_Sticker_Sheet.png";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        showToast("PNG 다운로드를 시작했어요");
+      } catch (error) {
+        console.error("이미지 저장 실패:", error);
+        alert("이미지 저장에 실패했습니다. 새로고침 후 다시 시도해주세요.");
+      } finally {
+        downloadBtn.disabled = false;
+        downloadBtn.textContent = originalText || "PNG 다운로드";
+      }
+    }
+
+    document.addEventListener("click", event => {
+      if (!event.target.closest(".placed-sticker")) setActive(null);
+    });
+
+    window.addEventListener("resize", () => {
+      stickerStage.querySelectorAll(".placed-sticker").forEach(el => {
+        const stage = getStageSize();
+        el.dataset.x = clamp(Number(el.dataset.x || 0), 0, stage.width - el.offsetWidth);
+        el.dataset.y = clamp(Number(el.dataset.y || 0), 0, stage.height - el.offsetHeight);
+        applyTransform(el);
+      });
+    });
+
+    shuffleBtn.addEventListener("click", shuffleStickers);
+    clearBtn.addEventListener("click", clearStickers);
+    downloadBtn.addEventListener("click", downloadStickerSheet);
+
+    loadStickerManifest();
+    updateCount();
+  </script>
+</body>
+</html>
