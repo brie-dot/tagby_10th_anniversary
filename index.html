@@ -15,8 +15,8 @@
 .login-card{padding:24px;color:var(--text)}.eyebrow{margin:0 0 12px;font-size:13px;font-weight:900;letter-spacing:.08em;opacity:.78}.login-title{margin:0;font-size:32px;line-height:1.12;letter-spacing:-.05em}.login-desc{margin:14px 0 24px;color:var(--muted);font-size:15px;line-height:1.55}
 .field{margin-bottom:14px}.field label{display:block;margin-bottom:7px;font-size:13px;font-weight:900}.field input{width:100%;border:1px solid var(--line);border-radius:16px;padding:14px 15px;font-size:16px;outline:none;background:#f9fafb}.field input:focus{border-color:var(--blue);background:#fff}
 .primary{width:100%;border:0;border-radius:18px;padding:15px 18px;background:var(--blue);color:#fff;font-size:16px;font-weight:900}.error{margin-top:12px;color:var(--danger);font-size:13px;font-weight:700;line-height:1.5}
-#mainScreen{background:var(--blue);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 14px;background:var(--blue);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.18)}
-.top-nav button{border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.16);padding:10px 6px;font-size:12px;font-weight:900;color:#fff;transition:.2s}.top-nav button.active{background:#fff;border-color:#fff;color:var(--blue);box-shadow:0 8px 18px rgba(0,0,0,.08)}
+#mainScreen{background:var(--blue);min-height:100vh}.top-nav{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 14px;background:var(--blue);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.18)}
+.top-nav button{border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.16);padding:10px 4px;font-size:11px;font-weight:900;color:#fff;transition:.2s}.top-nav button.active{background:#fff;border-color:#fff;color:var(--blue);box-shadow:0 8px 18px rgba(0,0,0,.08)}
 .status-wrap{padding:18px 18px 0}.status-card{padding:18px}.status-card.received{background:#111827;color:#fff;border-color:#111827}.status-title{margin:0 0 8px;font-size:20px;font-weight:900;letter-spacing:-.03em}.status-desc{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.received .status-desc{color:rgba(255,255,255,.78)}.cta{margin-top:14px;border:0;border-radius:16px;padding:13px 16px;background:#fff;color:#111827;font-weight:900;font-size:14px}
 .secret-panel{margin-top:14px;padding:16px;border-radius:18px;background:var(--soft);color:var(--blue);border:1px solid rgba(0,87,255,.18)}.secret-label{margin:0 0 6px;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.secret-title{margin:0 0 8px;font-size:18px;font-weight:900;letter-spacing:-.03em}.secret-code{margin:0;padding:12px 14px;border-radius:14px;background:#fff;color:#111827;font-size:22px;font-weight:900;letter-spacing:.04em;text-align:center}.secret-desc{margin:10px 0 0;color:var(--blue);font-size:13px;line-height:1.5;font-weight:700}
 .intro-wrap{padding:18px}.intro{overflow:hidden;border-radius:32px;box-shadow:var(--shadow)}.intro-track{display:flex;transition:transform .28s ease;touch-action:pan-y}.intro-slide{min-width:100%;min-height:500px;padding:30px 24px;display:flex;flex-direction:column;justify-content:space-between;background:#fff}.intro-slide.blue{background:var(--blue);color:#fff}.intro-slide.white-welcome{background:#fff;color:var(--blue)}.intro-slide.soft{background:linear-gradient(160deg,#fff 0%,#eef3ff 100%)}.intro-slide h1,.intro-slide h2{margin:0;font-size:32px;line-height:1.14;letter-spacing:-.05em}.intro-desc{margin:18px 0 0;font-size:16px;line-height:1.6;opacity:.88}
@@ -24,6 +24,7 @@
 .slide-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px}.slide-btn{min-width:82px;border:0;border-radius:999px;padding:12px 16px;background:#111827;color:#fff;font-size:14px;font-weight:900}.blue .slide-btn{background:#fff;color:var(--blue)}.slide-dots{display:flex;gap:7px;justify-content:center;flex:1}.slide-dot{width:7px;height:7px;border-radius:999px;background:#cbd5e1;transition:.2s}.slide-dot.active{width:22px;background:var(--blue)}.blue .slide-dot{background:rgba(255,255,255,.45)}.blue .slide-dot.active{background:#fff}
 .section{padding:24px 18px}.section-title{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;color:#fff}.section-title h2{margin:0;font-size:30px;letter-spacing:-.04em}.section-title span{font-size:15px;font-weight:700;opacity:.8}.card{padding:18px}
 .timeline{margin:0;padding:0;list-style:none;display:grid;gap:12px}.timeline li{display:grid;grid-template-columns:72px 1fr;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}.timeline li:last-child{border-bottom:0;padding-bottom:0}.time{color:var(--blue);font-weight:900}.timeline p{margin:0;font-weight:900;line-height:1.45}
+.content-hub-list{display:grid;gap:12px}.content-hub-card{display:block;padding:16px;border:1px solid var(--line);border-radius:18px;background:#f9fafb;color:var(--text);text-decoration:none}.content-hub-card strong{display:block;margin-bottom:6px;font-size:16px;font-weight:900}.content-hub-card span{display:block;color:var(--muted);font-size:13px;line-height:1.45;font-weight:700}.content-hub-card:active{transform:scale(.99)}.content-hub-card.disabled-link{opacity:.62;cursor:not-allowed}.content-hub-card.disabled-link strong::after{content:'  URL 필요';font-size:10px;color:var(--danger);font-weight:900}
 .placeholder{min-height:250px;border:0;border-radius:22px;background:transparent;display:flex;align-items:center;justify-content:center;text-align:center;color:#94a3b8;font-size:15px;font-weight:900;line-height:1.5}
 .sticker-section{padding:18px;margin-bottom:18px}.kicker{margin:0 0 6px;color:var(--blue);font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.category-title{margin:0;font-size:22px;font-weight:900;letter-spacing:-.04em}.desc{margin:8px 0 14px;color:var(--muted);font-size:14px;line-height:1.55}
 .carousel-shell{position:relative}.h-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x}.h-carousel::-webkit-scrollbar{display:none}
@@ -195,11 +196,14 @@
      <button id="navTimeline" onclick="scrollToSection('timelineSection')">
       타임테이블
      </button>
-     <button id="navSeat" onclick="scrollToSection('seatSection')">
-      좌석배치도
+     <button id="navContentHub" onclick="scrollToSection('contentHubSection')">
+      콘텐츠 허브
      </button>
      <button id="navSticker" onclick="scrollToSection('stickerSection')">
       스티커 메뉴판
+     </button>
+     <button id="navReceive" onclick="scrollToSection('receiveSection')">
+      수령 확인
      </button>
     </nav>
     <div class="status-wrap">
@@ -314,7 +318,7 @@
           필요한 정보를 바로 확인하세요
          </h2>
          <p class="intro-desc">
-          타임테이블, 좌석배치도, 스티커 메뉴판을 상단 버튼으로 빠르게 이동할 수 있습니다.
+          타임테이블, 콘텐츠 허브, 스티커 메뉴판, 수령 확인을 상단 버튼으로 빠르게 이동할 수 있습니다.
          </p>
         </div>
         <div class="slide-footer">
@@ -340,6 +344,35 @@
      <div class="card">
       <div class="placeholder image-only">
        <img src="images/timetable.png?v=1" alt="TAGby 10주년 타임테이블" class="sticker-real-img"/>
+      </div>
+     </div>
+    </section>
+    <section class="section" id="contentHubSection">
+     <div class="section-title">
+      <h2>
+       Content Hub
+      </h2>
+      <span>
+       오늘의 이벤트 링크
+      </span>
+     </div>
+     <div class="card">
+      <div class="content-hub-list">
+       <!-- TODO: 아래 href="#" 부분을 실제 메인 슬라이드 HTML 링크로 바꿔주세요. -->
+       <a class="content-hub-card disabled-link" href="#" target="_blank" rel="noopener noreferrer" onclick="return handleEmptyContentLink(event, '메인 슬라이드 링크가 아직 연결되지 않았습니다.');">
+        <strong>Main Slide</strong>
+        <span>행사 진행용 메인 슬라이드입니다.</span>
+       </a>
+       <!-- TODO: 아래 href="#" 부분을 실제 롤링페이퍼 링크로 바꿔주세요. -->
+       <a class="content-hub-card disabled-link" href="#" target="_blank" rel="noopener noreferrer" onclick="return handleEmptyContentLink(event, '롤링페이퍼 링크가 아직 연결되지 않았습니다.');">
+        <strong>Rolling Paper</strong>
+        <span>10주년 롤링페이퍼를 확인해보세요.</span>
+       </a>
+       <!-- TODO: 아래 href="#" 부분을 실제 YouTube 재생목록 링크로 바꿔주세요. -->
+       <a class="content-hub-card disabled-link" href="#" target="_blank" rel="noopener noreferrer" onclick="return handleEmptyContentLink(event, 'BGM 플레이리스트 링크가 아직 연결되지 않았습니다.');">
+        <strong>BGM Playlist</strong>
+        <span>오늘의 분위기를 위한 YouTube 재생목록입니다.</span>
+       </a>
       </div>
      </div>
     </section>
@@ -648,6 +681,7 @@ async function findUserFromSheet(name,email){
       user:{
         name:data.name,
         email:data.email || email,
+        inputEmail:email,
         team:data.team
       }
     };
@@ -877,6 +911,7 @@ async function confirmReceive(){
     await loadStickerInventory();
 
     updateStatusCard();
+    updateSecretPanel();
     renderTeamLogo();
     renderMemes();
     renderCart();
@@ -927,13 +962,20 @@ async function loadStickerInventory(){
   }
 }
 
-function isSecretUser(){
-  if(!currentUser||!currentUser.email) return false;
+function normalizeEmail(value){
+  return String(value||'').trim().toLowerCase();
+}
 
-  const userEmail=currentUser.email.trim().toLowerCase();
-  return SECRET_USER_EMAILS
-    .map(email=>String(email).trim().toLowerCase())
-    .includes(userEmail);
+function isSecretUser(){
+  if(!currentUser) return false;
+
+  const allowedEmails=SECRET_USER_EMAILS.map(normalizeEmail);
+  const candidateEmails=[
+    currentUser.email,
+    currentUser.inputEmail
+  ].map(normalizeEmail).filter(Boolean);
+
+  return candidateEmails.some(email=>allowedEmails.includes(email));
 }
 
 function updateSecretPanel(){
@@ -958,10 +1000,11 @@ function nextIntroSlide(){currentIntroIndex=Math.min(currentIntroIndex+1,2);upda
 function bindIntroSwipe(){const el=document.getElementById('introSlider');if(el.dataset.bound)return;el.dataset.bound='true';el.addEventListener('touchstart',e=>introTouchStartX=e.changedTouches[0].screenX,{passive:true});el.addEventListener('touchend',e=>{introTouchEndX=e.changedTouches[0].screenX;const gap=introTouchStartX-introTouchEndX;if(Math.abs(gap)<40)return;if(gap>0)nextIntroSlide();else prevIntroSlide()},{passive:true})}
 function moveCarousel(id,dir){const el=document.getElementById(id);if(!el)return;const first=el.children[0],step=first?first.getBoundingClientRect().width+12:el.clientWidth*.8;el.scrollBy({left:dir*step,behavior:'smooth'})}
 function scrollToSection(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});setActiveNav(id)}
-function setActiveNav(id){const map={timelineSection:'navTimeline',seatSection:'navSeat',stickerSection:'navSticker'};document.querySelectorAll('.top-nav button').forEach(b=>b.classList.remove('active'));if(map[id])document.getElementById(map[id])?.classList.add('active')}
-function bindNavObserver(){if(window.navBound)return;window.navBound=true;const sections=['timelineSection','seatSection','stickerSection'];const obs=new IntersectionObserver(entries=>{const v=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(v)setActiveNav(v.target.id)},{threshold:[.1,.25,.4,.6],rootMargin:'-90px 0px -25% 0px'});sections.forEach(id=>obs.observe(document.getElementById(id)))}
+function setActiveNav(id){const map={timelineSection:'navTimeline',contentHubSection:'navContentHub',stickerSection:'navSticker',receiveSection:'navReceive'};document.querySelectorAll('.top-nav button').forEach(b=>b.classList.remove('active'));if(map[id])document.getElementById(map[id])?.classList.add('active')}
+function bindNavObserver(){if(window.navBound)return;window.navBound=true;const sections=['timelineSection','contentHubSection','stickerSection','receiveSection'];const obs=new IntersectionObserver(entries=>{const v=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(v)setActiveNav(v.target.id)},{threshold:[.1,.25,.4,.6],rootMargin:'-90px 0px -25% 0px'});sections.forEach(id=>{const section=document.getElementById(id);if(section)obs.observe(section)})}
+function handleEmptyContentLink(event,msg){event.preventDefault();toast(msg);return false}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hidden');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.add('hidden'),1800)}
-(function boot(){const saved=localStorage.getItem(STORAGE_KEY);if(saved){currentUser=JSON.parse(saved);enterMain()}})();
+(function boot(){const saved=localStorage.getItem(STORAGE_KEY);if(saved){try{currentUser=JSON.parse(saved);enterMain()}catch(error){console.error(error);localStorage.removeItem(STORAGE_KEY)}}})();
   </script>
  </body>
 </html>
