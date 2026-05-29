@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <title>TAGby 10th Anniversary | Main Session</title>
+  <style>
+    :root {
+      --tagby-blue: #0078FF;
+      --deep-blue: #0038A8;
+      --white: #ffffff;
+      --soft-white: rgba(255, 255, 255, 0.82);
+      --line-white: rgba(255, 255, 255, 0.32);
+      --dim-white: rgba(255, 255, 255, 0.58);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Noto Sans KR", sans-serif;
+      background: var(--tagby-blue);
+      color: var(--white);
+    }
+
+    body {
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      width: 64vw;
+      height: 64vw;
+      right: -22vw;
+      top: -30vw;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    body::after {
+      width: 38vw;
+      height: 38vw;
+      left: -14vw;
+      bottom: -18vw;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 72px;
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+      transition: opacity 520ms ease, transform 520ms ease;
+      pointer-events: none;
+      text-align: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .eyebrow {
+      font-size: clamp(15px, 1.4vw, 22px);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--soft-white);
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .title {
+      font-size: clamp(58px, 8vw, 132px);
+      line-height: 0.96;
+      font-weight: 900;
+      letter-spacing: -0.065em;
+      word-break: keep-all;
+    }
+
+    .title.medium {
+      font-size: clamp(52px, 6.6vw, 108px);
+    }
+
+    .title.name {
+      font-size: clamp(72px, 10vw, 156px);
+      letter-spacing: -0.055em;
+    }
+
+    .subtitle {
+      margin-top: 32px;
+      font-size: clamp(22px, 2.1vw, 34px);
+      line-height: 1.5;
+      color: var(--soft-white);
+      font-weight: 500;
+      word-break: keep-all;
+    }
+
+    .meta {
+      margin-top: 34px;
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 20px;
+      border: 1px solid var(--line-white);
+      border-radius: 999px;
+      color: var(--soft-white);
+      font-size: clamp(14px, 1.2vw, 18px);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      backdrop-filter: blur(10px);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 42px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 220px;
+      padding: 16px 24px;
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--tagby-blue);
+      font-size: 18px;
+      font-weight: 800;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.84);
+      box-shadow: 0 22px 60px rgba(0, 30, 120, 0.22);
+      cursor: pointer;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--line-white);
+      box-shadow: none;
+    }
+
+    .corner-brand {
+      position: fixed;
+      top: 36px;
+      left: 44px;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      font-size: 25px;
+    }
+
+    .corner-brand .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .corner-label {
+      position: fixed;
+      top: 42px;
+      right: 44px;
+      z-index: 5;
+      font-size: 14px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim-white);
+      font-weight: 800;
+    }
+
+    .progress {
+      position: fixed;
+      left: 44px;
+      right: 44px;
+      bottom: 34px;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .progress-text {
+      min-width: 52px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--soft-white);
+      letter-spacing: 0.06em;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+      border-radius: 99px;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--white);
+      transition: width 360ms ease;
+    }
+
+    .nav-hint {
+      min-width: 180px;
+      text-align: right;
+      font-size: 13px;
+      color: var(--dim-white);
+      letter-spacing: 0.02em;
+    }
+
+    .number-mark {
+      position: absolute;
+      font-size: clamp(180px, 28vw, 440px);
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.12em;
+      color: rgba(255, 255, 255, 0.075);
+      z-index: -1;
+      user-select: none;
+    }
+
+    .number-mark.right {
+      right: 6vw;
+      bottom: 5vh;
+    }
+
+    .number-mark.center {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .divider {
+      width: min(520px, 54vw);
+      height: 1px;
+      background: var(--line-white);
+      margin: 38px 0 8px;
+    }
+
+    .small-note {
+      margin-top: 20px;
+      color: var(--dim-white);
+      font-size: clamp(15px, 1.4vw, 19px);
+      line-height: 1.55;
+    }
+
+    .name-tag {
+      margin-bottom: 28px;
+      padding: 10px 18px;
+      border: 1px solid var(--line-white);
+      border-radius: 999px;
+      font-size: clamp(13px, 1.2vw, 17px);
+      color: var(--soft-white);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .dark-slide {
+      background: #202026;
+    }
+
+    .dark-slide::before {
+      content: "";
+      position: absolute;
+      inset: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      pointer-events: none;
+    }
+
+    .mono-title {
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      font-size: clamp(38px, 5.8vw, 86px);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--white);
+    }
+
+    .mono-title.small {
+      font-size: clamp(28px, 3.8vw, 58px);
+      letter-spacing: 0.02em;
+    }
+
+    .dna-list {
+      margin-top: 34px;
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+      font-size: clamp(17px, 2vw, 30px);
+      line-height: 1.55;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .dna-list p {
+      opacity: 0;
+      transform: translateY(8px);
+      animation: dnaFade 560ms ease forwards;
+    }
+
+    .slide.active .dna-list p:nth-child(1) { animation-delay: 140ms; }
+    .slide.active .dna-list p:nth-child(2) { animation-delay: 300ms; }
+    .slide.active .dna-list p:nth-child(3) { animation-delay: 460ms; }
+    .slide.active .dna-list p:nth-child(4) { animation-delay: 620ms; }
+    .slide.active .dna-list p:nth-child(5) { animation-delay: 780ms; }
+
+    .dna-list.spaced {
+      margin-top: 28px;
+      line-height: 1.8;
+    }
+
+    .subtitle.compact {
+      margin-top: 28px;
+      font-size: clamp(19px, 1.8vw, 28px);
+    }
+
+    .goods-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 16px;
+      width: min(820px, 82vw);
+      margin-top: 42px;
+    }
+
+    .goods-grid div {
+      padding: 20px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      font-size: clamp(16px, 1.6vw, 24px);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.92);
+      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+    }
+
+    .gradient-stage-1 {
+      background: #0078FF;
+    }
+
+    .gradient-stage-2 {
+      background: #0262cf;
+    }
+
+    .gradient-stage-3 {
+      background: #0251ab;
+    }
+
+    .gradient-stage-4 {
+      background: #000000;
+    }
+
+    .gradient-stage-4 {
+      background: var(--tagby-blue);
+    }
+
+    .gradient-stage-1::before,
+    .gradient-stage-2::before,
+    .gradient-stage-3::before {
+      content: "";
+      position: absolute;
+      inset: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 28px;
+      pointer-events: none;
+    }
+    
+    .bg-photo-slide {
+      background-image: url("./10th_photo_bg.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    
+    .image-stage {
+      width: min(860px, 78vw);
+      min-height: min(520px, 48vh);
+      margin-top: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+
+    .final-design-slide {
+      background: #000000;
+      padding: 0;
+    }
+
+    .final-design-slide .final-design-image {
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    .final-design-slide .placeholder-copy {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000000;
+      color: rgba(255, 255, 255, 0.72);
+      text-align: center;
+    }
+
+    .image-stage img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .placeholder-copy {
+      font-size: clamp(18px, 2vw, 28px);
+      color: var(--soft-white);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.45;
+    }
+
+    .map-stage {
+      width: min(900px, 82vw);
+      min-height: min(360px, 36vh);
+      margin-top: 30px;
+      border: 1px dashed rgba(255, 255, 255, 0.36);
+      border-radius: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--soft-white);
+      font-size: clamp(18px, 1.8vw, 26px);
+      font-weight: 800;
+    }
+
+    .mega-brand {
+      font-size: clamp(110px, 22vw, 300px);
+      line-height: 0.86;
+      font-weight: 950;
+      letter-spacing: -0.09em;
+    }
+
+    .info-stack {
+      margin-top: 34px;
+      display: grid;
+      gap: 14px;
+      width: min(760px, 76vw);
+    }
+
+    .info-card {
+      padding: 18px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 22px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: clamp(18px, 1.8vw, 27px);
+      font-weight: 800;
+      line-height: 1.35;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+
+    .rotating-guide-slide {
+      background: var(--tagby-blue);
+      overflow: hidden;
+    }
+
+    .rotating-guide-slide::before {
+      display: none;
+    }
+
+    .rotating-message {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 72px clamp(40px, 8vw, 120px);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: rotateGuide 10s ease-in-out infinite;
+    }
+
+    .rotating-message.message-two {
+      animation-delay: 5s;
+    }
+
+    .rotating-message .title {
+      font-size: clamp(50px, 6vw, 104px);
+      line-height: 1.06;
+      letter-spacing: -0.06em;
+      max-width: 1200px;
+    }
+
+    .rotating-message .subtitle {
+      font-size: clamp(22px, 2.1vw, 34px);
+      line-height: 1.45;
+      max-width: 980px;
+    }
+
+    @keyframes rotateGuide {
+      0%, 10% {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      16%, 44% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      50%, 100% {
+        opacity: 0;
+        transform: translateY(-18px);
+      }
+    }
+
+
+
+    .exit-guide-slide {
+      background: var(--tagby-blue);
+      padding: 72px clamp(48px, 6vw, 100px);
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: clamp(36px, 5vw, 72px);
+      align-items: center;
+      text-align: left;
+    }
+
+    .exit-guide-copy {
+      width: 100%;
+    }
+
+    .exit-guide-copy .eyebrow {
+      margin-bottom: 24px;
+    }
+
+    .exit-guide-copy .title {
+      font-size: clamp(56px, 7vw, 118px);
+      line-height: 0.98;
+    }
+
+    .exit-guide-copy .subtitle {
+      margin-top: 32px;
+      font-size: clamp(24px, 2.3vw, 38px);
+      line-height: 1.45;
+    }
+
+    .exit-guide-copy .meta {
+      margin-top: 38px;
+    }
+
+    .exit-map-panel {
+      width: 100%;
+      height: min(68vh, 640px);
+      border-radius: 36px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 32px 90px rgba(0, 30, 120, 0.28);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      padding: 14px;
+    }
+
+    .exit-map-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .exit-map-fallback {
+      padding: 40px;
+      text-align: center;
+      color: var(--soft-white);
+      font-size: clamp(20px, 2vw, 30px);
+      line-height: 1.55;
+      font-weight: 800;
+      word-break: keep-all;
+    }
+
+    @keyframes dnaFade {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .slide {
+        padding: 42px 26px;
+      }
+
+      .corner-brand {
+        top: 24px;
+        left: 24px;
+      }
+
+      .corner-label {
+        top: 29px;
+        right: 24px;
+      }
+
+      .progress {
+        left: 24px;
+        right: 24px;
+        bottom: 22px;
+      }
+
+      .nav-hint {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="corner-brand"><span class="dot"></span><span>TAGby</span></div>
+  <div class="corner-label">10th Anniversary</div>
+
+  <main class="deck" id="deck">
+    <section class="slide active">
+      <div class="number-mark center">10</div>
+      <div class="eyebrow">2016 — 2026</div>
+      <h1 class="title">TAGby<br />10년 돌아보기</h1>
+      <p class="subtitle">우리가 함께 만들어온 시간과<br />앞으로 함께 만들어갈 이야기</p>
+      <div class="meta">Main Session</div>
+    </section>
+
+    <section class="slide">
+      <div class="number-mark right">01</div>
+      <div class="eyebrow">Opening Retrospective</div>
+      <h2 class="title medium">대표님 회고</h2>
+      <p class="subtitle">TAGby의 10년,<br />그리고 앞으로의 방향</p>
+      <div class="meta">10 min</div>
+    </section>
+
+    <section class="slide">
+      <div class="number-mark center">♡</div>
+      <div class="eyebrow">Thank You Moment</div>
+      <h2 class="title medium">10년의 시간을<br />이끌어주셔서 감사합니다</h2>
+      <p class="subtitle">Cake & Digital Rolling Paper</p>
+      <div class="button-row">
+        <a class="button" href="./rolling.html" target="_blank" rel="noopener noreferrer">디지털 롤링페이퍼 열기</a>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="number-mark right">05</div>
+      <div class="eyebrow">People Retrospective</div>
+      <h2 class="title medium">함께 만든<br />10년의 이야기</h2>
+      <p class="subtitle">개인 회고 세션</p>
+      <div class="meta">5 People</div>
+    </section>
+
+    <section class="slide">
+      <div class="name-tag">Retrospective 01</div>
+      <h2 class="title name">신명민</h2>
+      <div class="divider"></div>
+      <p class="small-note">TAGby 10th Anniversary</p>
+    </section>
+
+    <section class="slide">
+      <div class="name-tag">Retrospective 02</div>
+      <h2 class="title name">Speaker 02</h2>
+      <div class="divider"></div>
+      <p class="small-note">TAGby 10th Anniversary</p>
+    </section>
+
+    <section class="slide">
+      <div class="name-tag">Retrospective 03</div>
+      <h2 class="title name">Speaker 03</h2>
+      <div class="divider"></div>
+      <p class="small-note">TAGby 10th Anniversary</p>
+    </section>
+
+    <section class="slide">
+      <div class="name-tag">Retrospective 04</div>
+      <h2 class="title name">Speaker 04</h2>
+      <div class="divider"></div>
+      <p class="small-note">TAGby 10th Anniversary</p>
+    </section>
+
+    <section class="slide">
+      <div class="name-tag">Retrospective 05</div>
+      <h2 class="title name">Speaker 05</h2>
+      <div class="divider"></div>
+      <p class="small-note">TAGby 10th Anniversary</p>
+    </section>
+
+    <section class="slide gradient-stage-1">
+      <div class="eyebrow">2016 — 2026</div>
+      <h2 class="mono-title">001 to 010</h2>
+      <p class="subtitle">TAGby가 지나온 10년의 흐름</p>
+    </section>
+
+    <section class="slide gradient-stage-2 dna-slide">
+      <div class="eyebrow">TAGby DNA</div>
+      <div class="dna-list">
+        <p>WHY-DRIVEN / FULL-OWNERSHIP</p>
+        <p>LOGIC &amp; RATIO / OPEN-SYNC</p>
+        <p>MAX-EFFICIENCY / FEARLESS-STEP</p>
+        <p>META-GROWTH / RESULT-ONLY</p>
+        <p>RADICAL-CANDOR</p>
+      </div>
+    </section>
+
+    <section class="slide gradient-stage-3 dna-slide">
+      <div class="eyebrow">Filled by Different DNA</div>
+      <h2 class="mono-title" style="font-size: clamp(44px, 5.8vw, 92px); line-height: 1.12; letter-spacing: -0.035em;">
+        DNA.ARCHIVE.SEQ.10<br />=
+        [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
+      </h2>
+
+      <div style="margin-top: 48px; color: rgba(255,255,255,0.78); font-size: clamp(18px, 1.7vw, 26px); line-height: 1.9; font-weight: 500; letter-spacing: -0.015em;">
+        <p>10년 동안 축적되어온 TAGby DNA의 시퀀스/아카이브</p>
+        <p>서로 다른 사람들이 서로 다른 DNA로 각자의 빈칸을 채워왔습니다</p>
+      </div>
+    </section>
+
+    <section class="slide final-design-slide">
+      <img class="final-design-image" src="./tagby-dna-text.png" alt="TAGby 10th Anniversary DNA Final Design" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+      <div class="placeholder-copy" style="display:none;">첨부한 10주년 기념 디자인 이미지 자리<br />파일명: tagby-dna-text.png</div>
+    </section>
+
+    <section class="slide goods-slide">
+      <div class="eyebrow">TAGby 10th Anniversary Goods</div>
+      <h2 class="title medium">10주년 기념 굿즈</h2>
+
+      <div style="display:flex; justify-content:center; align-items:flex-end; gap: clamp(18px, 3vw, 56px); width:min(1200px, 92vw); margin-top:56px; flex-wrap:wrap;">
+
+        <div style="display:flex; flex-direction:column; align-items:center; gap:22px;">
+          <img src="./goods-hoodie.png" alt="TAGby Hoodie" style="width:min(320px, 28vw); filter: drop-shadow(0 20px 40px rgba(0,0,0,0.28));" />
+          <div style="font-family:'SFMono-Regular','Menlo','Monaco','Consolas',monospace; font-size:15px; letter-spacing:0.16em; color:rgba(255,255,255,0.78);">HOOD ZIP-UP</div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; align-items:center; gap:22px; transform: translateY(12px);">
+          <img src="./goods-pouch.png" alt="TAGby Pouch" style="width:min(300px, 26vw); filter: drop-shadow(0 20px 40px rgba(0,0,0,0.24));" />
+          <div style="font-family:'SFMono-Regular','Menlo','Monaco','Consolas',monospace; font-size:15px; letter-spacing:0.16em; color:rgba(255,255,255,0.78);">POUCH</div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; align-items:center; gap:22px; transform: translateY(-8px);">
+          <img src="./goods-mug.png" alt="TAGby Mug" style="width:min(250px, 22vw); filter: drop-shadow(0 20px 40px rgba(0,0,0,0.18));" />
+          <div style="font-family:'SFMono-Regular','Menlo','Monaco','Consolas',monospace; font-size:15px; letter-spacing:0.16em; color:rgba(255,255,255,0.78);">MUG</div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Intermission</div>
+      <h2 class="title medium">BREAK TIME</h2>
+      <p class="subtitle">잠시 쉬는 시간을 가진 뒤<br />레크리에이션으로 이어집니다</p>
+      <div class="button-row">
+        <a class="button" href="https://www.youtube.com/watch?v=V-y4wL7sCWI&list=RDV-y4wL7sCWI&start_radio=1&t=775s" target="_blank" rel="noopener noreferrer">Break Music 열기</a>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="number-mark right">02</div>
+      <div class="eyebrow">Recreation</div>
+      <h2 class="title medium">레크리에이션</h2>
+      <p class="subtitle">다음 프로그램을 시작합니다</p>
+      <div class="button-row">
+        <a class="button" href="./recreation/" target="_blank" rel="noopener noreferrer">레크리에이션 HTML 열기</a>
+      </div>
+    </section>
+
+    <section class="slide rotating-guide-slide">
+      <div class="rotating-message message-one">
+        <div class="eyebrow">Made by TAGby People</div>
+        <h2 class="title medium">준비한 콘텐츠가<br />모두 마무리되었습니다</h2>
+        <p class="subtitle">10주년 이벤트를 함께 준비해준<br />TF에게 큰 박수 부탁드립니다</p>
+        <div class="meta">👏 👏 👏</div>
+      </div>
+
+      <div class="rotating-message message-two">
+        <div class="eyebrow">Next Guide</div>
+        <h2 class="title medium">기념촬영 후<br />저녁 식사 장소로 이동합니다</h2>
+        <p class="subtitle">순서에 따라 촬영을 마친 뒤<br />신라스테이 역삼 카페로 이동해주세요</p>
+        <div class="meta">18:00 Dinner Session</div>
+      </div>
+    </section>
+
+    <section class="slide bg-photo-slide"></section>
+
+    <section class="slide exit-guide-slide">
+      <div class="exit-guide-copy">
+        <div class="eyebrow">Exit Guide</div>
+        <h2 class="title">퇴장 안내</h2>
+        <p class="subtitle">퇴장 시 레크리에이션 상품을<br />꼭 수령해주세요.</p>
+        <div class="meta">저녁식사 장소 · 신라스테이 역삼 카페</div>
+      </div>
+
+      <div class="exit-map-panel">
+        <img src="./dinner-map.png" alt="신라스테이 역삼 카페 약도" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+        <div class="exit-map-fallback" style="display:none;">저녁식사 장소 약도 이미지 자리<br />파일명: dinner-map.png</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="progress">
+    <div class="progress-text" id="progressText">1 / 10</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="nav-hint">← → / Space to navigate</div>
+  </footer>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const progressText = document.getElementById('progressText');
+    const progressFill = document.getElementById('progressFill');
+    let currentIndex = 0;
+
+    function updateSlide() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentIndex);
+      });
+
+      progressText.textContent = `${currentIndex + 1} / ${slides.length}`;
+      progressFill.style.width = `${((currentIndex + 1) / slides.length) * 100}%`;
+    }
+
+    function nextSlide() {
+      if (currentIndex < slides.length - 1) {
+        currentIndex += 1;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        updateSlide();
+      }
+    }
+
+    document.addEventListener('keydown', (event) => {
+      const key = event.key;
+
+      if (key === 'ArrowRight' || key === ' ' || key === 'Enter') {
+        event.preventDefault();
+        nextSlide();
+      }
+
+      if (key === 'ArrowLeft') {
+        event.preventDefault();
+        prevSlide();
+      }
+
+      if (key.toLowerCase() === 'f') {
+        document.documentElement.requestFullscreen?.();
+      }
+    });
+
+    let touchStartX = 0;
+
+    document.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', (event) => {
+      const touchEndX = event.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+
+      if (Math.abs(diff) > 50) {
+        diff > 0 ? nextSlide() : prevSlide();
+      }
+    });
+
+    updateSlide();
+  </script>
+</body>
+</html>
