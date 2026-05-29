@@ -571,7 +571,7 @@
   <main class="app">
     <header class="hero">
       <div>
-        <h1><span class="brand">TAGby</span><br>🛠️ DIY Sticker Sheet Maker</h1>
+        <h1><span class="brand">TAGby</span><br>✨ DIY Sticker Sheet Maker</h1>
         <p>스티커를 추가하고 위치를 옮긴 뒤, A6 세로형 PNG 이미지로 저장해보세요.</p>
       </div>
       <a class="drive-link" href="https://drive.google.com/drive/folders/1aOL1d3FOnDB9S9xr4lk-ArCMlUMNH7RI?usp=drive_link" target="_blank" rel="noopener noreferrer" id="driveLink">✅ 스티커 디자인 다운받기</a>
@@ -602,7 +602,7 @@
               <div class="empty-hint" id="emptyHint">왼쪽 또는 아래 메뉴에서<br>스티커를 추가해주세요</div>
             </div>
 
-            <div class="sheet-footer">TAGby 2016–2026</div>
+            <div class="sheet-footer">TAGby 2026.06.01</div>
           </div>
 
           <div class="controls">
@@ -636,7 +636,7 @@
     const categoryMeta = {
       all: { label: "전체" },
       logo: { label: "Logo" },
-      meme: { label: "Meme" },
+      meme: { label: "Special Designs" },
       nutrition: { label: "Nutrition" }
     };
 
@@ -680,15 +680,15 @@
 
       setTimeout(() => {
         alert(
-          "모바일에서는 이미지 저장이 안정적으로 지원되지 않아요.\\n\\n" +
-          "A6 스티커 시트가 화면에 보이도록 맞춘 뒤 캡쳐해주세요,,,\\n" +
+          "모바일에서는 저장이 안 되더라고요,,," +
+          "캡쳐,,, 또는 PC로 접속 부탁드려요" +
           "비개발자의 한계입니다 🥹"
         );
       }, 250);
     }
 
     function updateDownloadButtonLabel() {
-      downloadBtn.textContent = isMobileDevice() ? "캡쳐 안내" : "PNG 다운로드";
+      downloadBtn.textContent = isMobileDevice() ? "PNG 다운로드(?)" : "PNG 다운로드";
     }
 
     function getFileNameFromPath(src) {
