@@ -3,919 +3,1461 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-  <title>TAGby 10th Anniversary | Main Session</title>
+  <title>🥳TAGby 10주년 기념 퀴즈쇼🎉</title>
   <style>
-    :root {
-      --tagby-blue: #0078FF;
-      --deep-blue: #0038A8;
-      --white: #ffffff;
-      --soft-white: rgba(255, 255, 255, 0.82);
-      --line-white: rgba(255, 255, 255, 0.32);
-      --dim-white: rgba(255, 255, 255, 0.58);
-    }
-
-    * {
-      box-sizing: border-box;
+    * { box-sizing: border-box; }
+    body {
+      transition: background-color 0.15s ease;
       margin: 0;
-      padding: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f4f7ff;
+      color: #111827;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
-    html,
-    body {
+    .screen {
       width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: "Noto Sans KR", sans-serif;
-      background: var(--tagby-blue);
-      color: var(--white);
-    }
-
-    body {
-      position: relative;
-    }
-
-    body::before,
-    body::after {
-      content: "";
-      position: fixed;
-      border-radius: 999px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    body::before {
-      width: 64vw;
-      height: 64vw;
-      right: -22vw;
-      top: -30vw;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-    }
-
-    body::after {
-      width: 38vw;
-      height: 38vw;
-      left: -14vw;
-      bottom: -18vw;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-    }
-
-    .deck {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
-    }
-
-    .slide {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      min-height: 100vh;
+      display: none;
       align-items: center;
-      padding: 72px;
-      opacity: 0;
-      transform: translateY(18px) scale(0.985);
-      transition: opacity 520ms ease, transform 520ms ease;
-      pointer-events: none;
+      justify-content: center;
+      padding: 48px 64px;
+    }
+    .screen.active { display: flex; }
+    .intro-screen {
+      background: radial-gradient(circle at top left, #dbeafe 0, transparent 36%),
+                  linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
       text-align: center;
     }
-
-    .slide.active {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
-    }
-
-    .eyebrow {
-      font-size: clamp(15px, 1.4vw, 22px);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--soft-white);
-      font-weight: 700;
+    .intro-content { width: min(100%, 1100px); }
+    .intro-label {
+      display: inline-block;
       margin-bottom: 28px;
-    }
-
-    .title {
-      font-size: clamp(58px, 8vw, 132px);
-      line-height: 0.96;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: #0078FF;
+      color: #fff;
+      font-size: 22px;
       font-weight: 900;
-      letter-spacing: -0.065em;
-      word-break: keep-all;
-    }
-
-    .title.medium {
-      font-size: clamp(52px, 6.6vw, 108px);
-    }
-
-    .title.name {
-      font-size: clamp(72px, 10vw, 156px);
-      letter-spacing: -0.055em;
-    }
-
-    .subtitle {
-      margin-top: 32px;
-      font-size: clamp(22px, 2.1vw, 34px);
-      line-height: 1.5;
-      color: var(--soft-white);
-      font-weight: 500;
-      word-break: keep-all;
-    }
-
-    .meta {
-      margin-top: 34px;
-      display: inline-flex;
-      gap: 10px;
-      align-items: center;
-      padding: 12px 20px;
-      border: 1px solid var(--line-white);
-      border-radius: 999px;
-      color: var(--soft-white);
-      font-size: clamp(14px, 1.2vw, 18px);
-      font-weight: 700;
       letter-spacing: 0.02em;
-      backdrop-filter: blur(10px);
     }
-
-    .button-row {
-      display: flex;
-      gap: 16px;
-      margin-top: 42px;
-      flex-wrap: wrap;
-      justify-content: center;
+    .intro-title {
+      margin: 0;
+      font-size: clamp(64px, 9vw, 128px);
+      line-height: 1.1;
+      font-weight: 950;
+      letter-spacing: -0.06em;
+      word-break: keep-all;
     }
-
-    .button {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      min-width: 220px;
-      padding: 16px 24px;
+    .intro-button {
+      margin-top: 56px;
+      padding: 18px 34px;
+      border: 0;
       border-radius: 999px;
-      background: var(--white);
-      color: var(--tagby-blue);
-      font-size: 18px;
-      font-weight: 800;
-      text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.84);
-      box-shadow: 0 22px 60px rgba(0, 30, 120, 0.22);
+      background: #111827;
+      color: #fff;
+      font-size: 22px;
+      font-weight: 900;
       cursor: pointer;
     }
 
-    .button.secondary {
-      background: transparent;
-      color: var(--white);
-      border: 1px solid var(--line-white);
-      box-shadow: none;
+    .rule-screen-content { max-width: 1100px; text-align: left; }
+    .rule-title {
+      margin: 0 0 52px;
+      font-size: clamp(54px, 7vw, 100px);
+      line-height: 1.1;
+      font-weight: 950;
+      letter-spacing: -0.05em;
     }
+    .rule-slider-wrap { position: relative; min-height: 420px; overflow: hidden; }
+    .rule-next-button {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      color: rgba(17,24,39,0.92);
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .rule-slider { display: flex; transition: transform 0.4s ease; }
+    .rule-slide { width: 100%; flex-shrink: 0; padding: 12px; }
+    .rule-card {
+      padding: 40px;
+      border-radius: 36px;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(37,99,235,0.08);
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .rule-emoji { font-size: 96px; }
+    .rule-label { font-size: 24px; font-weight: 950; color: #0078FF; margin-bottom: 12px; }
+    .rule-main { font-size: clamp(34px, 4vw, 64px); line-height: 1.25; font-weight: 900; word-break: keep-all; }
+    .rule-sub { margin-top: 16px; color: #6b7280; font-size: clamp(22px, 2.2vw, 39px); font-weight: 700; }
 
-    .corner-brand {
+    .prize-screen {
+      background: radial-gradient(circle at top right, #fef3c7 0, transparent 40%),
+                  linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+      flex-direction: column;
+      gap: 0;
+    }
+    .prize-content { width: min(100%, 1100px); text-align: left; }
+    .prize-title {
+      margin: 0 0 52px;
+      font-size: clamp(54px, 7vw, 100px);
+      line-height: 1.1;
+      font-weight: 950;
+      letter-spacing: -0.05em;
+    }
+    .prize-slider-wrap { position: relative; min-height: 420px; overflow: hidden; }
+    .prize-next-button {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      color: rgba(17,24,39,0.92);
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .prize-slider { display: flex; transition: transform 0.4s ease; }
+    .prize-slide { width: 100%; flex-shrink: 0; padding: 12px; }
+    .prize-card {
+      padding: 40px;
+      border-radius: 36px;
+      background: rgba(255,255,255,0.80);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(245,158,11,0.10);
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .prize-emoji { font-size: 96px; }
+    .prize-label { font-size: 24px; font-weight: 950; color: #d97706; margin-bottom: 12px; }
+    .prize-main { font-size: clamp(34px, 4vw, 64px); line-height: 1.25; font-weight: 900; word-break: keep-all; }
+    .prize-sub { margin-top: 16px; color: #6b7280; font-size: clamp(22px, 2.2vw, 39px); font-weight: 700; white-space: pre-line; }
+
+    .pw-modal-overlay {
+      display: none;
       position: fixed;
-      top: 36px;
-      left: 44px;
-      z-index: 5;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .pw-modal-overlay.active { display: flex; }
+    .pw-modal {
+      background: #fff;
+      border-radius: 32px;
+      padding: 52px 48px 44px;
+      width: min(90vw, 480px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+      text-align: center;
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.92) translateY(16px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes modalShake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-10px); }
+      40%     { transform: translateX(10px); }
+      60%     { transform: translateX(-8px); }
+      80%     { transform: translateX(6px); }
+    }
+    .pw-modal.shake { animation: modalShake 0.4s ease; }
+    .pw-modal-icon { font-size: 56px; margin-bottom: 16px; }
+    .pw-modal-title { font-size: 28px; font-weight: 950; letter-spacing: -0.03em; margin: 0 0 8px; color: #111827; }
+    .pw-modal-sub { font-size: 15px; font-weight: 600; color: #6b7280; margin: 0 0 32px; }
+    .pw-input-wrap { position: relative; margin-bottom: 12px; }
+    .pw-input {
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 16px;
+      border: 2px solid #e5e7eb;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-align: center;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.2s;
+      background: #f9fafb;
+    }
+    .pw-input:focus { border-color: #0078FF; background: #fff; }
+    .pw-input.error { border-color: #dc2626; background: #fff5f5; }
+    .pw-error-msg { display: none; color: #dc2626; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .pw-error-msg.visible { display: block; }
+    .pw-confirm-btn {
+      width: 100%; padding: 16px; border: 0; border-radius: 16px;
+      background: #111827; color: #fff; font-size: 18px; font-weight: 900;
+      cursor: pointer; font-family: inherit; transition: background 0.15s;
+    }
+    .pw-confirm-btn:hover { background: #1f2937; }
+    .pw-cancel-btn { margin-top: 12px; background: none; border: 0; color: #9ca3af; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+    /* ── 퀴즈 스크린 ── */
+    .quiz-screen {
+      position: relative;
+      background: #fff;
+      overflow: hidden;
+      padding: 0;
+      display: none;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .quiz-screen.active { display: flex; }
+    .quiz-screen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(220,38,38,0);
+      pointer-events: none;
+      z-index: 20;
+    }
+    .quiz-screen.danger-mode::after { animation: screenFlash 0.45s infinite; }
+
+    .quiz-topbar {
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       gap: 12px;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      font-size: 25px;
+      padding: 14px 40px;
+      border-bottom: 1px solid #f3f4f6;
+      background: #fff;
+      z-index: 10;
     }
-
-    .corner-brand .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--white);
+    .score-btn {
+      padding: 8px 16px; border-radius: 999px; background: #0078FF;
+      color: #fff; font-size: 13px; font-weight: 900; border: 0; cursor: pointer;
     }
+    .question-progress { margin-left: auto; font-size: clamp(14px, 1.4vw, 28px); font-weight: 700; color: #9ca3af; white-space: nowrap; }
 
-    .corner-label {
-      position: fixed;
-      top: 42px;
-      right: 44px;
-      z-index: 5;
-      font-size: 14px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--dim-white);
-      font-weight: 800;
-    }
-
-    .progress {
-      position: fixed;
-      left: 44px;
-      right: 44px;
-      bottom: 34px;
-      z-index: 5;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .progress-text {
-      min-width: 52px;
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--soft-white);
-      letter-spacing: 0.06em;
-    }
-
-    .progress-bar {
+    .quiz-slides-outer {
       flex: 1;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.2);
       overflow: hidden;
-      border-radius: 99px;
-    }
-
-    .progress-fill {
-      width: 0%;
-      height: 100%;
-      background: var(--white);
-      transition: width 360ms ease;
-    }
-
-    .nav-hint {
-      min-width: 180px;
-      text-align: right;
-      font-size: 13px;
-      color: var(--dim-white);
-      letter-spacing: 0.02em;
-    }
-
-    .number-mark {
-      position: absolute;
-      font-size: clamp(180px, 28vw, 440px);
-      line-height: 1;
-      font-weight: 900;
-      letter-spacing: -0.12em;
-      color: rgba(255, 255, 255, 0.075);
-      z-index: -1;
-      user-select: none;
-    }
-
-    .number-mark.right {
-      right: 6vw;
-      bottom: 5vh;
-    }
-
-    .number-mark.center {
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .divider {
-      width: min(520px, 54vw);
-      height: 1px;
-      background: var(--line-white);
-      margin: 38px 0 8px;
-    }
-
-    .small-note {
-      margin-top: 20px;
-      color: var(--dim-white);
-      font-size: clamp(15px, 1.4vw, 19px);
-      line-height: 1.55;
-    }
-
-    .name-tag {
-      margin-bottom: 28px;
-      padding: 10px 18px;
-      border: 1px solid var(--line-white);
-      border-radius: 999px;
-      font-size: clamp(13px, 1.2vw, 17px);
-      color: var(--soft-white);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-weight: 800;
-    }
-
-    .dark-slide {
-      background: #202026;
-    }
-
-    .dark-slide::before {
-      content: "";
-      position: absolute;
-      inset: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 28px;
-      pointer-events: none;
-    }
-
-    .mono-title {
-      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
-      font-size: clamp(38px, 5.8vw, 86px);
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      line-height: 1;
-      color: var(--white);
-    }
-
-    .mono-title.small {
-      font-size: clamp(28px, 3.8vw, 58px);
-      letter-spacing: 0.02em;
-    }
-
-    .dna-list {
-      margin-top: 34px;
-      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
-      font-size: clamp(17px, 2vw, 30px);
-      line-height: 1.55;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .dna-list p {
-      opacity: 0;
-      transform: translateY(8px);
-      animation: dnaFade 560ms ease forwards;
-    }
-
-    .slide.active .dna-list p:nth-child(1) { animation-delay: 140ms; }
-    .slide.active .dna-list p:nth-child(2) { animation-delay: 300ms; }
-    .slide.active .dna-list p:nth-child(3) { animation-delay: 460ms; }
-    .slide.active .dna-list p:nth-child(4) { animation-delay: 620ms; }
-    .slide.active .dna-list p:nth-child(5) { animation-delay: 780ms; }
-
-    .dna-list.spaced {
-      margin-top: 28px;
-      line-height: 1.8;
-    }
-
-    .subtitle.compact {
-      margin-top: 28px;
-      font-size: clamp(19px, 1.8vw, 28px);
-    }
-
-    .goods-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(160px, 1fr));
-      gap: 16px;
-      width: min(820px, 82vw);
-      margin-top: 42px;
-    }
-
-    .goods-grid div {
-      padding: 20px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      border-radius: 999px;
-      font-size: clamp(16px, 1.6vw, 24px);
-      font-weight: 900;
-      letter-spacing: 0.06em;
-      color: rgba(255, 255, 255, 0.92);
-      font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
-    }
-
-    .gradient-stage-1 {
-      background: #0078FF;
-    }
-
-    .gradient-stage-2 {
-      background: #0262cf;
-    }
-
-    .gradient-stage-3 {
-      background: #0251ab;
-    }
-
-    .gradient-stage-4 {
-      background: #000000;
-    }
-
-    .gradient-stage-4 {
-      background: var(--tagby-blue);
-    }
-
-    .gradient-stage-1::before,
-    .gradient-stage-2::before,
-    .gradient-stage-3::before {
-      content: "";
-      position: absolute;
-      inset: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.11);
-      border-radius: 28px;
-      pointer-events: none;
-    }
-    
-    .bg-photo-slide {
-      background-image: url("./10th_photo_bg.png");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-    
-    .image-stage {
-      width: min(860px, 78vw);
-      min-height: min(520px, 48vh);
-      margin-top: 34px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 28px;
-      background: rgba(255, 255, 255, 0.08);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      backdrop-filter: blur(12px);
-    }
-
-    .final-design-slide {
-      background: #000000;
-      padding: 0;
-    }
-
-    .final-design-slide .final-design-image {
-      width: 100vw;
-      height: 100vh;
-      object-fit: contain;
-      display: block;
-    }
-
-    .final-design-slide .placeholder-copy {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000000;
-      color: rgba(255, 255, 255, 0.72);
-      text-align: center;
-    }
-
-    .image-stage img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    .placeholder-copy {
-      font-size: clamp(18px, 2vw, 28px);
-      color: var(--soft-white);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.45;
-    }
-
-    .map-stage {
-      width: min(900px, 82vw);
-      min-height: min(360px, 36vh);
-      margin-top: 30px;
-      border: 1px dashed rgba(255, 255, 255, 0.36);
-      border-radius: 28px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: var(--soft-white);
-      font-size: clamp(18px, 1.8vw, 26px);
-      font-weight: 800;
-    }
-
-    .mega-brand {
-      font-size: clamp(110px, 22vw, 300px);
-      line-height: 0.86;
-      font-weight: 950;
-      letter-spacing: -0.09em;
-    }
-
-    .info-stack {
-      margin-top: 34px;
-      display: grid;
-      gap: 14px;
-      width: min(760px, 76vw);
-    }
-
-    .info-card {
-      padding: 18px 24px;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      border-radius: 22px;
-      color: rgba(255, 255, 255, 0.9);
-      font-size: clamp(18px, 1.8vw, 27px);
-      font-weight: 800;
-      line-height: 1.35;
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-
-    .rotating-guide-slide {
-      background: var(--tagby-blue);
-      overflow: hidden;
-    }
-
-    .rotating-guide-slide::before {
-      display: none;
-    }
-
-    .rotating-message {
-      position: absolute;
-      inset: 0;
+      min-height: 0;
+      position: relative;
       width: 100%;
       height: 100%;
+    }
+    .quiz-slides-track {
+      display: flex;
+      flex-wrap: nowrap;
+      height: 100%;
+      width: 100%;
+      align-items: stretch;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .quiz-slide {
+      flex-shrink: 0;
+      width: 100%;
+      height: 100% !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 48px 80px !important;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .question-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .q-num { font-size: clamp(34px, 4vmin, 64px); font-weight: 950; color: #0078FF; letter-spacing: -0.04em; }
+    .question-type-badge { display: inline-block; padding: 4px 14px; border-radius: 999px; font-size: clamp(34px, 4vmin, 64px); font-weight: 900; letter-spacing: 0.01em; }
+    .badge-subjective { background: #eff6ff; color: #0078FF; }
+    .badge-mcq        { background: #f0fdf4; color: #0CA678; }
+    .badge-image-mcq  { background: #fdf4ff; color: #9333ea; }
+    .badge-image-subj { background: #fff7ed; color: #ea580c; }
+
+    .question-text {
+      margin: 0;
+      font-size: 200px; /* JS로 동적 조정 */
+      line-height: 1.22;
+      font-weight: 950;
+      letter-spacing: -0.05em;
+      word-break: keep-all;
+      white-space: pre-line;
+    }
+    .question-text .q-highlight { color: #529AF8; }
+
+    .slide-timer {
+      margin-top: 20px;
+      font-size: clamp(48px, 7vw, 100px);
+      font-weight: 950;
+      letter-spacing: -0.04em;
+      color: #0078FF;
+      line-height: 1;
+    }
+    .slide-timer.danger { color: #dc2626; animation: shake 0.28s infinite; }
+
+    .slide-question-ref {
+      font-size: clamp(14px, 1.4vw, 28px); font-weight: 700; color: #9ca3af;
+      margin-bottom: 28px; word-break: keep-all; white-space: pre-line; line-height: 1.5;
+    }
+
+    .question-image-wrap {
+      display: none;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #f3f4f6;
+      flex: 1;
+      min-height: 0;
+      max-height: 70vh;
+      width: 100%;
+    }
+    .question-image-wrap.visible { display: flex; align-items: center; justify-content: center; }
+    .question-image-wrap img {
+      display: none; max-width: 100%; max-height: 100%;
+      width: 100%; height: 100%; object-fit: contain; border-radius: 16px;
+    }
+    .image-loading { display: flex; align-items: center; justify-content: center; min-height: 120px; width: 240px; color: #9ca3af; font-size: 15px; font-weight: 700; }
+    .image-error   { display: flex; align-items: center; justify-content: center; min-height: 80px;  width: 240px; color: #dc2626; font-size: 14px; font-weight: 700; }
+
+    .options-area.visible {
+      display: flex !important;
+      flex-direction: row !important;
+      flex: 1 !important;
+      min-height: 0;
+      gap: 12px !important;
+      width: 100%;
+      align-items: stretch;
+    }
+    .option-item {
+      flex: 1 !important;
+      min-height: 0;
+      overflow: hidden;
+      padding: 20px 16px !important;
+      /* font-size: JS로 동적 제어 */
+      font-weight: 800;
+      line-height: 1.3;
+      word-break: keep-all;
+      border-radius: 24px !important;
+      background: #f8faff;
+      transition: background 0.2s, opacity 0.2s, border 0.2s;
+      border: 3px solid #e5e7eb !important;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 72px clamp(40px, 8vw, 120px);
-      text-align: center;
-      opacity: 0;
-      transform: translateY(18px);
-      animation: rotateGuide 10s ease-in-out infinite;
+      gap: 12px;
     }
+    .option-item.correct { background: #dcfce7 !important; border-color: #0CA678 !important; color: #15803d !important; }
+    .option-item.incorrect { opacity: 0.35; }
 
-    .rotating-message.message-two {
-      animation-delay: 5s;
-    }
-
-    .rotating-message .title {
-      font-size: clamp(50px, 6vw, 104px);
-      line-height: 1.06;
-      letter-spacing: -0.06em;
-      max-width: 1200px;
-    }
-
-    .rotating-message .subtitle {
-      font-size: clamp(22px, 2.1vw, 34px);
-      line-height: 1.45;
-      max-width: 980px;
-    }
-
-    @keyframes rotateGuide {
-      0%, 10% {
-        opacity: 0;
-        transform: translateY(18px);
-      }
-      16%, 44% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      50%, 100% {
-        opacity: 0;
-        transform: translateY(-18px);
-      }
-    }
-
-
-
-    .exit-guide-slide {
-      background: var(--tagby-blue);
-      padding: 72px clamp(48px, 6vw, 100px);
-      display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: clamp(36px, 5vw, 72px);
-      align-items: center;
-      text-align: left;
-    }
-
-    .exit-guide-copy {
+    /* 옵션 이미지 */
+    .option-img {
+      display: block;
       width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .option-label { display: block; }
+
+    .answer-box {
+      display: none;
+      margin-top: 16px;
+      font-size: clamp(48px, 7vw, 150px);
+      font-weight: 950;
+      line-height: 1.1;
+      word-break: keep-all;
+      color: #111827;
+    }
+    .answer-box.visible { display: block; }
+    .answer-highlight { color: #0078FF; }
+
+    /* 정답 설명 */
+    .answer-desc {
+      margin-top: 12px;
+      font-size: clamp(22px, 2.2vw, 39px);
+      font-weight: 800;
+      color: #F14646;
+      line-height: 1.5;
+      word-break: keep-all;
+      white-space: pre-line;
     }
 
-    .exit-guide-copy .eyebrow {
-      margin-bottom: 24px;
-    }
+    .quiz-slide.answer-mode .question-meta { opacity: 0.3; }
+    .quiz-slide.answer-mode .question-text { font-size: clamp(34px, 4vw, 64px); opacity: 0.38; }
+    .quiz-slide.answer-mode .slide-timer { display: none; }
+    .quiz-slide.answer-mode .slide-question-ref { opacity: 0.4; }
+    .quiz-slide.answer-mode .options-area { pointer-events: none; }
+    .quiz-slide.answer-mode .options-area .option-item { transition: opacity 0.2s; }
+    .quiz-slide.answer-mode .options-area .option-item:not(.correct) { opacity: 0.25; }
+    .quiz-slide.answer-mode .options-area .option-item.correct { box-shadow: 0 8px 32px rgba(22,163,74,0.2); }
 
-    .exit-guide-copy .title {
-      font-size: clamp(56px, 7vw, 118px);
-      line-height: 0.98;
-    }
-
-    .exit-guide-copy .subtitle {
-      margin-top: 32px;
-      font-size: clamp(24px, 2.3vw, 38px);
-      line-height: 1.45;
-    }
-
-    .exit-guide-copy .meta {
-      margin-top: 38px;
-    }
-
-    .exit-map-panel {
-      width: 100%;
-      height: min(68vh, 640px);
-      border-radius: 36px;
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 32px 90px rgba(0, 30, 120, 0.28);
-      overflow: hidden;
+    .bottom-bar {
+      flex-shrink: 0;
       display: flex;
       align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(10px);
-      padding: 14px;
-    }
-
-    .exit-map-panel img {
+      justify-content: space-between;
+      padding: 14px 40px;
+      border-top: 1px solid #f3f4f6;
+      background: #fff;
+      z-index: 10;
       width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      border-radius: 26px;
-      background: rgba(255, 255, 255, 0.92);
+      box-sizing: border-box;
     }
-
-    .exit-map-fallback {
-      padding: 40px;
-      text-align: center;
-      color: var(--soft-white);
-      font-size: clamp(20px, 2vw, 30px);
-      line-height: 1.55;
-      font-weight: 800;
-      word-break: keep-all;
+    .bottom-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
-
-    @keyframes dnaFade {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .bottom-timer {
+      font-size: clamp(48px, 7vw, 100px);
+      font-weight: 950;
+      letter-spacing: -0.04em;
+      color: #0078FF;
+      line-height: 1;
+      min-width: 160px;
     }
-
-    @media (max-width: 768px) {
-      .slide {
-        padding: 42px 26px;
-      }
-
-      .corner-brand {
-        top: 24px;
-        left: 24px;
-      }
-
-      .corner-label {
-        top: 29px;
-        right: 24px;
-      }
-
-      .progress {
-        left: 24px;
-        right: 24px;
-        bottom: 22px;
-      }
-
-      .nav-hint {
-        display: none;
-      }
+    .bottom-timer.danger { color: #dc2626; animation: shake 0.28s infinite; }
+    .timer-start-button {
+      padding: 10px 24px; border-radius: 999px; background: #0078FF;
+      color: #fff; font-size: 24px; font-weight: 900; border: 0;
     }
+    .answer-button {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 56px; height: 56px; border-radius: 999px;
+      background: #111827; color: #fff; font-size: 24px; font-weight: 950; line-height: 1; border: 0;
+    }
+    .timer { display: none !important; }
+
+    button { border: 0; cursor: pointer; transition: transform 0.15s ease, opacity 0.15s ease; font-family: inherit; }
+    button:hover:not(:disabled) { transform: translateY(-2px); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    @keyframes shake {
+      0%   { transform: translateX(0); }
+      25%  { transform: translateX(-4px); }
+      50%  { transform: translateX(4px); }
+      75%  { transform: translateX(-3px); }
+      100% { transform: translateX(0); }
+    }
+    @keyframes screenFlash {
+      0%,100% { background: rgba(220,38,38,0);    box-shadow: inset 0 0 0 rgba(255,0,0,0); }
+      50%      { background: rgba(220,38,38,0.22); box-shadow: inset 0 0 260px rgba(255,0,0,0.34); }
+    }
+    .error { color: #dc2626; }
+
+    .final-screen {
+      background: radial-gradient(circle at bottom right, #dbeafe 0, transparent 40%),
+                  linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
+      flex-direction: column; gap: 48px;
+      overflow-y: auto;
+      align-items: center;
+    }
+    .final-content { width: min(100%, 860px); text-align: center; }
+    .final-title { margin: 16px 0 8px; font-size: clamp(48px, 7vw, 96px); font-weight: 950; letter-spacing: -0.05em; line-height: 1.1; color: #111827; }
+    .final-sub { font-size: 22px; font-weight: 700; color: #6b7280; margin-bottom: 16px; }
+    .final-draw-notice { display: flex; align-items: center; gap: 12px; padding: 16px 24px; border-radius: 16px; background: #fffbeb; border: 2px solid #fbbf24; margin-bottom: 28px; text-align: left; }
+    .final-draw-notice-icon { font-size: 28px; flex-shrink: 0; }
+    .final-draw-notice-text { font-size: 15px; font-weight: 700; color: #92400e; line-height: 1.6; }
+    .final-ranking { display: flex; flex-direction: column; gap: 14px; text-align: left; }
+    .ranking-item { display: flex; align-items: center; gap: 20px; padding: 20px 28px; border-radius: 20px; background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.06); animation: slideUp 0.4s ease both; }
+    .ranking-item:nth-child(1) { animation-delay: 0.05s; }
+    .ranking-item:nth-child(2) { animation-delay: 0.1s; }
+    .ranking-item:nth-child(3) { animation-delay: 0.15s; }
+    .ranking-item:nth-child(4) { animation-delay: 0.2s; }
+    .ranking-item:nth-child(5) { animation-delay: 0.25s; }
+    .ranking-item:nth-child(6) { animation-delay: 0.3s; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .ranking-item.rank-1 { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #fbbf24; }
+    .ranking-item.rank-2 { background: linear-gradient(135deg, #f9fafb, #f3f4f6); border: 2px solid #9ca3af; }
+    .ranking-item.rank-3 { background: linear-gradient(135deg, #fffaf0, #fef3e2); border: 2px solid #d97706; }
+    .rank-badge { font-size: 36px; min-width: 48px; text-align: center; }
+    .rank-team { flex: 1; font-size: clamp(22px, 3vw, 36px); font-weight: 900; color: #111827; }
+    .rank-score { font-size: clamp(28px, 4vw, 48px); font-weight: 950; color: #0078FF; letter-spacing: -0.03em; }
+    .rank-score-label { font-size: 16px; font-weight: 700; color: #9ca3af; margin-left: 4px; }
+    .final-next-btn { margin-top: 40px; padding: 18px 40px; border: 0; border-radius: 999px; background: #111827; color: #fff; font-size: 20px; font-weight: 900; cursor: pointer; font-family: inherit; }
+
+    .tiebreak-screen { background: radial-gradient(circle at top right, #fee2e2 0, transparent 40%), linear-gradient(135deg, #ffffff 0%, #fff5f5 100%); flex-direction: column; gap: 40px; text-align: center; }
+    .tiebreak-content { width: min(100%, 860px); }
+    .tiebreak-title { margin: 16px 0 16px; font-size: clamp(48px, 7vw, 96px); font-weight: 950; letter-spacing: -0.05em; line-height: 1.1; color: #111827; }
+    .tiebreak-sub { font-size: 22px; font-weight: 700; color: #6b7280; margin-bottom: 48px; word-break: keep-all; line-height: 1.6; }
+
+    .reception-screen { background: radial-gradient(circle at bottom left, #d1fae5 0, transparent 40%), linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); flex-direction: column; gap: 40px; }
+    .reception-content { width: min(100%, 1100px); text-align: left; }
+    .reception-title { margin: 16px 0 52px; font-size: clamp(54px, 7vw, 100px); font-weight: 950; letter-spacing: -0.05em; line-height: 1.1; color: #111827; word-break: keep-all; }
+    .rec-slider-wrap { position: relative; min-height: 380px; overflow: hidden; }
+    .rec-next-button { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 999px; border: 1px solid rgba(17,24,39,0.08); background: rgba(255,255,255,0.3); backdrop-filter: blur(8px); color: rgba(17,24,39,0.9); font-size: 20px; font-weight: 900; cursor: pointer; z-index: 10; font-family: inherit; }
+    .rec-slider { display: flex; transition: transform 0.4s ease; }
+    .rec-slide { width: 100%; flex-shrink: 0; padding: 12px; }
+    .rec-card { padding: 48px 52px; border-radius: 36px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); box-shadow: 0 10px 40px rgba(16,185,129,0.1); min-height: 380px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
+    .rec-emoji { font-size: 96px; line-height: 1; }
+    .rec-label { font-size: 24px; font-weight: 950; color: #059669; margin-bottom: 12px; letter-spacing: 0.01em; }
+    .rec-main { font-size: clamp(34px, 4vw, 64px); line-height: 1.25; font-weight: 900; word-break: keep-all; color: #111827; }
+    .rec-sub { margin-top: 16px; font-size: clamp(22px, 2.2vw, 39px); font-weight: 700; color: #6b7280; word-break: keep-all; line-height: 1.5; }
   </style>
 </head>
 <body>
-  <div class="corner-brand"><span class="dot"></span><span>TAGby</span></div>
-  <div class="corner-label">10th Anniversary</div>
 
-  <main class="deck" id="deck">
-    <section class="slide active">
-      <div class="number-mark center">10</div>
-      <div class="eyebrow">2016 — 2026</div>
-      <h1 class="title">TAGby<br />10년 돌아보기</h1>
-      <p class="subtitle">우리가 함께 만들어온 시간과<br />앞으로 함께 만들어갈 이야기</p>
-      <div class="meta">Main Session</div>
-    </section>
+  <!-- 인트로 -->
+  <section class="screen intro-screen active" id="introScreen">
+    <div class="intro-content">
+      <div class="intro-label">TAGby 10th Anniversary</div>
+      <h1 class="intro-title">TAGby 10주년<br />기념 퀴즈쇼</h1>
+      <button class="intro-button" id="showRuleButton">퀴즈 룰 보기 →</button>
+    </div>
+  </section>
 
-    <section class="slide">
-      <div class="number-mark right">01</div>
-      <div class="eyebrow">Opening Retrospective</div>
-      <h2 class="title medium">대표님 회고</h2>
-      <p class="subtitle">TAGby의 10년,<br />그리고 앞으로의 방향</p>
-      <div class="meta">10 min</div>
-    </section>
-
-    <section class="slide">
-      <div class="number-mark center">♡</div>
-      <div class="eyebrow">Thank You Moment</div>
-      <h2 class="title medium">10년의 시간을<br />이끌어주셔서 감사합니다</h2>
-      <p class="subtitle">Cake & Digital Rolling Paper</p>
-      <div class="button-row">
-        <a class="button" href="./rolling.html" target="_blank" rel="noopener noreferrer">디지털 롤링페이퍼 열기</a>
+  <!-- 룰 -->
+  <section class="screen intro-screen" id="ruleScreen">
+    <div class="intro-content rule-screen-content">
+      <div class="intro-label">QUIZ RULE</div>
+      <h2 class="rule-title">퀴즈 진행 방식</h2>
+      <div class="rule-slider-wrap">
+        <button class="rule-next-button" id="ruleNextButton">→</button>
+        <div class="rule-slider" id="ruleSlider"></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="slide">
-      <div class="number-mark right">05</div>
-      <div class="eyebrow">People Retrospective</div>
-      <h2 class="title medium">함께 만든<br />10년의 이야기</h2>
-      <p class="subtitle">개인 회고 세션</p>
-      <div class="meta">5 People</div>
-    </section>
-
-    <section class="slide">
-      <div class="name-tag">Retrospective 01</div>
-      <h2 class="title name">신명민</h2>
-      <div class="divider"></div>
-      <p class="small-note">TAGby 10th Anniversary</p>
-    </section>
-
-    <section class="slide">
-      <div class="name-tag">Retrospective 02</div>
-      <h2 class="title name">Speaker 02</h2>
-      <div class="divider"></div>
-      <p class="small-note">TAGby 10th Anniversary</p>
-    </section>
-
-    <section class="slide">
-      <div class="name-tag">Retrospective 03</div>
-      <h2 class="title name">Speaker 03</h2>
-      <div class="divider"></div>
-      <p class="small-note">TAGby 10th Anniversary</p>
-    </section>
-
-    <section class="slide">
-      <div class="name-tag">Retrospective 04</div>
-      <h2 class="title name">Speaker 04</h2>
-      <div class="divider"></div>
-      <p class="small-note">TAGby 10th Anniversary</p>
-    </section>
-
-    <section class="slide">
-      <div class="name-tag">Retrospective 05</div>
-      <h2 class="title name">Speaker 05</h2>
-      <div class="divider"></div>
-      <p class="small-note">TAGby 10th Anniversary</p>
-    </section>
-
-    <section class="slide gradient-stage-1">
-      <div class="eyebrow">2016 — 2026</div>
-      <h2 class="mono-title">001 to 010</h2>
-      <p class="subtitle">TAGby가 지나온 10년의 흐름</p>
-    </section>
-
-    <section class="slide gradient-stage-2 dna-slide">
-      <div class="eyebrow">TAGby DNA</div>
-      <div class="dna-list">
-        <p>WHY-DRIVEN / FULL-OWNERSHIP</p>
-        <p>LOGIC &amp; RATIO / OPEN-SYNC</p>
-        <p>MAX-EFFICIENCY / FEARLESS-STEP</p>
-        <p>META-GROWTH / RESULT-ONLY</p>
-        <p>RADICAL-CANDOR</p>
+  <!-- 상품 설명 -->
+  <section class="screen prize-screen" id="prizeScreen">
+    <div class="prize-content">
+      <div class="intro-label" style="background:#d97706;">🎁 PRIZES</div>
+      <h2 class="prize-title">오늘의 상품</h2>
+      <div class="prize-slider-wrap">
+        <button class="prize-next-button" id="prizeNextButton">→</button>
+        <div class="prize-slider" id="prizeSlider"></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="slide gradient-stage-3 dna-slide">
-      <div class="eyebrow">Filled by Different DNA</div>
-      <h2 class="mono-title" style="font-size: clamp(44px, 5.8vw, 92px); line-height: 1.12; letter-spacing: -0.035em;">
-        DNA.ARCHIVE.SEQ.10<br />=
-        [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
-      </h2>
-
-      <div style="margin-top: 48px; color: rgba(255,255,255,0.78); font-size: clamp(18px, 1.7vw, 26px); line-height: 1.9; font-weight: 500; letter-spacing: -0.015em;">
-        <p>10년 동안 축적되어온 TAGby DNA의 시퀀스/아카이브</p>
-        <p>서로 다른 사람들이 서로 다른 DNA로 각자의 빈칸을 채워왔습니다</p>
+  <!-- 비밀번호 모달 -->
+  <div class="pw-modal-overlay" id="pwModalOverlay">
+    <div class="pw-modal" id="pwModal">
+      <div class="pw-modal-icon">🔒</div>
+      <h3 class="pw-modal-title">비밀번호 입력</h3>
+      <p class="pw-modal-sub">진행자만 접근할 수 있습니다</p>
+      <div class="pw-input-wrap">
+        <input type="password" class="pw-input" id="pwInput" placeholder="비밀번호 입력" autocomplete="off" />
       </div>
-    </section>
+      <div class="pw-error-msg" id="pwErrorMsg">❌ 비밀번호가 올바르지 않습니다</div>
+      <button class="pw-confirm-btn" id="pwConfirmBtn">확인</button>
+      <br/>
+      <button class="pw-cancel-btn" id="pwCancelBtn">취소</button>
+    </div>
+  </div>
 
-    <section class="slide final-design-slide">
-      <img class="final-design-image" src="./tagby-dna-text.png" alt="TAGby 10th Anniversary DNA Final Design" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-      <div class="placeholder-copy" style="display:none;">첨부한 10주년 기념 디자인 이미지 자리<br />파일명: tagby-dna-text.png</div>
-    </section>
-
-    <section class="slide goods-slide">
-      <div class="eyebrow">TAGby 10th Anniversary Goods</div>
-      <h2 class="title medium">10주년 기념 굿즈</h2>
-
-      <div style="display:flex; justify-content:center; align-items:flex-end; gap: clamp(18px, 3vw, 56px); width:min(1200px, 92vw); margin-top:56px; flex-wrap:wrap;">
-
-        <div style="display:flex; flex-direction:column; align-items:center; gap:22px;">
-          <img src="./goods-hoodie.png" alt="TAGby Hoodie" style="width:min(320px, 28vw); filter: drop-shadow(0 20px 40px rgba(0,0,0,0.28));" />
-          <div style="font-family:'SFMono-Regular','Menlo','Monaco','Consolas',monospace; font-size:15px; letter-spacing:0.16em; color:rgba(255,255,255,0.78);">HOOD ZIP-UP</div>
+  <!-- 퀴즈 -->
+  <section class="screen quiz-screen" id="quizScreen">
+    <div class="quiz-slides-outer">
+      <div class="quiz-slides-track" id="quizSlidesTrack">
+        <!-- 슬라이드 0: 질문 -->
+        <div class="quiz-slide" id="slideQuestion">
+          <div class="question-meta">
+            <span class="q-num" id="questionNumText">Q1</span>
+            <span class="question-type-badge badge-subjective" id="questionTypeBadge">주관식</span>
+          </div>
+          <h2 class="question-text" id="questionText">문제를 불러오는 중...</h2>
+          <!-- 주관식 정답 박스 -->
+          <div class="answer-box" id="answerBoxQ"></div>
         </div>
-
-        <div style="display:flex; flex-direction:column; align-items:center; gap:22px; transform: translateY(12px);">
-          <img src="./goods-pouch.png" alt="TAGby Pouch" style="width:min(300px, 26vw); filter: drop-shadow(0 20px 40px rgba(0,0,0,0.24));" />
-          <div style="font-family:'SFMono-Regular','Menlo','Monaco','Consolas',monospace; font-size:15px; letter-spacing:0.16em; color:rgba(255,255,255,0.78);">POUCH</div>
+        <!-- 슬라이드 1: 추가설명 -->
+        <div class="quiz-slide" id="slideExtra">
+          <div class="slide-question-ref" id="slideQuestionRef"></div>
+          <div class="question-image-wrap" id="questionImageWrap">
+            <div class="image-loading" id="imageLoading">이미지 불러오는 중...</div>
+            <img id="questionImage" src="" alt="문제 이미지" />
+          </div>
+          <div class="options-area" id="optionsArea"></div>
+          <!-- 비주관식 정답 박스 -->
+          <div class="answer-box" id="answerBoxE"></div>
         </div>
+      </div>
+    </div>
+    <div class="timer" id="timer"></div>
+    <div class="bottom-bar">
+      <div class="bottom-left">
+        <span class="bottom-timer" id="bottomTimer">01:00</span>
+        <button class="timer-start-button" id="startButton">▶ 시작</button>
+      </div>
+      <button class="answer-button" id="answerButton">→</button>
+    </div>
+  </section>
 
-        <div style="display:flex; flex-direction:column; align-items:center; gap:22px; transform: translateY(-8px);">
-          <img src="./goods-mug.png" alt="TAGby Mug" style="width:min(250px, 22vw); filter: drop-shadow(0 20px 40px rgba(0,0,0,0.18));" />
-          <div style="font-family:'SFMono-Regular','Menlo','Monaco','Consolas',monospace; font-size:15px; letter-spacing:0.16em; color:rgba(255,255,255,0.78);">MUG</div>
+  <!-- 최종 결과 -->
+  <section class="screen final-screen" id="finalScreen">
+    <div class="final-content">
+      <div class="intro-label">QUIZ COMPLETE 🎉</div>
+      <h2 class="final-title">퀴즈가 모두<br>종료되었습니다!</h2>
+      <p class="final-sub">최종 점수를 확인하세요</p>
+      <div class="final-draw-notice">
+        <div class="final-draw-notice-icon">🎁</div>
+        <div class="final-draw-notice-text">
+          순위 확인 후 상품 뽑기가 진행됩니다.<br>
+          1등 팀은 <strong>만원 이상 상품</strong> 풀에서 먼저 뽑습니다!
         </div>
-
       </div>
-    </section>
-
-    <section class="slide">
-      <div class="eyebrow">Intermission</div>
-      <h2 class="title medium">BREAK TIME</h2>
-      <p class="subtitle">잠시 쉬는 시간을 가진 뒤<br />레크리에이션으로 이어집니다</p>
-      <div class="button-row">
-        <a class="button" href="https://www.youtube.com/watch?v=V-y4wL7sCWI&list=RDV-y4wL7sCWI&start_radio=1&t=775s" target="_blank" rel="noopener noreferrer">Break Music 열기</a>
+      <div class="final-ranking" id="finalRanking">
+        <div style="text-align:center; color:#9ca3af; font-weight:700;">점수 불러오는 중...</div>
       </div>
-    </section>
+      <button class="final-next-btn" id="finalNextBtn" style="display:none;" onclick="goAfterFinal()"></button>
+    </div>
+  </section>
 
-    <section class="slide">
-      <div class="number-mark right">02</div>
-      <div class="eyebrow">Recreation</div>
-      <h2 class="title medium">레크리에이션</h2>
-      <p class="subtitle">다음 프로그램을 시작합니다</p>
-      <div class="button-row">
-        <a class="button" href="./recreation/" target="_blank" rel="noopener noreferrer">레크리에이션 HTML 열기</a>
+  <!-- 순위결정전 -->
+  <section class="screen tiebreak-screen" id="tiebreakScreen">
+    <div class="tiebreak-content">
+      <div class="intro-label" style="background:#dc2626;">⚡ TIEBREAKER</div>
+      <h2 class="tiebreak-title">동점자가<br>발생했습니다!</h2>
+      <p class="tiebreak-sub">순위결정전을 통해 최종 순위를 가립니다.<br>진행 방식은 진행자의 안내를 따라주세요.</p>
+      <p style="margin-top:32px; color:#9ca3af; font-size:16px; font-weight:700;">→ 방향키를 누르면 상품 수령 안내로 넘어갑니다</p>
+    </div>
+  </section>
+
+  <!-- 상품 수령 안내 -->
+  <section class="screen reception-screen" id="receptionScreen">
+    <div class="reception-content">
+      <div class="intro-label" style="background:#059669;">🎁 PRIZE RECEPTION</div>
+      <h2 class="reception-title">상품 수령<br>안내</h2>
+      <div class="rec-slider-wrap">
+        <button class="rec-next-button" id="recNextBtn">→</button>
+        <div class="rec-slider" id="recSlider"></div>
       </div>
-    </section>
-
-    <section class="slide rotating-guide-slide">
-      <div class="rotating-message message-one">
-        <div class="eyebrow">Made by TAGby People</div>
-        <h2 class="title medium">준비한 콘텐츠가<br />모두 마무리되었습니다</h2>
-        <p class="subtitle">10주년 이벤트를 함께 준비해준<br />TF에게 큰 박수 부탁드립니다</p>
-        <div class="meta">👏 👏 👏</div>
-      </div>
-
-      <div class="rotating-message message-two">
-        <div class="eyebrow">Next Guide</div>
-        <h2 class="title medium">기념촬영 후<br />저녁 식사 장소로 이동합니다</h2>
-        <p class="subtitle">순서에 따라 촬영을 마친 뒤<br />신라스테이 역삼 카페로 이동해주세요</p>
-        <div class="meta">18:00 Dinner Session</div>
-      </div>
-    </section>
-
-    <section class="slide bg-photo-slide"></section>
-
-    <section class="slide exit-guide-slide">
-      <div class="exit-guide-copy">
-        <div class="eyebrow">Exit Guide</div>
-        <h2 class="title">퇴장 안내</h2>
-        <p class="subtitle">퇴장 시 레크리에이션 상품을<br />꼭 수령해주세요.</p>
-        <div class="meta">저녁식사 장소 · 신라스테이 역삼 카페</div>
-      </div>
-
-      <div class="exit-map-panel">
-        <img src="./dinner-map.png" alt="신라스테이 역삼 카페 약도" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-        <div class="exit-map-fallback" style="display:none;">저녁식사 장소 약도 이미지 자리<br />파일명: dinner-map.png</div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="progress">
-    <div class="progress-text" id="progressText">1 / 10</div>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="nav-hint">← → / Space to navigate</div>
-  </footer>
+    </div>
+  </section>
 
   <script>
-    const slides = Array.from(document.querySelectorAll('.slide'));
-    const progressText = document.getElementById('progressText');
-    const progressFill = document.getElementById('progressFill');
-    let currentIndex = 0;
+    /* ══════════════════════════════════════════════
+       ★ 설정값
+    ══════════════════════════════════════════════ */
+    const QUIZ_PASSWORD  = "tagby2025";
+    const GITHUB_IMAGE_BASE = "https://brie-dot.github.io/tagby_10th_anniversary/recreation/images/";
+    const ASSET_VERSION = "20260529-1"; // 이미지 교체/리네이밍 후 캐시가 꼬이면 이 값만 바꿔주세요.
+    const SHEET_URL      = "https://docs.google.com/spreadsheets/d/1B6AtoVN8a4kBMX7xcGotZEhRS_NWBISjy5l8OCFn4O8/export?format=csv&gid=0";
+    const SCORE_URL      = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpMTMpqFtQVyu9efUUp10kRvpQMza3Ur9JxVkqWfb_7JFLYmQGogHznVf9s3NpeJa9QMPjfGX3HTPH/pub?gid=355034406&single=true&output=csv";
+    const TIMER_DURATION = 40;
+    const DANGER_AT      = 10;
 
-    function updateSlide() {
-      slides.forEach((slide, index) => {
-        slide.classList.toggle('active', index === currentIndex);
+    const TYPE = {
+      SUBJECTIVE : "subjective",
+      MCQ        : "mcq",
+      IMAGE_MCQ  : "image-mcq",
+      IMAGE_SUBJ : "image-subjective",
+    };
+
+    const CIRCLE_NUMS = ["①","②","③","④","⑤"];
+
+    const PROXIES = [
+      url => url,
+      url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+      url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+      url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+    ];
+
+    const RULES = [
+      { emoji: "👥", label: "RULE 1", main: "퀴즈는 팀전으로 진행됩니다.", sub: "팀당 5~6인 구성" },
+      { emoji: "🤔", label: "RULE 2", main: "퀴즈는 두 가지 질문으로 나누어집니다.", sub: "1. 스케치북 퀴즈 2. 스피드 퀴즈" },
+      { emoji: "✍️", label: "RULE 3", main: "스케치북 퀴즈 : 40초 안에 스케치북에 정답을 적어 보여주세요.", sub: "정답을 맞춘 모든 팀에게 1점을 부여합니다." },
+      { emoji: "⁉️", label: "RULE 4", main: "스피드 퀴즈 : 가장 먼저 팀명을 외친 팀부터 정답을 맞출 수 있습니다.", sub: "최초의 1팀만 3점을 가져갑니다." },
+      { emoji: "🏆", label: "RULE 5", main: "모든 퀴즈 종료 후 점수가 높은 팀 순으로 최종 순위를 발표합니다." },
+    ];
+
+    const PRIZES = [
+      {
+        emoji: "🎁",
+        label: "TOTAL PRIZES",
+        main: "총 61개의 상품이 준비되어 있습니다!",
+        sub: "아메리카노부터 신세계 상품권까지, 모든 상품은 랜덤 번호가 부여되어 있습니다."
+      },
+      {
+        emoji: "🎉",
+        label: "ALL WIN",
+        main: "점수가 높은 팀부터 차례대로 랜덤 상품 교환권(번호표)를 뽑습니다.",
+        sub: "모든 참여자가 하나 이상의 상품을 받아가요! 아무도 빈손으로 돌아가지 않습니다 :)"
+      },
+      {
+        emoji: "🥇",
+        label: "1등 팀 특전",
+        main: "1등 팀은 1만원 이상의 상품 풀에서 먼저 뽑습니다!",
+        sub: "1등 팀이 뽑은 후 남은 교환권들을 포함하여 다음 뽑기를 이어갑니다"
+      },
+    ];
+
+    const REC_RULES = [
+      {
+        emoji: "🎁",
+        label: "유의 사항 1",
+        main: "상품 교환권은 잘 보관해주신 후, 모든 콘텐츠가 종료된 후 리셉션에 제시해주세요.",
+        sub: "리셉션에서 실물 상품으로 교환해드립니다."
+      },
+      {
+        emoji: "🎉",
+        label: "유의 사항 2",
+        main: "실물 상품이 아닌 기프티콘/모바일 교환권을 수령하신 경우 세리맨에게 DM으로 말씀해주세요!",
+        sub: "행사 종료 후 일괄적으로 전달드립니다."
+      },
+    ];
+
+    const FALLBACK_DATA = [
+      { num: 1, question: "태그바이 창립일은?", answer: "[[2016년 6월 1일]]입니다.", type: TYPE.SUBJECTIVE, options: [], optionImages: [], image: "", answerDesc: "" },
+      { num: 2, question: "다음 중 태그바이가 처음 서비스를 시작한 연도는?", answer: "[[②2016년]]", type: TYPE.MCQ, options: ["2014년","2016년","2018년","2020년","2022년"], optionImages: [], image: "", answerDesc: "" },
+    ];
+
+    /* ── DOM ── */
+    const $ = id => document.getElementById(id);
+    const introScreen       = $("introScreen");
+    const ruleScreen        = $("ruleScreen");
+    const prizeScreen       = $("prizeScreen");
+    const quizScreen        = $("quizScreen");
+    const ruleSlider        = $("ruleSlider");
+    const ruleNextBtn       = $("ruleNextButton");
+    const quizSlidesTrack   = $("quizSlidesTrack");
+    const slideQuestion     = $("slideQuestion");
+    const slideExtra        = $("slideExtra");
+    const questionNum       = $("questionNumText");
+    const questionTypeBadge = $("questionTypeBadge");
+    const questionText      = $("questionText");
+    const slideQuestionRef  = $("slideQuestionRef");
+    const questionImageWrap = $("questionImageWrap");
+    const questionImage     = $("questionImage");
+    const imageLoading      = $("imageLoading");
+    const optionsArea       = $("optionsArea");
+    const startBtn          = $("startButton");
+    const answerBtn         = $("answerButton");
+    const answerBoxQ        = $("answerBoxQ");  // 주관식 정답
+    const answerBoxE        = $("answerBoxE");  // 비주관식 정답
+    const bottomTimerEl     = $("bottomTimer");
+
+    /* ── 상태 ── */
+    let quizData      = [];
+    let currentIndex  = 0;
+    let slideStep     = 0;
+    let remainingSecs = TIMER_DURATION;
+    let timerId       = null;
+    let isRunning     = false;
+    let ruleIndex     = 0;
+    let prizeIndex    = 0;
+    let recIndex      = 0;
+    let recPrevScreen = "finalScreen";
+
+    /* ══════════════════════════════════════════════
+       슬라이드 생성
+    ══════════════════════════════════════════════ */
+    ruleSlider.innerHTML = RULES.map(r => `
+      <div class="rule-slide"><div class="rule-card">
+        <div class="rule-emoji">${r.emoji}</div>
+        <div>
+          <div class="rule-label">${r.label}</div>
+          <div class="rule-main">${r.main}</div>
+          ${r.sub ? `<div class="rule-sub">${r.sub}</div>` : ""}
+        </div>
+      </div></div>`).join("");
+
+    $("prizeSlider").innerHTML = PRIZES.map(p => `
+      <div class="prize-slide"><div class="prize-card">
+        <div class="prize-emoji">${p.emoji}</div>
+        <div>
+          <div class="prize-label">${p.label}</div>
+          <div class="prize-main">${p.main}</div>
+          ${p.sub ? `<div class="prize-sub">${p.sub.replace(/\n/g,"<br>")}</div>` : ""}
+        </div>
+      </div></div>`).join("");
+
+    $("recSlider").innerHTML = REC_RULES.map(r => `
+      <div class="rec-slide"><div class="rec-card">
+        <div class="rec-emoji">${r.emoji}</div>
+        <div>
+          <div class="rec-label">${r.label}</div>
+          <div class="rec-main">${r.main}</div>
+          ${r.sub ? `<div class="rec-sub">${r.sub.replace(/\n/g,"<br>")}</div>` : ""}
+        </div>
+      </div></div>`).join("");
+
+    /* ══════════════════════════════════════════════
+       슬라이더 업데이트
+    ══════════════════════════════════════════════ */
+    function setStepperButtonState(button, isLast, lastLabel) {
+      button.style.display = "block";
+      button.textContent = isLast ? lastLabel : "→";
+      button.style.width = isLast ? "auto" : "42px";
+      button.style.padding = isLast ? "0 18px" : "0";
+      button.style.whiteSpace = "nowrap";
+    }
+    function updateRuleSlider() {
+      ruleSlider.style.transform = `translateX(-${ruleIndex * 100}%)`;
+      setStepperButtonState(ruleNextBtn, ruleIndex === RULES.length - 1, "상품 보기 →");
+    }
+    function updatePrizeSlider() {
+      const prizeNextBtn = $("prizeNextButton");
+      $("prizeSlider").style.transform = `translateX(-${prizeIndex * 100}%)`;
+      setStepperButtonState(prizeNextBtn, prizeIndex === PRIZES.length - 1, "퀴즈 시작 →");
+    }
+    function updateRecSlider() {
+      $("recSlider").style.transform = `translateX(-${recIndex * 100}%)`;
+      $("recNextBtn").style.display = recIndex === REC_RULES.length - 1 ? "none" : "block";
+    }
+
+    /* ══════════════════════════════════════════════
+       비밀번호 모달
+    ══════════════════════════════════════════════ */
+    function openPwModal() {
+      $("pwInput").value = "";
+      $("pwErrorMsg").classList.remove("visible");
+      $("pwInput").classList.remove("error");
+      $("pwModalOverlay").classList.add("active");
+      setTimeout(() => $("pwInput").focus(), 100);
+    }
+    function closePwModal() { $("pwModalOverlay").classList.remove("active"); }
+    function checkPassword() {
+      const val = $("pwInput").value;
+      if (val === QUIZ_PASSWORD) {
+        closePwModal();
+        showScreen("quizScreen");
+      } else {
+        $("pwInput").classList.add("error");
+        $("pwErrorMsg").classList.add("visible");
+        $("pwInput").value = "";
+        const modal = $("pwModal");
+        modal.classList.remove("shake");
+        void modal.offsetWidth;
+        modal.classList.add("shake");
+        setTimeout(() => modal.classList.remove("shake"), 400);
+        setTimeout(() => $("pwInput").focus(), 50);
+      }
+    }
+    $("pwConfirmBtn").addEventListener("click", checkPassword);
+    $("pwCancelBtn").addEventListener("click", closePwModal);
+    $("pwInput").addEventListener("keydown", e => { if (e.key === "Enter") checkPassword(); });
+    $("pwModalOverlay").addEventListener("click", e => { if (e.target === $("pwModalOverlay")) closePwModal(); });
+
+    /* ══════════════════════════════════════════════
+       유틸
+    ══════════════════════════════════════════════ */
+    function formatTime(s) {
+      return `${String(Math.floor(s / 60)).padStart(2,"0")}:${String(s % 60).padStart(2,"0")}`;
+    }
+    function escapeHTML(text) {
+      return String(text)
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+    }
+    function sanitizeFileName(fileName) {
+      const original = String(fileName || "").trim();
+      const safe = original.replace(/^\/+/, "").replace(/[^a-zA-Z0-9._/-]/g, "");
+      if (original && original !== safe) {
+        console.warn("이미지 파일명에 허용되지 않는 문자가 있어 제거했습니다:", original, "→", safe);
+      }
+      return safe;
+    }
+    function imageUrl(fileName) {
+      const safeFileName = sanitizeFileName(fileName);
+      return safeFileName ? `${GITHUB_IMAGE_BASE}${safeFileName}?v=${encodeURIComponent(ASSET_VERSION)}` : "";
+    }
+    function preloadImage(src) {
+      return new Promise((resolve, reject) => {
+        if (!src) { reject(new Error("empty image src")); return; }
+        const img = new Image();
+        img.onload = () => resolve(src);
+        img.onerror = () => reject(new Error(src));
+        img.src = src;
       });
+    }
+    async function preloadQuizImages(data) {
+      const urls = [...new Set(
+        data.flatMap(q => [q.image, ...(q.optionImages || [])])
+          .filter(Boolean)
+          .map(imageUrl)
+      )];
+      if (!urls.length) return;
+      const results = await Promise.allSettled(urls.map(preloadImage));
+      const failed = results
+        .map((result, i) => result.status === "rejected" ? urls[i] : null)
+        .filter(Boolean);
+      if (failed.length) {
+        console.warn("불러오지 못한 이미지:", failed);
+        alert(`⚠️ ${failed.length}개 이미지를 미리 불러오지 못했습니다. 파일명/깃허브 업로드 상태를 확인해주세요.`);
+      }
+    }
+    function formatQuestion(text) {
+      return escapeHTML(text).replace(/\[\[(.*?)\]\]/g, '<span class="q-highlight">$1</span>');
+    }
+    function formatAnswer(answer) {
+      return escapeHTML(answer).replace(/\[\[(.*?)\]\]/g, '<span class="answer-highlight">$1</span>');
+    }
+    function setTimerDanger(on) {
+      bottomTimerEl.classList.toggle("danger", on);
+      quizScreen.classList.toggle("danger-mode", on);
+    }
+    function clearDanger() { setTimerDanger(false); }
 
-      progressText.textContent = `${currentIndex + 1} / ${slides.length}`;
-      progressFill.style.width = `${((currentIndex + 1) / slides.length) * 100}%`;
+    const BADGE_INFO = {
+      [TYPE.SUBJECTIVE] : { cls: "badge-subjective", label: "주관식" },
+      [TYPE.MCQ]        : { cls: "badge-mcq",        label: "객관식" },
+      [TYPE.IMAGE_MCQ]  : { cls: "badge-image-mcq",  label: "이미지 객관식" },
+      [TYPE.IMAGE_SUBJ] : { cls: "badge-image-subj", label: "이미지 주관식" },
+    };
+    function updateTypeBadge(type) {
+      const info = BADGE_INFO[type] || BADGE_INFO[TYPE.SUBJECTIVE];
+      questionTypeBadge.className = "question-type-badge " + info.cls;
+      questionTypeBadge.textContent = info.label;
     }
 
-    function nextSlide() {
-      if (currentIndex < slides.length - 1) {
-        currentIndex += 1;
-        updateSlide();
+    function onImageLoad() {
+      imageLoading.style.display = "none";
+      questionImage.style.display = "block";
+    }
+    function onImageError() {
+      imageLoading.style.display = "none";
+      questionImage.style.display = "none";
+      const errEl = document.createElement("div");
+      errEl.className = "image-error";
+      errEl.textContent = "⚠️ 이미지를 불러올 수 없습니다";
+      if (!questionImageWrap.querySelector(".image-error")) questionImageWrap.appendChild(errEl);
+    }
+    questionImage.addEventListener("load",  onImageLoad);
+    questionImage.addEventListener("error", onImageError);
+
+    /* ══════════════════════════════════════════════
+       CSV 파싱 & 데이터 로드
+    ══════════════════════════════════════════════ */
+    function parseCSV(text) {
+      const rows = [];
+      let row = [], cell = "", inQuote = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i], next = text[i+1];
+        if (ch === '"' && inQuote && next === '"') { cell += '"'; i++; }
+        else if (ch === '"')                        { inQuote = !inQuote; }
+        else if (ch === ',' && !inQuote)            { row.push(cell.trim()); cell = ""; }
+        else if ((ch === '\n' || ch === '\r') && !inQuote) {
+          if (cell || row.length) { row.push(cell.trim()); rows.push(row); row = []; cell = ""; }
+          if (ch === '\r' && next === '\n') i++;
+        } else { cell += ch; }
+      }
+      if (cell || row.length) { row.push(cell.trim()); rows.push(row); }
+      return rows;
+    }
+
+    function rowsToQuizData(rows) {
+      if (!rows.length) return [];
+      const header = rows[0].map(c => String(c).trim().toLowerCase());
+      const hasHeader = header.some(c =>
+        ["질문 넘버","질문","정답","타입","옵션","옵션이미지","질문이미지","정답설명",
+         "question","answer","num","type","options","option_image","image","description"].includes(c)
+      );
+      const body = hasHeader ? rows.slice(1) : rows;
+      const idx = name => header.indexOf(name);
+      const ni  = [idx("질문 넘버"), idx("num"), idx("번호"), idx("no"), 0].find(i => i >= 0);
+      const qi  = [idx("질문"),      idx("question"), idx("문제"), 1].find(i => i >= 0);
+      const ai  = [idx("정답"),      idx("answer"),   2].find(i => i >= 0);
+      const ti  = [idx("타입"),      idx("type")].find(i => i >= 0) ?? -1;
+      const oi  = [idx("옵션"),      idx("options")].find(i => i >= 0) ?? -1;
+      const oii = [idx("옵션이미지"), idx("option_image")].find(i => i >= 0) ?? -1;
+      const ii  = [idx("질문이미지"), idx("image")].find(i => i >= 0) ?? -1;
+      const di  = [idx("정답설명"),  idx("description")].find(i => i >= 0) ?? -1;
+
+      return body
+        .filter(r => r[qi]?.trim())
+        .map((r, i) => {
+          const rawOptions = (oi >= 0 && r[oi]) ? r[oi] : "";
+          const options = rawOptions ? rawOptions.split(/[;；]/).map(o => o.trim()).filter(Boolean) : [];
+          const rawOptionImages = (oii >= 0 && r[oii]) ? r[oii] : "";
+          const optionImages = rawOptionImages ? rawOptionImages.split(/[;；]/).map(o => o.trim()) : [];
+          const rawType = (ti >= 0 && r[ti]) ? r[ti].trim() : "";
+          let type = TYPE.SUBJECTIVE;
+          if      (rawType === "객관식")        type = TYPE.MCQ;
+          else if (rawType === "객관식-이미지") type = TYPE.IMAGE_MCQ;
+          else if (rawType === "주관식-이미지") type = TYPE.IMAGE_SUBJ;
+          const imageFile  = (ii >= 0 && r[ii]) ? r[ii].trim() : "";
+          const answerDesc = (di >= 0 && r[di]) ? r[di].trim() : "";
+          return {
+            num: r[ni] || i+1,
+            question: r[qi].trim(),
+            answer: (r[ai] || "정답 없음").trim(),
+            type, options, optionImages, image: imageFile, answerDesc,
+          };
+        });
+    }
+
+    async function tryFetch(url) {
+      const r = await fetch(url, { cache: "no-cache" });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const text = await r.text();
+      if (!text?.trim()) throw new Error("empty");
+      return text;
+    }
+    async function loadWithFallback(url = SHEET_URL) {
+      for (const makeUrl of PROXIES) {
+        try { return await tryFetch(makeUrl(url)); } catch {}
+      }
+      throw new Error("failed");
+    }
+    async function loadQuizData() {
+      try {
+        const csv  = await loadWithFallback();
+        const data = rowsToQuizData(parseCSV(csv));
+        if (!data.length) throw new Error("no data");
+        quizData = data;
+      } catch (err) {
+        console.error("퀴즈 데이터 로드 실패:", err);
+        alert("⚠️ 구글 시트에서 퀴즈 데이터를 불러오지 못했습니다. 임시 샘플 데이터로 표시됩니다. 행사 전 시트 연결을 확인해주세요.");
+        quizData = FALLBACK_DATA;
+      }
+      renderQuestion();
+      preloadQuizImages(quizData);
+    }
+
+    /* ══════════════════════════════════════════════
+       렌더링
+    ══════════════════════════════════════════════ */
+    function hasExtraSlide(q) { return q.type !== TYPE.SUBJECTIVE; }
+    function goToSlide(idx) {
+      const w = document.querySelector('.quiz-slides-outer').offsetWidth;
+      quizSlidesTrack.style.transform = `translateX(-${idx * w}px)`;
+    }
+
+    function renderQuestion() {
+      if (!quizData.length) return;
+      const q = quizData[currentIndex];
+      slideStep = 0;
+
+      questionNum.textContent = `Q${q.num}`;
+      questionText.innerHTML  = formatQuestion(q.question);
+      updateTypeBadge(q.type);
+
+      answerBoxQ.classList.remove("visible");
+      answerBoxQ.innerHTML = "";
+      answerBoxE.classList.remove("visible");
+      answerBoxE.innerHTML = "";
+      slideQuestion.classList.remove("answer-mode");
+      slideExtra.classList.remove("answer-mode");
+
+      slideQuestionRef.innerHTML = formatQuestion(q.question);
+
+      const hasImage = q.image && (q.type === TYPE.IMAGE_MCQ || q.type === TYPE.IMAGE_SUBJ);
+      if (hasImage) {
+        questionImageWrap.classList.add("visible");
+        imageLoading.style.display = "flex";
+        questionImage.style.display = "none";
+        questionImageWrap.querySelectorAll(".image-error").forEach(e => e.remove());
+        questionImage.src = imageUrl(q.image);
+      } else {
+        questionImageWrap.classList.remove("visible");
+        questionImage.src = "";
+      }
+
+      const hasMCQ = q.options.length > 0 && (q.type === TYPE.MCQ || q.type === TYPE.IMAGE_MCQ);
+      if (hasMCQ) {
+        renderOptions(q.options, -1, q.optionImages);
+        optionsArea.classList.add("visible");
+      } else {
+        optionsArea.classList.remove("visible");
+        optionsArea.innerHTML = "";
+      }
+
+      resetTimer();
+      goToSlide(0);
+      setTimeout(adjustQuestionFontSize, 50);
+    }
+
+    /* 질문 텍스트 폰트 동적 조정 */
+    function adjustQuestionFontSize() {
+      const el = questionText;
+      const slide = slideQuestion;
+      if (!el || !slide) return;
+
+      const maxSize = 200;
+      const minSize = 40;
+      const maxH = slide.clientHeight * 0.55; // 슬라이드 높이의 55% (Q번호+타이머 공간 제외)
+      const maxW = slide.clientWidth - 160;   // 좌우 패딩 80px씩 제외
+
+      let size = maxSize;
+      el.style.fontSize = size + 'px';
+
+      while (size > minSize) {
+        if (el.scrollHeight <= maxH && el.scrollWidth <= maxW) break;
+        size -= 2;
+        el.style.fontSize = size + 'px';
+      }
+    }
+    /* 보기 카드 폰트 동적 조정 */
+    function adjustOptionFontSize() {
+      const items = document.querySelectorAll('.option-item');
+      if (!items.length) return;
+      items.forEach(item => {
+        const w = item.offsetWidth;
+        const h = item.offsetHeight;
+        const size = Math.min(w * 0.18, h * 0.35, 120);
+        item.style.fontSize = Math.max(size, 20) + 'px';
+      });
+    }
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        adjustQuestionFontSize();
+        adjustOptionFontSize();
+        goToSlide(slideStep);
+      }, 100);
+    });
+
+    function renderOptions(options, correctIdx, optionImages = []) {
+      optionsArea.innerHTML = options.map((opt, i) => {
+        let cls = "option-item";
+        if (correctIdx >= 0) cls += i === correctIdx ? " correct" : " incorrect";
+        const imgFile = optionImages[i] || "";
+        const imgSrc = imageUrl(imgFile);
+        const imgHtml = imgSrc
+          ? `<img src="${imgSrc}" class="option-img" alt="${escapeHTML(opt)}" />`
+          : "";
+        return `<div class="${cls}">${imgHtml}<span class="option-label">${CIRCLE_NUMS[i] || (i+1)+"."} ${escapeHTML(opt)}</span></div>`;
+      }).join("");
+      setTimeout(adjustOptionFontSize, 50);
+    }
+
+    /* ══════════════════════════════════════════════
+       타이머
+    ══════════════════════════════════════════════ */
+    function setTimerDisplay(secs) {
+      const txt = formatTime(secs);
+      bottomTimerEl.textContent = txt;
+    }
+
+    function resetTimer() {
+      clearInterval(timerId);
+      timerId = null; isRunning = false;
+      remainingSecs = TIMER_DURATION;
+      setTimerDisplay(remainingSecs);
+      setTimerDanger(false);
+      startBtn.textContent = "▶ 시작";
+      startBtn.disabled    = false;
+      answerBtn.disabled   = false;
+    }
+
+    function startTimer() {
+      if (isRunning || !quizData.length) return;
+      isRunning = true;
+      startBtn.disabled = true;
+      timerId = setInterval(() => {
+        remainingSecs--;
+        setTimerDisplay(remainingSecs);
+        if (remainingSecs <= DANGER_AT) {
+          setTimerDanger(true);
+          if (remainingSecs > 0) playTickBeep(remainingSecs);
+        }
+        if (remainingSecs <= 0) {
+          clearInterval(timerId); timerId = null; isRunning = false;
+          playEndBeep();
+        }
+      }, 1000);
+    }
+
+    /* ══════════════════════════════════════════════
+       정답 표시
+    ══════════════════════════════════════════════ */
+    function showAnswer() {
+      clearInterval(timerId); timerId = null; isRunning = false;
+      setTimerDanger(false);
+      const q = quizData[currentIndex];
+      if ((q.type === TYPE.MCQ || q.type === TYPE.IMAGE_MCQ) && q.options.length) {
+        renderOptions(q.options, findCorrectOptionIndex(q), q.optionImages);
+      }
+      const descHtml = q.answerDesc
+        ? `<div class="answer-desc">${escapeHTML(q.answerDesc)}</div>`
+        : "";
+      const answerHtml = `A. ${formatAnswer(q.answer)}${descHtml}`;
+      startBtn.disabled = true;
+      slideStep = 2;
+
+      if (hasExtraSlide(q)) {
+        // 비주관식: 슬라이드1에서 정답 표시
+        // MCQ는 하이라이트만, 주관식-이미지는 answerBox 표시
+        if (q.type === TYPE.MCQ || q.type === TYPE.IMAGE_MCQ) {
+          // 객관식: answerBox 숨기고 카드 하이라이트만
+        } else {
+          answerBoxE.innerHTML = answerHtml;
+          answerBoxE.classList.add("visible");
+        }
+        slideExtra.classList.add("answer-mode");
+        goToSlide(1);
+      } else {
+        // 주관식: 슬라이드0에서 정답 표시
+        answerBoxQ.innerHTML = answerHtml;
+        answerBoxQ.classList.add("visible");
+        slideQuestion.classList.add("answer-mode");
+        goToSlide(0);
       }
     }
 
-    function prevSlide() {
-      if (currentIndex > 0) {
-        currentIndex -= 1;
-        updateSlide();
+    function findCorrectOptionIndex(q) {
+      const match = q.answer.match(/\[\[(.*?)\]\]/);
+      const correctText = match ? match[1] : q.answer.replace(/\[\[|\]\]/g, "").trim();
+      for (let i = 0; i < CIRCLE_NUMS.length; i++) {
+        if (correctText.startsWith(CIRCLE_NUMS[i])) return i;
+      }
+      const numMatch = correctText.match(/^(\d+)/);
+      if (numMatch) {
+        const n = parseInt(numMatch[1], 10);
+        if (n >= 1 && n <= q.options.length) return n - 1;
+      }
+      return q.options.findIndex(opt =>
+        opt.toLowerCase().includes(correctText.toLowerCase()) ||
+        correctText.toLowerCase().includes(opt.toLowerCase())
+      );
+    }
+
+    /* ══════════════════════════════════════════════
+       네비게이션
+    ══════════════════════════════════════════════ */
+    function quizArrow(dir) {
+      const q = quizData[currentIndex];
+      const hasExtra = hasExtraSlide(q);
+      if (dir === 1) {
+        if (slideStep === 0 && hasExtra) { slideStep = 1; goToSlide(1); }
+        else if (slideStep < 2) { showAnswer(); }
+        else {
+          if (currentIndex === quizData.length - 1) { showFinalScreen(); return; }
+          currentIndex++;
+          renderQuestion();
+        }
+      } else {
+        if (slideStep === 2) {
+          slideStep = hasExtra ? 1 : 0;
+          slideQuestion.classList.remove("answer-mode");
+          slideExtra.classList.remove("answer-mode");
+          answerBoxQ.classList.remove("visible");
+          answerBoxE.classList.remove("visible");
+          startBtn.disabled = false;
+          goToSlide(slideStep);
+        } else if (slideStep === 1) {
+          slideStep = 0; goToSlide(0);
+        } else {
+          if (currentIndex === 0) return;
+          currentIndex--;
+          renderQuestion();
+        }
       }
     }
 
-    document.addEventListener('keydown', (event) => {
-      const key = event.key;
+    /* ══════════════════════════════════════════════
+       사운드
+    ══════════════════════════════════════════════ */
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx;
+    }
+    async function playTone(freq, duration, volume = 0.7, offset = 0) {
+      try {
+        const ctx = getAudioCtx();
+        await ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = "sine"; osc.frequency.value = freq;
+        const t = ctx.currentTime + offset;
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(volume, t + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+        osc.start(t); osc.stop(t + duration + 0.02);
+      } catch {}
+    }
+    function playTickBeep(remainingSecs) {
+      const step = DANGER_AT - remainingSecs;
+      const freq = 600 + step * 55;
+      for (let i = 0; i < 4; i++) playTone(freq, 0.10, 0.75, i * 0.13);
+    }
+    async function playEndBeep() {
+      try {
+        const ctx = getAudioCtx();
+        await ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = "sawtooth";
+        const duration = 2.5, cycleTime = 0.25;
+        const cycles = Math.ceil(duration / cycleTime);
+        for (let i = 0; i < cycles; i++) {
+          const t = ctx.currentTime + i * cycleTime;
+          osc.frequency.setValueAtTime(400, t);
+          osc.frequency.linearRampToValueAtTime(1300, t + cycleTime / 2);
+          osc.frequency.linearRampToValueAtTime(400, t + cycleTime);
+        }
+        gain.gain.setValueAtTime(0.85, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + duration);
+      } catch {}
+    }
 
-      if (key === 'ArrowRight' || key === ' ' || key === 'Enter') {
-        event.preventDefault();
-        nextSlide();
+    /* ══════════════════════════════════════════════
+       최종 결과
+    ══════════════════════════════════════════════ */
+    const RANK_EMOJI = { 1: "🥇", 2: "🥈", 3: "🥉" };
+
+    async function showFinalScreen() {
+      clearInterval(timerId); clearDanger();
+      quizScreen.classList.remove("active");
+      $("finalScreen").classList.add("active");
+      try {
+        const csv  = await loadWithFallback(SCORE_URL);
+        const rows = parseCSV(csv);
+        const hasHeader = isNaN(Number(rows[0]?.[1]));
+        const body = hasHeader ? rows.slice(1) : rows;
+        const teams = body
+          .filter(r => r[0]?.trim())
+          .map(r => {
+            const raw = r[0].trim();
+            const name = raw.endsWith("팀") ? raw : raw + "팀";
+            return { name, score: Number(r[1]) || 0 };
+          })
+          .sort((a, b) => b.score - a.score);
+        let rank = 1;
+        teams.forEach((t, i) => {
+          if (i > 0 && t.score < teams[i-1].score) rank = i + 1;
+          t.rank = rank;
+        });
+        $("finalRanking").innerHTML = teams.map(t => `
+          <div class="ranking-item ${t.rank <= 3 ? "rank-"+t.rank : ""}">
+            <div class="rank-badge">${RANK_EMOJI[t.rank] || t.rank+"위"}</div>
+            <div class="rank-team">${escapeHTML(t.name)}</div>
+            <div><span class="rank-score">${t.score}</span><span class="rank-score-label">점</span></div>
+          </div>`).join("");
+        const scores = teams.map(t => t.score);
+        const hasTie = scores.length !== new Set(scores).size;
+        const btn = $("finalNextBtn");
+        btn.textContent = hasTie ? "⚡ 순위결정전 진행하기" : "🎁 상품 수령 안내로 이동";
+        btn.dataset.hasTie = hasTie;
+        btn.style.display = "inline-block";
+      } catch {
+        $("finalRanking").innerHTML = `<div style="color:#dc2626;font-weight:700;text-align:center;">점수를 불러오지 못했어요. 구글 시트 연결을 확인해주세요.</div>`;
       }
+    }
 
-      if (key === 'ArrowLeft') {
-        event.preventDefault();
-        prevSlide();
+    function goAfterFinal() {
+      const hasTie = $("finalNextBtn").dataset.hasTie === "true";
+      $("finalScreen").classList.remove("active");
+      hasTie ? $("tiebreakScreen").classList.add("active") : goReception("finalScreen");
+    }
+
+    function goReception(from = "tiebreakScreen") {
+      recPrevScreen = from;
+      $("tiebreakScreen").classList.remove("active");
+      $("finalScreen").classList.remove("active");
+      $("receptionScreen").classList.add("active");
+      recIndex = 0;
+      updateRecSlider();
+    }
+
+    $("recNextBtn").addEventListener("click", () => {
+      recIndex = Math.min(recIndex + 1, REC_RULES.length - 1);
+      updateRecSlider();
+    });
+
+    /* ══════════════════════════════════════════════
+       화면 전환
+    ══════════════════════════════════════════════ */
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      $(id).classList.add("active");
+    }
+
+    $("showRuleButton").addEventListener("click", () => {
+      introScreen.classList.remove("active");
+      ruleScreen.classList.add("active");
+      ruleIndex = 0; updateRuleSlider();
+    });
+    ruleNextBtn.addEventListener("click", () => {
+      if (ruleIndex === RULES.length - 1) {
+        prizeIndex = 0;
+        updatePrizeSlider();
+        showScreen("prizeScreen");
+        return;
       }
+      ruleIndex = Math.min(ruleIndex + 1, RULES.length - 1);
+      updateRuleSlider();
+    });
+    $("prizeNextButton").addEventListener("click", () => {
+      if (prizeIndex === PRIZES.length - 1) {
+        openPwModal();
+        return;
+      }
+      prizeIndex = Math.min(prizeIndex + 1, PRIZES.length - 1);
+      updatePrizeSlider();
+    });
+    startBtn.addEventListener("click", startTimer);
+    answerBtn.addEventListener("click", () => quizArrow(1));
 
-      if (key.toLowerCase() === 'f') {
-        document.documentElement.requestFullscreen?.();
+    document.addEventListener("keydown", e => {
+      if ($("pwModalOverlay").classList.contains("active")) return;
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      const dir = e.key === "ArrowRight" ? 1 : -1;
+
+      if (introScreen.classList.contains("active")) {
+        if (dir === 1) { ruleIndex = 0; updateRuleSlider(); showScreen("ruleScreen"); }
+        return;
+      }
+      if (ruleScreen.classList.contains("active")) {
+        if (dir === -1 && ruleIndex === 0) showScreen("introScreen");
+        else if (dir === 1 && ruleIndex === RULES.length - 1) { prizeIndex = 0; updatePrizeSlider(); showScreen("prizeScreen"); }
+        else { ruleIndex += dir; updateRuleSlider(); }
+        return;
+      }
+      if (prizeScreen.classList.contains("active")) {
+        if (dir === -1 && prizeIndex === 0) showScreen("ruleScreen");
+        else if (dir === 1 && prizeIndex === PRIZES.length - 1) openPwModal();
+        else { prizeIndex += dir; updatePrizeSlider(); }
+        return;
+      }
+      if (quizScreen.classList.contains("active")) {
+        if (dir === -1 && currentIndex === 0 && slideStep === 0) {
+          prizeIndex = PRIZES.length - 1; updatePrizeSlider(); showScreen("prizeScreen");
+          return;
+        }
+        quizArrow(dir);
+        return;
+      }
+      if ($("finalScreen").classList.contains("active")) {
+        if (dir === -1) showScreen("quizScreen");
+        if (dir === 1)  $("finalNextBtn").click();
+        return;
+      }
+      if ($("tiebreakScreen").classList.contains("active")) {
+        if (dir === -1) showScreen("finalScreen");
+        if (dir === 1)  goReception("tiebreakScreen");
+        return;
+      }
+      if ($("receptionScreen").classList.contains("active")) {
+        if (dir === -1 && recIndex === 0) {
+          $("receptionScreen").classList.remove("active");
+          $(recPrevScreen).classList.add("active");
+        } else {
+          recIndex = Math.max(0, Math.min(REC_RULES.length - 1, recIndex + dir));
+          updateRecSlider();
+        }
+        return;
       }
     });
 
-    let touchStartX = 0;
-
-    document.addEventListener('touchstart', (event) => {
-      touchStartX = event.changedTouches[0].screenX;
-    });
-
-    document.addEventListener('touchend', (event) => {
-      const touchEndX = event.changedTouches[0].screenX;
-      const diff = touchStartX - touchEndX;
-
-      if (Math.abs(diff) > 50) {
-        diff > 0 ? nextSlide() : prevSlide();
-      }
-    });
-
-    updateSlide();
+    loadQuizData();
   </script>
 </body>
 </html>
