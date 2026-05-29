@@ -436,12 +436,12 @@
         <span>디지털 롤링페이퍼를 구경해보세요</span>
        </a>
        <a class="event-link-card" href="#" onclick="openContentLink('bgmPlaylist_mute'); return false;">
-        <strong>TAGby Playlist_mute ver.</strong>
-        <span>#가사_없는 #차분한 #jazz</span>
+        <strong>☕️ TAGby Playlist_mute ver.</strong>
+        <span>#just_chillin</span>
        </a>
        <a class="event-link-card" href="#" onclick="openContentLink('bgmPlaylist_vivid'); return false;">
         <strong>🎶 TAGby Playlist_vivid ver.</strong>
-        <span>#둠칫둠칫 #노동요 #dont_kill_my_vibe</span>
+        <span>#dont_kill_my_vibe</span>
        </a>
       </div>
      </div>
@@ -1042,7 +1042,7 @@ function openContentLink(type){
   window.open(url,'_blank','noopener,noreferrer');
 }
 
-function updateStatusCard(){const c=document.getElementById('statusCard'),t=document.getElementById('statusTitle'),d=document.getElementById('statusDesc'),b=document.getElementById('diyButton');if(received){c.classList.add('received');t.textContent='✓ 스티커 수령이 완료되었습니다!';d.textContent='다른 스티커도 갖고 싶으신가요? <br/> 나만의 DIY A6 Sticker Set을 만들어보세요.';b.classList.remove('hidden')}else{c.classList.remove('received');t.textContent='🎉 체크인이 완료되었습니다!';d.textContent='TAGby 10주년 이벤트를 즐겨주세요.';b.classList.add('hidden')}}
+function updateStatusCard(){const c=document.getElementById('statusCard'),t=document.getElementById('statusTitle'),d=document.getElementById('statusDesc'),b=document.getElementById('diyButton');if(received){c.classList.add('received');t.textContent='✓ 스티커 수령이 완료되었습니다!';d.textContent='다른 스티커도 갖고 싶으신가요? 나만의 DIY A6 Sticker Set을 만들어보세요.';b.classList.remove('hidden')}else{c.classList.remove('received');t.textContent='🎉 체크인이 완료되었습니다!';d.textContent='TAGby 10주년 이벤트를 즐겨주세요.';b.classList.add('hidden')}}
 function renderIntroDots(){['introDots1','introDots2','introDots3'].forEach(id=>document.getElementById(id).innerHTML=[0,1,2].map(i=>`<span class="slide-dot ${i===currentIntroIndex?'active':''}"></span>`).join(''))}
 function updateIntroSlide(){document.getElementById('introTrack').style.transform=`translateX(-${currentIntroIndex*100}%)`;renderIntroDots()}
 function nextIntroSlide(){currentIntroIndex=Math.min(currentIntroIndex+1,2);updateIntroSlide()}function prevIntroSlide(){currentIntroIndex=Math.max(currentIntroIndex-1,0);updateIntroSlide()}
