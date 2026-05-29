@@ -157,7 +157,7 @@
    <section class="login-screen" id="loginScreen">
     <div class="login-card">
      <p class="eyebrow">
-      TAGby 10th Anniversary
+      💙TAGby 10th Check-in💙
      </p>
      <h1 class="login-title" style="color:var(--blue);">
       QR Check-in
@@ -226,7 +226,7 @@
       <div class="intro-track" id="introTrack">
        <article class="intro-slide white-welcome">
         <div>
-         <p class="eyebrow" style="color:var(--text)>
+         <p class="eyebrow" style="color:var(--text)">
           TAGby 10th Anniversary
          </p>
          <h1 style="color:var(--text);">
@@ -238,7 +238,7 @@
            <br/>
            오신 것을 환영합니다!
          </h1>
-         <p class="intro-desc" style="color:var(--text)>
+         <p class="intro-desc" style="color:var(--text)">
           <strong id="welcomeName">
            홍길동
           </strong>
@@ -647,7 +647,7 @@ async function findUserFromSheet(name,email){
       ok:true,
       user:{
         name:data.name,
-        email:data.email,
+        email:data.email || email,
         team:data.team
       }
     };
